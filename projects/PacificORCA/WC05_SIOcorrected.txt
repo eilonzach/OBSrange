@@ -1,0 +1,183 @@
+
+  1:: Boat Location:  Lat: -7 16.0623 (-7.2677),  Lon: -134 30.8711 (-134.5145), range: 4496.2500Residual: -18.576401
+  2:: Boat Location:  Lat: -7 16.0901 (-7.2682),  Lon: -134 30.9313 (-134.5155), range: 4486.5000Residual: -21.479805
+  3:: Boat Location:  Lat: -7 16.1233 (-7.2687),  Lon: -134 30.9916 (-134.5165), range: 4481.2500Residual: -22.952645
+  4:: Boat Location:  Lat: -7 16.1645 (-7.2694),  Lon: -134 31.0080 (-134.5168), range: 4479.0000Residual: -24.070994
+  5:: Boat Location:  Lat: -7 16.1943 (-7.2699),  Lon: -134 31.0004 (-134.5167), range: 4479.7500Residual: -23.362015
+  6:: Boat Location:  Lat: -7 16.2150 (-7.2702),  Lon: -134 30.9957 (-134.5166), range: 4481.2500Residual: -22.311418
+  7:: Boat Location:  Lat: -7 16.2867 (-7.2714),  Lon: -134 30.9762 (-134.5163), range: 4486.5000Residual: -21.342114
+  8:: Boat Location:  Lat: -7 16.3644 (-7.2727),  Lon: -134 30.9531 (-134.5159), range: 4497.7500Residual: -19.548912
+  9:: Boat Location:  Lat: -7 16.4571 (-7.2743),  Lon: -134 30.9251 (-134.5154), range: 4516.5000Residual: -18.602583
+ 10:: Boat Location:  Lat: -7 16.5647 (-7.2761),  Lon: -134 30.8903 (-134.5148), range: 4548.7500Residual: -15.989089
+ 11:: Boat Location:  Lat: -7 16.6809 (-7.2780),  Lon: -134 30.8514 (-134.5142), range: 4592.2500Residual: -15.155152
+ 12:: Boat Location:  Lat: -7 16.7961 (-7.2799),  Lon: -134 30.8139 (-134.5136), range: 4647.7500Residual: -12.362681
+ 13:: Boat Location:  Lat: -7 16.9481 (-7.2825),  Lon: -134 30.7690 (-134.5128), range: 4733.2500Residual: -11.025052
+ 14:: Boat Location:  Lat: -7 17.0659 (-7.2844),  Lon: -134 30.7352 (-134.5123), range: 4812.0000Residual: -8.635246
+ 15:: Boat Location:  Lat: -7 17.1781 (-7.2863),  Lon: -134 30.6969 (-134.5116), range: 4896.7500Residual: -6.598580
+ 16:: Boat Location:  Lat: -7 17.2931 (-7.2882),  Lon: -134 30.6584 (-134.5110), range: 4990.5000Residual: -6.066454
+ 17:: Boat Location:  Lat: -7 17.3995 (-7.2900),  Lon: -134 30.6168 (-134.5103), range: 5086.5000Residual: -5.174197
+ 18:: Boat Location:  Lat: -7 17.5061 (-7.2918),  Lon: -134 31.1778 (-134.5196), range: 5117.2500Residual: -25.857104
+ 19:: Boat Location:  Lat: -7 16.8946 (-7.2816),  Lon: -134 32.1230 (-134.5354), range: 5069.2500Residual: -57.080682
+ 20:: Boat Location:  Lat: -7 16.7869 (-7.2798),  Lon: -134 32.1799 (-134.5363), range: 5061.0000Residual: -60.486198
+ 21:: Boat Location:  Lat: -7 16.6172 (-7.2770),  Lon: -134 32.2551 (-134.5376), range: 5062.5000Residual: -59.493482
+ 22:: Boat Location:  Lat: -7 16.5032 (-7.2751),  Lon: -134 32.2900 (-134.5382), range: 5055.0000Residual: -66.950175
+ 23:: Boat Location:  Lat: -7 16.3924 (-7.2732),  Lon: -134 32.3064 (-134.5384), range: 5049.7500Residual: -66.116411
+ 24:: Boat Location:  Lat: -7 16.2794 (-7.2713),  Lon: -134 32.3143 (-134.5386), range: 5041.5000Residual: -69.170584
+ 25:: Boat Location:  Lat: -7 16.1684 (-7.2695),  Lon: -134 32.3119 (-134.5385), range: 5037.0000Residual: -68.140360
+ 26:: Boat Location:  Lat: -7 16.0614 (-7.2677),  Lon: -134 32.3008 (-134.5383), range: 5028.7500Residual: -71.342058
+ 27:: Boat Location:  Lat: -7 15.9518 (-7.2659),  Lon: -134 32.2808 (-134.5380), range: 5025.7500Residual: -69.925591
+ 28:: Boat Location:  Lat: -7 15.8453 (-7.2641),  Lon: -134 32.2508 (-134.5375), range: 5019.7500Residual: -70.871391
+ 29:: Boat Location:  Lat: -7 15.7391 (-7.2623),  Lon: -134 32.2144 (-134.5369), range: 5019.7500Residual: -68.829951
+ 30:: Boat Location:  Lat: -7 15.6424 (-7.2607),  Lon: -134 32.1700 (-134.5362), range: 5015.2500Residual: -70.102258
+ 31:: Boat Location:  Lat: -7 15.5446 (-7.2591),  Lon: -134 32.1211 (-134.5354), range: 5016.7500Residual: -70.134972
+ 32:: Boat Location:  Lat: -7 15.4413 (-7.2574),  Lon: -134 32.0694 (-134.5345), range: 5027.2500Residual: -69.965353
+ 33:: Boat Location:  Lat: -7 15.3562 (-7.2559),  Lon: -134 31.9990 (-134.5333), range: 5026.5000Residual: -67.338765
+ 34:: Boat Location:  Lat: -7 15.2786 (-7.2546),  Lon: -134 31.9157 (-134.5319), range: 5020.5000Residual: -65.701331
+ 35:: Boat Location:  Lat: -7 15.2021 (-7.2534),  Lon: -134 31.8265 (-134.5304), range: 5020.5000Residual: -62.787533
+ 36:: Boat Location:  Lat: -7 15.1383 (-7.2523),  Lon: -134 31.7288 (-134.5288), range: 5016.0000Residual: -60.515218
+ 37:: Boat Location:  Lat: -7 15.0765 (-7.2513),  Lon: -134 31.6302 (-134.5272), range: 5019.7500Residual: -57.246566
+ 38:: Boat Location:  Lat: -7 15.0272 (-7.2505),  Lon: -134 31.5264 (-134.5254), range: 5021.2500Residual: -53.680705
+ 39:: Boat Location:  Lat: -7 14.9840 (-7.2497),  Lon: -134 31.4189 (-134.5236), range: 5024.2500Residual: -51.475338
+ 40:: Boat Location:  Lat: -7 14.9474 (-7.2491),  Lon: -134 31.3085 (-134.5218), range: 5031.0000Residual: -48.383766
+ 41:: Boat Location:  Lat: -7 14.9239 (-7.2487),  Lon: -134 31.1946 (-134.5199), range: 5036.2500Residual: -44.189581
+ 42:: Boat Location:  Lat: -7 14.9155 (-7.2486),  Lon: -134 31.0790 (-134.5180), range: 5038.5000Residual: -38.941182
+ 43:: Boat Location:  Lat: -7 14.9191 (-7.2487),  Lon: -134 30.9594 (-134.5160), range: 5037.0000Residual: -36.230121
+ 44:: Boat Location:  Lat: -7 14.9355 (-7.2489),  Lon: -134 30.8409 (-134.5140), range: 5036.2500Residual: -31.357313
+ 45:: Boat Location:  Lat: -7 14.9564 (-7.2493),  Lon: -134 30.7222 (-134.5120), range: 5039.2500Residual: -28.597191
+ 46:: Boat Location:  Lat: -7 14.9797 (-7.2497),  Lon: -134 30.6036 (-134.5101), range: 5053.5000Residual: -22.312517
+ 47:: Boat Location:  Lat: -7 15.0183 (-7.2503),  Lon: -134 30.4875 (-134.5081), range: 5063.2500Residual: -17.298191
+ 48:: Boat Location:  Lat: -7 15.0730 (-7.2512),  Lon: -134 30.3804 (-134.5063), range: 5067.0000Residual: -12.363430
+ 49:: Boat Location:  Lat: -7 15.1362 (-7.2523),  Lon: -134 30.2762 (-134.5046), range: 5073.7500Residual: -6.668384
+ 50:: Boat Location:  Lat: -7 15.2080 (-7.2535),  Lon: -134 30.1777 (-134.5030), range: 5080.5000Residual: -2.087114
+ 51:: Boat Location:  Lat: -7 15.2893 (-7.2548),  Lon: -134 30.0860 (-134.5014), range: 5087.2500Residual: 2.465040
+ 52:: Boat Location:  Lat: -7 15.3770 (-7.2563),  Lon: -134 30.0050 (-134.5001), range: 5093.2500Residual: 6.841091
+ 53:: Boat Location:  Lat: -7 15.4728 (-7.2579),  Lon: -134 29.9299 (-134.4988), range: 5100.0000Residual: 10.516512
+ 54:: Boat Location:  Lat: -7 15.5748 (-7.2596),  Lon: -134 29.8641 (-134.4977), range: 5106.7500Residual: 13.864963
+ 55:: Boat Location:  Lat: -7 15.6860 (-7.2614),  Lon: -134 29.8064 (-134.4968), range: 5116.5000Residual: 19.869906
+ 56:: Boat Location:  Lat: -7 15.7994 (-7.2633),  Lon: -134 29.7578 (-134.4960), range: 5125.5000Residual: 22.699902
+ 57:: Boat Location:  Lat: -7 15.9184 (-7.2653),  Lon: -134 29.7231 (-134.4954), range: 5127.7500Residual: 21.424315
+ 58:: Boat Location:  Lat: -7 16.0801 (-7.2680),  Lon: -134 29.6979 (-134.4950), range: 5132.2500Residual: 23.749066
+ 59:: Boat Location:  Lat: -7 16.2079 (-7.2701),  Lon: -134 29.6878 (-134.4948), range: 5140.5000Residual: 26.126112
+ 60:: Boat Location:  Lat: -7 16.3667 (-7.2728),  Lon: -134 29.6942 (-134.4949), range: 5150.2500Residual: 29.745841
+ 61:: Boat Location:  Lat: -7 16.5624 (-7.2760),  Lon: -134 29.7693 (-134.4962), range: 5119.5000Residual: 24.586923
+ 62:: Boat Location:  Lat: -7 16.5294 (-7.2755),  Lon: -134 30.0197 (-134.5003), range: 4912.5000Residual: 14.458681
+ 63:: Boat Location:  Lat: -7 16.4295 (-7.2738),  Lon: -134 30.4022 (-134.5067), range: 4661.2500Residual: 0.150168
+ 64:: Boat Location:  Lat: -7 16.3972 (-7.2733),  Lon: -134 30.5039 (-134.5084), range: 4613.2500Residual: -1.206982
+ 65:: Boat Location:  Lat: -7 16.3714 (-7.2729),  Lon: -134 30.5891 (-134.5098), range: 4575.0000Residual: -6.692404
+Sum (Residual^2): 108858.277816
+Sqrt(Sum(Residuals^2)/N): 40.923621
+
+============================================================
+
+Running calculation on 100x100 grid (with 100.0000 meter spacing) Lat: -7 16.1778 (-7.2696),  Lon: -134 31.0050 (-134.5168), depth: 4503.0000
+New drop point location: 
+ Lat: -7 16.1778 (-7.2696),  Lon: -134 31.0593 (-134.5177), depth: 4503.0000
+sum(Residual^2) = 50498.1510
+
+sqrt(sum(Residual^2)/65) = 27.8728
+
+
+Running calculation on 100x100 grid (with 10.0000 meter spacing) Lat: -7 16.1778 (-7.2696),  Lon: -134 31.0593 (-134.5177), depth: 4503.0000
+New drop point location: 
+ Lat: -7 16.1509 (-7.2692),  Lon: -134 31.0593 (-134.5177), depth: 4503.0000
+sum(Residual^2) = 38598.2541
+
+sqrt(sum(Residual^2)/65) = 24.3684
+
+
+Running calculation on 20x20 grid (with 1.0000 meter spacing) Lat: -7 16.1509 (-7.2692),  Lon: -134 31.0593 (-134.5177), depth: 4503.0000
+New drop point location: 
+ Lat: -7 16.1519 (-7.2692),  Lon: -134 31.0572 (-134.5176), depth: 4503.0000
+sum(Residual^2) = 38484.4792
+
+sqrt(sum(Residual^2)/65) = 24.3325
+
+
+Running calculation on 20x20 grid (with 0.1000 meter spacing) Lat: -7 16.1519 (-7.2692),  Lon: -134 31.0572 (-134.5176), depth: 4503.0000
+New drop point location: 
+ Lat: -7 16.1520 (-7.2692),  Lon: -134 31.0573 (-134.5176), depth: 4503.0000
+sum(Residual^2) = 38484.2839
+
+sqrt(sum(Residual^2)/65) = 24.3324
+
+
+
+Individual residuals (based at final drop point): 
+  1)  Lat: -7 16.0623 (-7.2677),  Lon: -134 30.8711 (-134.5145), range: 4496.2500Individual residual: -22.830728
+  2)  Lat: -7 16.0901 (-7.2682),  Lon: -134 30.9313 (-134.5155), range: 4486.5000Individual residual: -23.925675
+  3)  Lat: -7 16.1233 (-7.2687),  Lon: -134 30.9916 (-134.5165), range: 4481.2500Individual residual: -23.685999
+  4)  Lat: -7 16.1645 (-7.2694),  Lon: -134 31.0080 (-134.5168), range: 4479.0000Individual residual: -24.972802
+  5)  Lat: -7 16.1943 (-7.2699),  Lon: -134 31.0004 (-134.5167), range: 4479.7500Individual residual: -25.150467
+  6)  Lat: -7 16.2150 (-7.2702),  Lon: -134 30.9957 (-134.5166), range: 4481.2500Individual residual: -24.692666
+  7)  Lat: -7 16.2867 (-7.2714),  Lon: -134 30.9762 (-134.5163), range: 4486.5000Individual residual: -25.898830
+  8)  Lat: -7 16.3644 (-7.2727),  Lon: -134 30.9531 (-134.5159), range: 4497.7500Individual residual: -26.526974
+  9)  Lat: -7 16.4571 (-7.2743),  Lon: -134 30.9251 (-134.5154), range: 4516.5000Individual residual: -28.457568
+ 10)  Lat: -7 16.5647 (-7.2761),  Lon: -134 30.8903 (-134.5148), range: 4548.7500Individual residual: -29.216157
+ 11)  Lat: -7 16.6809 (-7.2780),  Lon: -134 30.8514 (-134.5142), range: 4592.2500Individual residual: -31.984111
+ 12)  Lat: -7 16.7961 (-7.2799),  Lon: -134 30.8139 (-134.5136), range: 4647.7500Individual residual: -32.609314
+ 13)  Lat: -7 16.9481 (-7.2825),  Lon: -134 30.7690 (-134.5128), range: 4733.2500Individual residual: -35.415876
+ 14)  Lat: -7 17.0659 (-7.2844),  Lon: -134 30.7352 (-134.5123), range: 4812.0000Individual residual: -36.036596
+ 15)  Lat: -7 17.1781 (-7.2863),  Lon: -134 30.6969 (-134.5116), range: 4896.7500Individual residual: -36.936881
+ 16)  Lat: -7 17.2931 (-7.2882),  Lon: -134 30.6584 (-134.5110), range: 4990.5000Individual residual: -39.230414
+ 17)  Lat: -7 17.3995 (-7.2900),  Lon: -134 30.6168 (-134.5103), range: 5086.5000Individual residual: -41.004240
+ 18)  Lat: -7 17.5061 (-7.2918),  Lon: -134 31.1778 (-134.5196), range: 5117.2500Individual residual: -43.951805
+ 19)  Lat: -7 16.8946 (-7.2816),  Lon: -134 32.1230 (-134.5354), range: 5069.2500Individual residual: -31.959755
+ 20)  Lat: -7 16.7869 (-7.2798),  Lon: -134 32.1799 (-134.5363), range: 5061.0000Individual residual: -31.485146
+ 21)  Lat: -7 16.6172 (-7.2770),  Lon: -134 32.2551 (-134.5376), range: 5062.5000Individual residual: -24.916916
+ 22)  Lat: -7 16.5032 (-7.2751),  Lon: -134 32.2900 (-134.5382), range: 5055.0000Individual residual: -29.166299
+ 23)  Lat: -7 16.3924 (-7.2732),  Lon: -134 32.3064 (-134.5384), range: 5049.7500Individual residual: -25.775760
+ 24)  Lat: -7 16.2794 (-7.2713),  Lon: -134 32.3143 (-134.5386), range: 5041.5000Individual residual: -26.531614
+ 25)  Lat: -7 16.1684 (-7.2695),  Lon: -134 32.3119 (-134.5385), range: 5037.0000Individual residual: -23.589826
+ 26)  Lat: -7 16.0614 (-7.2677),  Lon: -134 32.3008 (-134.5383), range: 5028.7500Individual residual: -25.254607
+ 27)  Lat: -7 15.9518 (-7.2659),  Lon: -134 32.2808 (-134.5380), range: 5025.7500Individual residual: -22.570006
+ 28)  Lat: -7 15.8453 (-7.2641),  Lon: -134 32.2508 (-134.5375), range: 5019.7500Individual residual: -22.644751
+ 29)  Lat: -7 15.7391 (-7.2623),  Lon: -134 32.2144 (-134.5369), range: 5019.7500Individual residual: -19.989841
+ 30)  Lat: -7 15.6424 (-7.2607),  Lon: -134 32.1700 (-134.5362), range: 5015.2500Individual residual: -21.085343
+ 31)  Lat: -7 15.5446 (-7.2591),  Lon: -134 32.1211 (-134.5354), range: 5016.7500Individual residual: -21.126247
+ 32)  Lat: -7 15.4413 (-7.2574),  Lon: -134 32.0694 (-134.5345), range: 5027.2500Individual residual: -21.051584
+ 33)  Lat: -7 15.3562 (-7.2559),  Lon: -134 31.9990 (-134.5333), range: 5026.5000Individual residual: -19.363702
+ 34)  Lat: -7 15.2786 (-7.2546),  Lon: -134 31.9157 (-134.5319), range: 5020.5000Individual residual: -19.211758
+ 35)  Lat: -7 15.2021 (-7.2534),  Lon: -134 31.8265 (-134.5304), range: 5020.5000Individual residual: -18.056432
+ 36)  Lat: -7 15.1383 (-7.2523),  Lon: -134 31.7288 (-134.5288), range: 5016.0000Individual residual: -18.034247
+ 37)  Lat: -7 15.0765 (-7.2513),  Lon: -134 31.6302 (-134.5272), range: 5019.7500Individual residual: -17.145632
+ 38)  Lat: -7 15.0272 (-7.2505),  Lon: -134 31.5264 (-134.5254), range: 5021.2500Individual residual: -16.342443
+ 39)  Lat: -7 14.9840 (-7.2497),  Lon: -134 31.4189 (-134.5236), range: 5024.2500Individual residual: -17.157591
+ 40)  Lat: -7 14.9474 (-7.2491),  Lon: -134 31.3085 (-134.5218), range: 5031.0000Individual residual: -17.319428
+ 41)  Lat: -7 14.9239 (-7.2487),  Lon: -134 31.1946 (-134.5199), range: 5036.2500Individual residual: -16.710565
+ 42)  Lat: -7 14.9155 (-7.2486),  Lon: -134 31.0790 (-134.5180), range: 5038.5000Individual residual: -15.349370
+ 43)  Lat: -7 14.9191 (-7.2487),  Lon: -134 30.9594 (-134.5160), range: 5037.0000Individual residual: -16.873564
+ 44)  Lat: -7 14.9355 (-7.2489),  Lon: -134 30.8409 (-134.5140), range: 5036.2500Individual residual: -16.421889
+ 45)  Lat: -7 14.9564 (-7.2493),  Lon: -134 30.7222 (-134.5120), range: 5039.2500Individual residual: -18.187131
+ 46)  Lat: -7 14.9797 (-7.2497),  Lon: -134 30.6036 (-134.5101), range: 5053.5000Individual residual: -16.470898
+ 47)  Lat: -7 15.0183 (-7.2503),  Lon: -134 30.4875 (-134.5081), range: 5063.2500Individual residual: -16.186319
+ 48)  Lat: -7 15.0730 (-7.2512),  Lon: -134 30.3804 (-134.5063), range: 5067.0000Individual residual: -15.940312
+ 49)  Lat: -7 15.1362 (-7.2523),  Lon: -134 30.2762 (-134.5046), range: 5073.7500Individual residual: -14.975792
+ 50)  Lat: -7 15.2080 (-7.2535),  Lon: -134 30.1777 (-134.5030), range: 5080.5000Individual residual: -15.067790
+ 51)  Lat: -7 15.2893 (-7.2548),  Lon: -134 30.0860 (-134.5014), range: 5087.2500Individual residual: -15.110062
+ 52)  Lat: -7 15.3770 (-7.2563),  Lon: -134 30.0050 (-134.5001), range: 5093.2500Individual residual: -15.063342
+ 53)  Lat: -7 15.4728 (-7.2579),  Lon: -134 29.9299 (-134.4988), range: 5100.0000Individual residual: -15.639923
+ 54)  Lat: -7 15.5748 (-7.2596),  Lon: -134 29.8641 (-134.4977), range: 5106.7500Individual residual: -16.319060
+ 55)  Lat: -7 15.6860 (-7.2614),  Lon: -134 29.8064 (-134.4968), range: 5116.5000Individual residual: -14.210759
+ 56)  Lat: -7 15.7994 (-7.2633),  Lon: -134 29.7578 (-134.4960), range: 5125.5000Individual residual: -14.975480
+ 57)  Lat: -7 15.9184 (-7.2653),  Lon: -134 29.7231 (-134.4954), range: 5127.7500Individual residual: -19.474446
+ 58)  Lat: -7 16.0801 (-7.2680),  Lon: -134 29.6979 (-134.4950), range: 5132.2500Individual residual: -20.788235
+ 59)  Lat: -7 16.2079 (-7.2701),  Lon: -134 29.6878 (-134.4948), range: 5140.5000Individual residual: -20.908051
+ 60)  Lat: -7 16.3667 (-7.2728),  Lon: -134 29.6942 (-134.4949), range: 5150.2500Individual residual: -19.743671
+ 61)  Lat: -7 16.5624 (-7.2760),  Lon: -134 29.7693 (-134.4962), range: 5119.5000Individual residual: -25.944799
+ 62)  Lat: -7 16.5294 (-7.2755),  Lon: -134 30.0197 (-134.5003), range: 4912.5000Individual residual: -28.526297
+ 63)  Lat: -7 16.4295 (-7.2738),  Lon: -134 30.4022 (-134.5067), range: 4661.2500Individual residual: -28.695219
+ 64)  Lat: -7 16.3972 (-7.2733),  Lon: -134 30.5039 (-134.5084), range: 4613.2500Individual residual: -25.844231
+ 65)  Lat: -7 16.3714 (-7.2729),  Lon: -134 30.5891 (-134.5098), range: 4575.0000Individual residual: -27.731009
+
+Initial Drop:     Lat: -7 16.1778 (-7.2696),  Lon: -134 31.0050 (-134.5168), depth: 4503.0000
+Final Drop:     Lat: -7 16.1520 (-7.2692),  Lon: -134 31.0573 (-134.5176), depth: 4503.0000
+                Number of points (N):65.000000
+                sum(Residual^2) = 38484.2839
+
+                sqrt(sum(Residual^2/N)  : 24.332404
+
+Offset Distance: Lat=47.9000 meters, Lon=-96.2000 meters, (r=107.4656 meters, angle=153.53)
+
+============================================================
+
+
