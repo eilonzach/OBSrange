@@ -22,15 +22,47 @@ To Do List from V1:
 
 Notes from V2:
 
-1) I fixed the errors I had introduced into V1 be re-arranging my code. :) Versions give comparable results now. RMSs of 1.5 ms for EE04!!
+1) I fixed the errors I had introduced into V1 be re-arranging my code. :)
+   Versions give comparable results now. RMSs of 1.5 ms for EE04!!
 
-2) I updated the smoothing function in python by translating Zach's moving average code in matlab.
+2) I updated the smoothing function in python by translating Zach's moving 
+   average code in MATLAB.
 
-3) The only other "big thing" to do now is re-work the ftest and eigenvector scaling. But I anticipate this will be smooth now that the other aforementioned errors have been worked out.
+3) The only other "big thing" to do now is re-work the ftest and eigenvector
+   scaling. But I anticipate this will be smooth now that the other 
+   aforementioned errors have been worked out.
 
 4) Still need to add output functionality. Will be straightforward but tedious.
 
 5) Still need to update plots, but they're workable for now.
 
-6) I added a row (or column, whatever it was) to the resampled bootstrap matrices which corresponds to unscrambeld raw data. Makes comparisons much easier! 
+6) I added a row (or column, whatever it was) to the resampled bootstrap 
+   matrices which corresponds to unscrambeld raw data. Makes comparisons much
+   easier!
 
+Latest notes / To Dos for github version.
+
+1) I fixed the ftest and the eigenvector scaling. The guts of the code should
+   all be ironed out now. I wasn't able to upload a version with this fix before
+   we left the KM, but now we have github!
+
+2) Need to add output functionality. Will do soon.
+
+   DONE.
+
+3) Need to create a new script, a 'main' script, which will act as a wrapper to 
+   process all stations in a given network/deployment.
+
+   DONE.
+
+4) I might also wrap up the actual inversion lines into a single function.
+
+   DONE.
+
+5) Need to finalize plots. Will do soon at the end.
+
+   DONE.
+
+6) A possible last step would be to handle edge cases in reading survey files 
+   from other surveys. But perhaps we'll let people do this themselves? As it 
+   stands, the python code works perfect for all our survey files. 

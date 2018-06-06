@@ -1,5 +1,5 @@
 '''
-FUNCTION calc.py
+FUNCTION SET calc.py
 
 Functions for several intermediate calculations.
 

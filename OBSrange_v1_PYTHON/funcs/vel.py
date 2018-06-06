@@ -2,9 +2,9 @@
 FUNCTION SET velocity.py 
 
 A function to calculate the velocity vectors of the ship at survey points with
-positions (xs, ys, zs) recorded at times ts, as well as a function to smooth the
-ship's velocity vectors. Smoothing function written by Z. Eilon. Adapted to
-python by S. Mosher.
+positions (xs, ys, zs) recorded at times ts. 
+
+Another function smooths the ship's velocity vectors.
 
 Zach E. & Josh R. & Stephen M. 4/23/18
 '''
@@ -16,12 +16,15 @@ def vector(xs, ys, zs, ts):
   # Check for stationary positions.
   dts = np.diff(ts)
   is_dts_0 = dts == 0
+
+  # Avoid zero division. Replace later.
+  dts[is_dts_0 == True] = 1
   
   # Calculate half velocity.
   v_half = np.array([np.diff(xs)/dts, np.diff(ys)/dts, np.diff(zs)/dts]).T
 
   # Replace stationary points with zeros.
-  v_half[np.where(v_half == is_dts_0)] = 0 
+  v_half[is_dts_0] = [0,0,0]
 
   # Reconstruct a point since np.diff(X) throws away a point.
   v = (v_half[0:-1] + v_half[1:])/2
@@ -33,8 +36,6 @@ def vector(xs, ys, zs, ts):
   return v
 
 def smooth(vel, npts):
-  from IPython.core.debugger import Tracer
-  
   # Decompose velocity vectors.
   vx = vel[:,0]
   vy = vel[:,1]
@@ -52,22 +53,24 @@ def smooth(vel, npts):
   row = np.ones(npts)
   row = np.concatenate([row, np.zeros(L-npts)])
 
-  # mid full moving average section
+  # mid full moving average section.
   C = LA.toeplitz(c=column, r=row)
   
-  # taper section # wish I could think of a way to avoid the loop!
+  # taper section (wish I could think of a way to avoid the loop!).
   D = np.zeros([dy,L])
   f = 2 * np.arange(1, dy + 1) - 1
   
   for i in range(len(f)):
     D[i, 0:f[i]] = 1
 
-  #complete moving average filter (not normalised)
+  # complete moving average filter (not normalised).
   G = np.concatenate([D, C, np.rot90(D, 2)])
 
   for v in [vx, vy, vz]:
-    v = np.dot(G,v)/np.sum(G, axis=1) # multiply and normalise
-    # throw away last point
+    # multiply and normalise.
+    v = np.dot(G,v)/np.sum(G, axis=1) 
+    
+    # throw away last point.
     v = v[0:-1]
 
   return np.vstack([vx, vy, vz]).T

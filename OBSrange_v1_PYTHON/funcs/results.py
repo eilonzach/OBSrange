@@ -9,7 +9,7 @@ Stephen M. 04/23/18
 # Import modules and functions
 import numpy as np
 
-class res:
+class resl:
   '''
   Initialization
   '''
@@ -30,15 +30,18 @@ class res:
     self.azs     = np.zeros(N) # sensor drift azimuth
     self.E_rms   = np.zeros(N) # RMS error terms
     self.v_effs  = np.zeros(N) # effective degrees of freedom for F-test
+    
     # Matrices
     self.dists   = np.ndarray(shape=(M, N)).T # ship distances from OBS
-    self.az_locs = np.ndarray(shape=(M, N)).T # ship azimuthz from OBS
+    self.az_locs = np.ndarray(shape=(M, N)).T # ship azimuths from OBS
     self.twts    = np.ndarray(shape=(M, N))   # travel-times
     self.corrs   = np.ndarray(shape=(M, N))   # travel-time corrections
     self.dtwts   = np.ndarray(shape=(M, N))   # travel-time residuals
-    self.vrs      = np.ndarray(shape=(M, N))  # radial velocities of ship.
+    self.vrs      = np.ndarray(shape=(M, N))  # radial velocities of ship
+    
     # Output dictionary
     self.models  = {}                         # holds each model update
+  
   '''
   A function to update the results object.
   '''
@@ -55,6 +58,7 @@ class res:
     self.twts[:,i]  = tts
     self.corrs[:,i] = corr
     self.vrs[:,i]   = vr
+    
     # Calculate OBS drift distance and azimuth.
     self.dxdrfts[i] = m0[0] - x0
     self.dydrfts[i] = m0[1] - y0
@@ -64,6 +68,7 @@ class res:
     if az < 0:
       az += 360
     self.azs[i] = az
+    
     # Calculate ship distance and azimuths from OBS.
     dxs = xs - m0[0]
     dys = ys - m0[1]

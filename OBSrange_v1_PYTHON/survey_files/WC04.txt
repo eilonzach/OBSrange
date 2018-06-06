@@ -1,0 +1,188 @@
+Ranging data taken on:  2018-04-26 18:42:09.230000
+Cruise:                 obs-cruise
+Site:                   WC04
+Instrument:             
+Drop Point (Latitude):  -6.53526
+Drop Point (Longitude): -134.12927
+Depth (meters):         4561
+Comment:                
+==================================================
+
+ 6050 msec. Lat: 6 32.0655 S  Lon: 134 07.8225 W  Alt: 27.98 Time(UTC): 2018:117:01:43:42
+ 6051 msec. Lat: 6 32.0734 S  Lon: 134 07.8141 W  Alt: 27.22 Time(UTC): 2018:117:01:43:57
+ 6050 msec. Lat: 6 32.1094 S  Lon: 134 07.7786 W  Alt: 26.94 Time(UTC): 2018:117:01:44:57
+ 6055 msec. Lat: 6 32.1436 S  Lon: 134 07.7300 W  Alt: 26.06 Time(UTC): 2018:117:01:45:58
+ 6066 msec. Lat: 6 32.1559 S  Lon: 134 07.6598 W  Alt: 26.80 Time(UTC): 2018:117:01:46:58
+ 6083 msec. Lat: 6 32.1561 S  Lon: 134 07.5783 W  Alt: 26.70 Time(UTC): 2018:117:01:47:58
+ 6109 msec. Lat: 6 32.1521 S  Lon: 134 07.4869 W  Alt: 28.23 Time(UTC): 2018:117:01:48:58
+ 6148 msec. Lat: 6 32.1435 S  Lon: 134 07.3854 W  Alt: 27.80 Time(UTC): 2018:117:01:49:59
+Event skipped - Timeout or Badly formatted data was received
+ 6218 msec. Lat: 6 32.1302 S  Lon: 134 07.2469 W  Alt: 29.32 Time(UTC): 2018:117:01:51:13
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+ 6434 msec. Lat: 6 32.1002 S  Lon: 134 06.9351 W  Alt: 31.49 Time(UTC): 2018:117:01:53:49
+ 6543 msec. Lat: 6 32.0878 S  Lon: 134 06.8132 W  Alt: 32.40 Time(UTC): 2018:117:01:54:50
+ 6665 msec. Lat: 6 32.0757 S  Lon: 134 06.6905 W  Alt: 32.80 Time(UTC): 2018:117:01:55:50
+ 6794 msec. Lat: 6 32.0679 S  Lon: 134 06.5688 W  Alt: 33.72 Time(UTC): 2018:117:01:56:50
+ 6907 msec. Lat: 6 32.1313 S  Lon: 134 06.4713 W  Alt: 32.67 Time(UTC): 2018:117:01:57:51
+Event skipped - Timeout or Badly formatted data was received
+ 6932 msec. Lat: 6 32.2833 S  Lon: 134 06.4612 W  Alt: 32.12 Time(UTC): 2018:117:01:59:05
+Event skipped - Timeout or Badly formatted data was received
+ 6920 msec. Lat: 6 32.4384 S  Lon: 134 06.5001 W  Alt: 32.49 Time(UTC): 2018:117:02:00:19
+ 6924 msec. Lat: 6 32.5701 S  Lon: 134 06.5354 W  Alt: 31.91 Time(UTC): 2018:117:02:01:19
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+ 6727 msec. Lat: 6 33.2678 S  Lon: 134 08.1529 W  Alt: 30.90 Time(UTC): 2018:117:02:17:18
+ 6669 msec. Lat: 6 33.1859 S  Lon: 134 08.2269 W  Alt: 31.63 Time(UTC): 2018:117:02:18:18
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+ 6596 msec. Lat: 6 33.0639 S  Lon: 134 08.3215 W  Alt: 22.55 Time(UTC): 2018:117:02:19:45
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+ 4418 msec. Lat: 6 32.4052 S  Lon: 134 08.7746 W  Alt: 29.21 Time(UTC): 2018:117:02:27:34
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+ 6396 msec. Lat: 6 31.7315 S  Lon: 134 08.5794 W  Alt: 35.33 Time(UTC): 2018:117:02:36:34
+ 6376 msec. Lat: 6 31.6729 S  Lon: 134 08.5150 W  Alt: 37.64 Time(UTC): 2018:117:02:37:34
+ 6359 msec. Lat: 6 31.6120 S  Lon: 134 08.4482 W  Alt: 37.84 Time(UTC): 2018:117:02:38:35
+ 6348 msec. Lat: 6 31.5579 S  Lon: 134 08.3773 W  Alt: 35.60 Time(UTC): 2018:117:02:39:35
+ 6341 msec. Lat: 6 31.5065 S  Lon: 134 08.3052 W  Alt: 32.61 Time(UTC): 2018:117:02:40:35
+ 6338 msec. Lat: 6 31.4620 S  Lon: 134 08.2315 W  Alt: 32.00 Time(UTC): 2018:117:02:41:35
+ 6337 msec. Lat: 6 31.4226 S  Lon: 134 08.1565 W  Alt: 34.79 Time(UTC): 2018:117:02:42:36
+ 6334 msec. Lat: 6 31.3939 S  Lon: 134 08.0800 W  Alt: 34.97 Time(UTC): 2018:117:02:43:36
+ 6338 msec. Lat: 6 31.3656 S  Lon: 134 08.0030 W  Alt: 34.53 Time(UTC): 2018:117:02:44:36
+ 6351 msec. Lat: 6 31.3353 S  Lon: 134 07.9247 W  Alt: 33.14 Time(UTC): 2018:117:02:45:36
+ 6369 msec. Lat: 6 31.3058 S  Lon: 134 07.8457 W  Alt: 32.62 Time(UTC): 2018:117:02:46:37
+Event skipped - Timeout or Badly formatted data was received
+ 6375 msec. Lat: 6 31.3020 S  Lon: 134 07.7443 W  Alt: 32.71 Time(UTC): 2018:117:02:47:51
+ 6378 msec. Lat: 6 31.3161 S  Lon: 134 07.6613 W  Alt: 29.40 Time(UTC): 2018:117:02:48:51
+12378 msec. Lat: 6 31.3333 S  Lon: 134 07.5671 W  Alt: 29.65 Time(UTC): 2018:117:02:49:57
+12372 msec. Lat: 6 31.3575 S  Lon: 134 07.4807 W  Alt: 28.52 Time(UTC): 2018:117:02:50:58
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+ 6380 msec. Lat: 6 31.4219 S  Lon: 134 07.3799 W  Alt: 28.49 Time(UTC): 2018:117:02:52:19
+ 6329 msec. Lat: 6 31.5058 S  Lon: 134 07.3769 W  Alt: 30.96 Time(UTC): 2018:117:02:53:19
+ 6262 msec. Lat: 6 31.5856 S  Lon: 134 07.4301 W  Alt: 33.36 Time(UTC): 2018:117:02:54:20

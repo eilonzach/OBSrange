@@ -1,10 +1,12 @@
 '''
 FUNCTION SET pings.py
 
-A set functions to load ping data from the txt file created during the sensor
-survey and perform quality control. 
+A set functions to load ping data from the .txt file created during the sensor
+survey, format it, and perform quality control. 
 
-Output of the first function load() is a dictionary. Fields are:
+First function format() formats data in the .txt file.
+
+Output of the second function load() is a dictionary. Fields are:
 
   1) Drop latitude                             -- in decimal degrees
   2) Drop longitude                            -- in decimal degrees
@@ -15,7 +17,7 @@ Output of the first function load() is a dictionary. Fields are:
   7) Two-way travel-time of each survey point  -- in msecs
   8) Station id                                -- string
 
-Outputs of the second function qc() are two dictionaries into which the good and
+Outputs of the third function qc() are two dictionaries into which the good and
 bad data points are segregated. Bad points are considered as those for which the
 two-way travel time exceeds a time threshold (in msec). The threshold is based 
 on a reasonable amount of time needed to traverse the Euclidean distance between
@@ -28,33 +30,44 @@ Josh R. & Zach E. & Stephen M. 4/23/18
 import numpy as np
 from funcs import coord_txs, calc
 
+def format(lines):
+  for i, line in enumerate(lines):
+    # Remove any leading whitespace from lines
+    lines[i] = line.strip()
+  return lines
+
 def load(txt_file):
-  # Create a python list of the lines in the survey txt file.
+  # Create a python list of the lines in the survey .txt file.
   lines = list( open(txt_file, mode='r') )
   
+  # Format lines.
+  lines = format(lines)
+
   # Populate single-valued fields.
-  sta = lines[2].split(' ')[-1].split('\n')[0]
-  lat_drop = float( lines[4].split(' ')[-1].split('\n')[0] )
-  lon_drop = float( lines[5].split(' ')[-1].split('\n')[0] )
-  z_drop = float( lines[6].split(' ')[-1].split('\n')[0] )
+  sta = lines[2].split(' ')[-1]
+  lat_drop = float( lines[4].split(' ')[-1] )
+  lon_drop = float( lines[5].split(' ')[-1] )
+  z_drop = float( lines[6].split(' ')[-1] )
   
   # Initialize python lists for lats, lons, ts, and twts.
   lats = []
   lons = []
   ts = []
   twts = []
-
-  # Loop through lines of the txt file to fill the above lists, skip bad lines.
+  
+  # Loop through lines of the .txt file to fill the above lists, skip bad lines.
   for line in lines[10:]:
-    if line.split(' ')[0] == 'Event': # Bad lines start 'Event skipped'
+    if line.split(' ')[0] == 'Event': # Most bad lines start 'Event skipped'
+      continue
+    if line.split(' ')[0][0] == '*': # Some bad lines start with '*'
       continue
     else:
-      lats.append( line.split('Lat: ')[1].split(' Lon:')[0] )
-      lons.append( line.split('Lon: ')[1].split(' Alt:')[0] ) 
-      ts.append( line.split('Time(UTC): ')[-1].split('\n')[0] )
-      twts.append( line.split(' msec')[0])
-  
-  # Format lats, lons, ts, and twts to needed units.
+      lats.append( line.split('Lat:')[1].split('Lon:')[0].strip() )
+      lons.append( line.split('Lon:')[1].split('Alt:')[0].strip() ) 
+      ts.append( line.split('Time(UTC): ')[-1].strip() )
+      twts.append( line.split('msec')[0].strip() )
+
+  # Format lats, lons, ts, and twts to desired units.
   for i, (lat, lon, t, twt) in enumerate( zip(lats, lons, ts, twts) ):
     # Account for N-S / E-W when converting coordinate to decimal degrees.
     if lat.split(' ')[2] == 'S':
@@ -75,7 +88,7 @@ def load(txt_file):
     ts[i] = jday * 24 * 60 * 60 + hour * 60 * 60 + mint * 60 + secd
     
     twts[i] =  float(twt) * 1e-3
-  
+
   # Package everything into a dictionary and return. Convert lists to np arrays.
   data = {
           'lat_drop' : lat_drop,

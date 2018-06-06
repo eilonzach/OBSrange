@@ -1,0 +1,104 @@
+Ranging data taken on:  2018-04-21 17:35:55.963000
+Cruise:                 obs-cruise
+Site:                   CC05
+Instrument:             
+Drop Point (Latitude):  -5.5180
+Drop Point (Longitude): -132.8726
+Depth (meters):         4716
+Comment:                
+==================================================
+
+ 6368 msec. Lat: 5 31.0542 S  Lon: 132 52.3364 W  Alt: 25.47 Time(UTC): 2018:112:00:36:57
+ 6368 msec. Lat: 5 31.0542 S  Lon: 132 52.3364 W  Alt: 25.47 Time(UTC): 2018:112:00:36:57
+ 6368 msec. Lat: 5 31.0529 S  Lon: 132 52.3367 W  Alt: 27.66 Time(UTC): 2018:112:00:37:53
+ 6367 msec. Lat: 5 31.0529 S  Lon: 132 52.3358 W  Alt: 28.95 Time(UTC): 2018:112:00:38:53
+ 6368 msec. Lat: 5 31.0762 S  Lon: 132 52.3115 W  Alt: 27.87 Time(UTC): 2018:112:00:39:53
+ 6375 msec. Lat: 5 31.1388 S  Lon: 132 52.2755 W  Alt: 28.39 Time(UTC): 2018:112:00:40:54
+ 6392 msec. Lat: 5 31.2285 S  Lon: 132 52.2217 W  Alt: 28.22 Time(UTC): 2018:112:00:41:54
+ 6426 msec. Lat: 5 31.3181 S  Lon: 132 52.1559 W  Alt: 28.98 Time(UTC): 2018:112:00:42:54
+ 6469 msec. Lat: 5 31.3986 S  Lon: 132 52.0765 W  Alt: 30.20 Time(UTC): 2018:112:00:43:54
+ 6525 msec. Lat: 5 31.4874 S  Lon: 132 51.9984 W  Alt: 29.97 Time(UTC): 2018:112:00:44:55
+ 6594 msec. Lat: 5 31.5793 S  Lon: 132 51.9231 W  Alt: 28.51 Time(UTC): 2018:112:00:45:55
+Event skipped - Timeout or Badly formatted data was received
+ 6708 msec. Lat: 5 31.6994 S  Lon: 132 51.8260 W  Alt: 28.15 Time(UTC): 2018:112:00:47:12
+ 6805 msec. Lat: 5 31.7949 S  Lon: 132 51.7513 W  Alt: 27.75 Time(UTC): 2018:112:00:48:12
+ 6917 msec. Lat: 5 31.8882 S  Lon: 132 51.6766 W  Alt: 27.08 Time(UTC): 2018:112:00:49:13
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+ 7148 msec. Lat: 5 32.0050 S  Lon: 132 51.4629 W  Alt: 26.72 Time(UTC): 2018:112:00:51:35
+ 7159 msec. Lat: 5 31.9309 S  Lon: 132 51.3791 W  Alt: 23.44 Time(UTC): 2018:112:00:52:35
+ 7156 msec. Lat: 5 31.8352 S  Lon: 132 51.3042 W  Alt: 22.97 Time(UTC): 2018:112:00:53:35
+ 7165 msec. Lat: 5 31.7335 S  Lon: 132 51.2290 W  Alt: 21.84 Time(UTC): 2018:112:00:54:36
+ 3113 msec. Lat: 5 31.6286 S  Lon: 132 51.1722 W  Alt: 28.34 Time(UTC): 2018:112:00:55:32
+ 7154 msec. Lat: 5 31.4981 S  Lon: 132 51.1283 W  Alt: 32.53 Time(UTC): 2018:112:00:56:36
+ 7148 msec. Lat: 5 31.3727 S  Lon: 132 51.0938 W  Alt: 36.78 Time(UTC): 2018:112:00:57:36
+ 7140 msec. Lat: 5 31.2387 S  Lon: 132 51.0747 W  Alt: 39.61 Time(UTC): 2018:112:00:58:37
+ 7140 msec. Lat: 5 31.0977 S  Lon: 132 51.0611 W  Alt: 37.13 Time(UTC): 2018:112:00:59:37
+ 7138 msec. Lat: 5 30.9573 S  Lon: 132 51.0639 W  Alt: 38.73 Time(UTC): 2018:112:01:00:37
+ 7131 msec. Lat: 5 30.8183 S  Lon: 132 51.0866 W  Alt: 34.67 Time(UTC): 2018:112:01:01:37
+ 7128 msec. Lat: 5 30.6787 S  Lon: 132 51.1209 W  Alt: 30.56 Time(UTC): 2018:112:01:02:38
+ 7126 msec. Lat: 5 30.5425 S  Lon: 132 51.1696 W  Alt: 28.51 Time(UTC): 2018:112:01:03:38
+ 7122 msec. Lat: 5 30.4160 S  Lon: 132 51.2348 W  Alt: 26.03 Time(UTC): 2018:112:01:04:38
+ 7102 msec. Lat: 5 30.3032 S  Lon: 132 51.3232 W  Alt: 25.71 Time(UTC): 2018:112:01:05:38
+ 7093 msec. Lat: 5 30.1961 S  Lon: 132 51.4199 W  Alt: 23.72 Time(UTC): 2018:112:01:06:39
+  973 msec. Lat: 5 30.0977 S  Lon: 132 51.5082 W  Alt: 23.43 Time(UTC): 2018:112:01:07:33
+ 7105 msec. Lat: 5 29.9907 S  Lon: 132 51.6297 W  Alt: 24.65 Time(UTC): 2018:112:01:08:39
+ 7085 msec. Lat: 5 29.9296 S  Lon: 132 51.7637 W  Alt: 24.72 Time(UTC): 2018:112:01:09:39
+ 7069 msec. Lat: 5 29.8811 S  Lon: 132 51.9019 W  Alt: 25.98 Time(UTC): 2018:112:01:10:40
+ 7073 msec. Lat: 5 29.8288 S  Lon: 132 52.0419 W  Alt: 28.39 Time(UTC): 2018:112:01:11:40
+ 7087 msec. Lat: 5 29.7833 S  Lon: 132 52.1823 W  Alt: 29.43 Time(UTC): 2018:112:01:12:40
+ 7081 msec. Lat: 5 29.7743 S  Lon: 132 52.3255 W  Alt: 28.81 Time(UTC): 2018:112:01:13:40
+ 7067 msec. Lat: 5 29.7918 S  Lon: 132 52.4682 W  Alt: 29.85 Time(UTC): 2018:112:01:14:41
+ 7064 msec. Lat: 5 29.8134 S  Lon: 132 52.6130 W  Alt: 30.60 Time(UTC): 2018:112:01:15:41
+ 7068 msec. Lat: 5 29.8418 S  Lon: 132 52.7449 W  Alt: 29.25 Time(UTC): 2018:112:01:16:41
+ 7072 msec. Lat: 5 29.8836 S  Lon: 132 52.8765 W  Alt: 30.81 Time(UTC): 2018:112:01:17:41
+ 7074 msec. Lat: 5 29.9437 S  Lon: 132 53.0007 W  Alt: 30.70 Time(UTC): 2018:112:01:18:42
+ 7069 msec. Lat: 5 30.0259 S  Lon: 132 53.1177 W  Alt: 28.26 Time(UTC): 2018:112:01:19:42
+ 7068 msec. Lat: 5 30.1141 S  Lon: 132 53.2277 W  Alt: 26.59 Time(UTC): 2018:112:01:20:42
+ 7078 msec. Lat: 5 30.2081 S  Lon: 132 53.3288 W  Alt: 25.66 Time(UTC): 2018:112:01:21:43
+ 7078 msec. Lat: 5 30.3130 S  Lon: 132 53.4128 W  Alt: 23.18 Time(UTC): 2018:112:01:22:43
+ 7078 msec. Lat: 5 30.4313 S  Lon: 132 53.4846 W  Alt: 24.47 Time(UTC): 2018:112:01:23:43
+ 7066 msec. Lat: 5 30.5560 S  Lon: 132 53.5335 W  Alt: 24.98 Time(UTC): 2018:112:01:24:43
+ 7052 msec. Lat: 5 30.6844 S  Lon: 132 53.5655 W  Alt: 23.95 Time(UTC): 2018:112:01:25:43
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+ 7109 msec. Lat: 5 31.3701 S  Lon: 132 53.6290 W  Alt: 25.10 Time(UTC): 2018:112:01:31:06
+ 7101 msec. Lat: 5 31.4917 S  Lon: 132 53.5857 W  Alt: 24.03 Time(UTC): 2018:112:01:32:06
+ 7115 msec. Lat: 5 31.6116 S  Lon: 132 53.5442 W  Alt: 23.78 Time(UTC): 2018:112:01:33:06
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+ 7125 msec. Lat: 5 31.8103 S  Lon: 132 53.4343 W  Alt: 24.10 Time(UTC): 2018:112:01:34:56
+ 7126 msec. Lat: 5 31.9127 S  Lon: 132 53.3611 W  Alt: 23.03 Time(UTC): 2018:112:01:35:56
+ 7133 msec. Lat: 5 32.0054 S  Lon: 132 53.2788 W  Alt: 21.93 Time(UTC): 2018:112:01:36:56
+ 7137 msec. Lat: 5 32.0875 S  Lon: 132 53.1878 W  Alt: 25.01 Time(UTC): 2018:112:01:37:56
+ 7137 msec. Lat: 5 32.1581 S  Lon: 132 53.0897 W  Alt: 23.56 Time(UTC): 2018:112:01:38:57
+ 7138 msec. Lat: 5 32.2214 S  Lon: 132 52.9789 W  Alt: 22.33 Time(UTC): 2018:112:01:39:57
+Event skipped - Timeout or Badly formatted data was received
+ 7160 msec. Lat: 5 32.3030 S  Lon: 132 52.8369 W  Alt: 22.58 Time(UTC): 2018:112:01:41:14
+ 7183 msec. Lat: 5 32.3612 S  Lon: 132 52.7252 W  Alt: 23.09 Time(UTC): 2018:112:01:42:14
+ 7111 msec. Lat: 5 32.3130 S  Lon: 132 52.6346 W  Alt: 23.47 Time(UTC): 2018:112:01:43:14
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+Event skipped - Timeout or Badly formatted data was received
+ 6838 msec. Lat: 5 32.0446 S  Lon: 132 52.5717 W  Alt: 23.98 Time(UTC): 2018:112:01:45:19
+ 6749 msec. Lat: 5 31.9457 S  Lon: 132 52.5489 W  Alt: 24.81 Time(UTC): 2018:112:01:46:20
+ 6693 msec. Lat: 5 31.8716 S  Lon: 132 52.5298 W  Alt: 25.23 Time(UTC): 2018:112:01:47:20
