@@ -11,7 +11,7 @@ clear; close all;
 addpath('./functions');
 
 %% Parameters
-projpath = '/Users/zeilon/Work/OBSrange/projects/PacificORCA/'; % path to project
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % path to project
 datapath = './'; % path to survey data
 outdir = './OUT_OBSrange/OUT_nocorr/'; % output directory
 onesta = 'EE04'; % put a station name here to only consider that station. Else ''
