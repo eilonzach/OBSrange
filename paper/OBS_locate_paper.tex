@@ -6,7 +6,8 @@
 \usepackage{graphicx}
 \usepackage{amssymb}
 \usepackage{epstopdf}
-\usepackage{natbib}
+\usepackage[round,sort,comma]{natbib}
+
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
 \title{A new tool for the precise remote location of Ocean Bottom Seismometers}
@@ -28,7 +29,7 @@
 
 %% ---------------- REFERENCES ---------------- %%
 \newpage
-\bibliographystyle{gji.bst}
+\bibliographystyle{srl.bst}
 \bibliography{refs}
 
 

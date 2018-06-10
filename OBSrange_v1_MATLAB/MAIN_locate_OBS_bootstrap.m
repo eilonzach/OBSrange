@@ -11,12 +11,12 @@ clear; close all;
 addpath('./functions');
 
 %% Parameters
-projpath = '/Users/zeilon/Work/Fieldwork/PacArray18/OBS_survey'; % path to project
-datapath = './OrcaAcousticSurvey/'; % path to survey data
+projpath = '/Users/zeilon/Work/OBSrange/projects/PacificORCA/'; % path to project
+datapath = './'; % path to survey data
 outdir = './OUT_OBSrange/OUT_nocorr/'; % output directory
-onesta = 'CC10'; % put a station name here to only consider that station. Else ''
+onesta = 'EE04'; % put a station name here to only consider that station. Else ''
 
-ifsave = 0; % Save results to *.mat?
+ifsave = 1; % Save results to *.mat?
 ifplot = 1; % Plot results?
 
 par = struct([]);
@@ -29,7 +29,7 @@ par.if_twtcorr = 0; % Apply a traveltime correction to account for ship velocity
 par.npts_movingav = 5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
-ifQC_ping = 0; % Do quality control on pings?
+ifQC_ping = 1; % Do quality control on pings?
 res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnitude
 
 % TAT - Define turnaround time to damp towards in the inversion

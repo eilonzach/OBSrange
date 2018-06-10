@@ -1,9 +1,8 @@
 clear; close all;
-addpath('./functions');
 
 %% Parameters
 % projpath = '/Users/zeilon/Documents/MATLAB/OBS_range_dist/projects/Worcester_OBS-Relocations'; % path to project
-projpath = '/Users/zeilon/Work/Fieldwork/PacArray18/OBS_survey'; % path to project
+projpath = '/Users/zeilon/Work/OBSrange/projects/PacificORCA/'; % path to project
 outdir_OBSrange = './OUT_OBSrange/OUT_nocorr/'; % output directory
 
 projname =fliplr(strtok(fliplr(projpath),'/'));
@@ -70,6 +69,9 @@ xlabel('Longitude'); ylabel('Latitude')
 
 
 [abs(loc_lolaz(:,3)),sqrt(drift_az(:,1).^2 + loc_lolaz(:,3).^2)]
+
+save2pdf(2,'ORCAdrift.pdf');
+
 
 return
 %% print to csv file:
