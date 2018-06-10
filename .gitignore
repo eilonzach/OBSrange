@@ -1,0 +1,7 @@
+*.pyc
+*.pdf
+*.log
+*.gz
+*.aux
+*.txt
+*.mat
