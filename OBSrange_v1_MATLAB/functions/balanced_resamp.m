@@ -1,6 +1,7 @@
 function [ dataout, indxs, datamat ] = balanced_resamp( data,niter )
 %[ indxs ] = balanced_resampling( data,niter )
-%   function to get indices for balanced resampling of data for
+%   
+%   Function to get indices for balanced resampling of data for
 %   bootstrapping
 %
 % INPUTS:

@@ -1,7 +1,11 @@
 function [ datao ] = loadSIO( filename )
-%
-% Load SIO data for comparison
-%
+% [ datao ] = loadSIO( filename )
+% 
+% Load SIO OBS location file "filename" for location comparison - see
+% example directory for format expected for these files.
+% 
+% J. Russell, 2018
+
 fid = fopen(filename);
 iping = 0;
 

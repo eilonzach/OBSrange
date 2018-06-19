@@ -1,9 +1,15 @@
 function [ mu ] = mean_ang( theta)
 % [ mu ] = mean_ang( theta )
-%   Calculates circular mean of angles in radians - i.e. deals with
-%   wraparound. Theta can be a vector or a matrix, means will be calculated
-%   column-wise
-% Z. Eilon 2011
+% 
+%  Calculates circular mean of angles in radians - deals with wraparound problem
+%  
+%  INPUTS
+%    theta: vector or a matrix of angles, in radians
+%           (if matrix, means will be calculated column-wise)
+%  OUTPUTs
+%    mu:    mean angles, in radians
+% 
+% Z. Eilon, 2011
 
 if isrow(theta)
     theta = theta'; % flip if needed

@@ -1,5 +1,6 @@
 function [ minX_ind ] = mindex( X,a )
 % [ minX_ind ] = mindex( X,a )
+% 
 %   simple function to return the index of the minimum point in vector X
 %   
 %   if a second argument is given, the function outputs the index of the
@@ -14,6 +15,8 @@ function [ minX_ind ] = mindex( X,a )
 %       Y(find(X==min(X)) or, more often, Y(find((X-a)==min(X-a)))
 %   Instead, can now use
 %       Y(mindex(X)) or Y(mindex(X,a))
+% 
+%  Z. Eilon, 2016
 
 if nargin<2
 [~,minX_ind] = min(X);

@@ -1,6 +1,17 @@
 function [ Ncount, cent ] = plot_hist( ax,x,Nbins)
 % [ Ncount, cent ] = plot_hist( ax,x,Nbins )
-% Plot histograms
+%   Plotting script to plot histograms of output models from bootstrapping
+% 
+% INPUTS:
+%   ax:    handle to axes in which to plot
+%   x:     [Nboot x 1] vector values of a certain parameter
+%   Nbins: nunber of bins for the histogram
+% 
+% OUTPUTS:
+%   Ncount: number of values in each bin
+%   cent:   centre value of each bin
+% 
+% J. Russell and Z. Eilon, 2018
 
 x_mean = mean(x);
 x_std = std(x);

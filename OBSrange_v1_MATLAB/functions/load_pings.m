@@ -1,8 +1,10 @@
 function [ data ] = load_pings( filename )
 %[ data ] = load_pings( filename )
 %
-% Load ping data
+% Load ping data in file called "filename", with format based on SIO
+% acoustic survey codes. See example directory for expected format. 
 %
+% J. Russell, 2018
 
 fid = fopen(filename);
 iping = 0;

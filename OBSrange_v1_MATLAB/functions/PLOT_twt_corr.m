@@ -68,16 +68,3 @@ set(ax4,'fontsize',16,'linewidth',2,'box','on'); grid(ax4,'on');
 cb = colorbar('peer',ax4);
 axis(ax1,'equal');
 ylabel(cb,'TWT corrections (ms)');
-
-
-
-
-% subplot(2,2,4);
-% obs_num = 1:length(dtwt_bs);
-% scatter(obs_num,dtwt_bs*1000,100,sqrt(sum(v_ship.^2,1)),'o','filled','markeredgecolor',[0 0 0],'linewidth',1); hold on;
-% grid on; box on; set(gca,'fontsize',16,'linewidth',2);
-% title('Observation Residuals (ms)','fontsize',18);
-% xlabel('Observation #','fontsize',18);
-% ylabel('Residuals (ms)','fontsize',18);
-% cb = colorbar;
-% ylabel(cb,'Velocity (m/s)');

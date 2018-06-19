@@ -1,5 +1,12 @@
 function [ G ] = buildG( x, y, z, dvp, x_ship, y_ship, z_ship, vp_w, Nobs, M)
-% Build the G matrix for 2-way travel time inversion
+% [ G ] = buildG( x, y, z, dvp, x_ship, y_ship, z_ship, vp_w, Nobs, M)
+% 
+% Build the G matrix for 2-way travel time inversion, based on instrument
+% position for this iteration (x,y,z), water speed (vp_w) and perturbation
+% to water speed (dvp), and ship position (x_ship,y_ship,z_ship). This is
+% done for Nobs observations and M (=5, by default) data.
+% 
+% J. Russell, 2018
 
 G = zeros(Nobs,M);
 

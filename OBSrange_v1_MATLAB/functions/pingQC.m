@@ -1,7 +1,24 @@
 function [ datao, datao_bad ] = pingQC( data, vp_w, res_thresh )
+% [ datao, datao_bad ] = pingQC( data, vp_w, res_thresh )
 %
-% Ping quality control
-%
+% Ping quality control function - flags bad data based on difference
+% between predicted travel time for some preliminary model and the actual
+% travel time. If the difference exceeds "res_thresh" (which is given in
+% ms, not seconds!), then the data points are flagged as bad readings. This
+% is to wean out bad readings from the deckbox (spurious reflections from
+% the transducers that do happen to come in between the range gates but are
+% not truly from the instruments). 
+% 
+% INPUTS:
+%   data:  structure with ship location and travel time data
+%   vp_w:  default water velocity (usually 1500m/s)
+%   res_thresh: residual threshold, in ms, above which trave time data wil
+%               be rejeted - set this high (~500ms) so that only obvious
+%               outliers are thrown out, and you don't lose lots of data
+%               from a station that has drifted even a significant distance
+% 
+% J. Russell, 2018
+
 lat_drop = data.lat_drop;
 lon_drop = data.lon_drop;
 z_drop = data.z_drop;

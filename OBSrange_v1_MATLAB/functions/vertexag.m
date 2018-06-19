@@ -1,9 +1,11 @@
 function [ Vfac ] = vertexag( ax )
 %[ Vfac ] = vertexag( ax )
 %
-% function to compute the vertical exaggeration by empirically comparing
-% the vertical pixels (Y) vs. horizontal pixels (X) to 
-% the vertical scale  (y) vs. horizontal scale  (x).
+% function to compute the vertical exaggeration, "Vfac", in axes "ax" by 
+% comparing the vertical pixels (Y) vs. horizontal pixels (X) to the
+% vertical scale  (y) vs. horizontal scale  (x).
+% 
+% Z. Eilon, 2017
 
 if nargin < 1 || isempty(ax)
     ax = gca;

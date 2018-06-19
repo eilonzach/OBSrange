@@ -1,3 +1,9 @@
+% MAIN script to run location inversion for an OBS deployment
+% 
+% Requires: 
+%   Acoustic survey files in some directory 
+%   Inputs below
+% 
 % Uses two-way travel time information and ship coordinates from an OBS 
 % survey to invert for station location on the seafloor (Lat, Lon, Depth),
 % turn-around time (TAT), static correction to the sound velocity through the
@@ -5,17 +11,21 @@
 % direction of the survey circle (vr0).
 %
 % Josh R. & Zach E. 4/16/18
-%
-%
+
 clear; close all;
-addpath('./functions');
+
+%% INPUTS - MAKE SURE THESE ARE 
+% path to project
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
+% path to survey data from the project directory
+datapath = './'; 
+% path to output directory from project directory(will be created if it does not yet exist)
+outdir = './OUT_OBSrange/'; 
+% Put a string station name here to only consider that station. 
+% Otherwise, to locate all stations, put ''
+onesta = ''; 
 
 %% Parameters
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % path to project
-datapath = './'; % path to survey data
-outdir = './OUT_OBSrange/OUT_nocorr/'; % output directory
-onesta = 'EE04'; % put a station name here to only consider that station. Else ''
-
 ifsave = 1; % Save results to *.mat?
 ifplot = 1; % Plot results?
 
@@ -45,6 +55,12 @@ par.dampdvp = 5e-8; %5e-8
 
 % Global norm damping for stabilization
 par.epsilon = 1e-10;
+
+%% ===================================================================== %%
+%% ================ NOT ADVISED TO EDIT BELOW THIS LINE ================ %%
+%% ===================================================================== %%
+
+addpath('./functions');
 
 %% Load 2-way Travel Time Data
 wd = pwd;
@@ -268,6 +284,12 @@ end
 
 
 %% Save output
+% output directory
+if par.if_twtcorr
+    outdir = [outdir,'OUT_wcorr'];
+elseif ~par.if_twtcorr
+    outdir = [outdir,'OUT_nocorr'];
+end  
 if ~exist(outdir)
 	mkdir(outdir);
 end

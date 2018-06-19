@@ -1,6 +1,8 @@
 function [ answ ] = isodd( x )
-% ISODD Summary of this function goes here
+% [ answ ] = isodd( x )
+% 
 % determines if a number is odd or not
+ 
 y=(x-1)/2;
 yy=double(int8(y));
 dy=y-yy;

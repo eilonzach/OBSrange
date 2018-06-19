@@ -1,9 +1,10 @@
 function [ B ] = moving_average( A,n )
 %[ B ] = moving_average( A,n )
-% tapered, n-point moving average. 
-% n must be integer, and will be rounded up if even
 % 
-%   Z. Eilon,   March 2017
+% B is a tapered, n-point moving average of the vector A 
+% n must be integer, and will be rounded up if even.
+% 
+%   Z. Eilon,  2017
 
 if ~isodd(n)
     n = round_level(n,2)+1;

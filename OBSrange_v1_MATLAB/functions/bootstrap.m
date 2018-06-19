@@ -1,10 +1,12 @@
-% Bootstrap
+function [xmatbs,ymatbs,zmatbs,amatbs,bmatbs,indxs] = bootstrap(x,y,z,a,b,niter)
+% [xmatbs,ymatbs,zmatbs,amatbs,bmatbs,indxs]=bootstrap(x,y,z,a,b,niter)
+% 
 % Applies balanced random resampling, where each data point occurs niter times in
 % the bootstraping scheme.
 %
 % The 1st column of each matrix is the full unscrambled dataset
-%
-function [xmatbs,ymatbs,zmatbs,amatbs,bmatbs,indxs]=bootstrap(x,y,z,a,b,niter)
+% 
+% J. Russell, 2018
 
 
 [ xmatbs, indxs, ~ ] = balanced_resamp( x,niter );

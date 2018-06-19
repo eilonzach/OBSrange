@@ -1,7 +1,16 @@
 function [ mean_drift_az ] = plot_drift_polar( ax,driftaz )
 %[ mean_drift_az ] = plot_drift_polar( ax,driftaz )
-%   Plot polar histogram of drift direction
-% driftaz is in degrees
+% 
+%   Plotting script to plot polar histogram of drift direction
+% 
+% INPUTS:
+%   ax:      handle to axes in which to plot
+%   driftaz: azimuth of drift (in degrees)
+% 
+% OUTPUTS:
+%   mean_drift_az: average drift azimuth, in degrees
+% 
+% Z. Eilon, 2018
 
 % polar histogram
 hpol = polarhistogram(ax,d2r(driftaz),36,'Normalization','pdf','FaceColor',[0 0.1 0.8],'linewidth',0.1);

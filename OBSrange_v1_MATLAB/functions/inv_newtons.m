@@ -1,6 +1,5 @@
-function [ m_final,models,v_eff ] = ...
-    inv_newtons( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H)
-%[ m_final,E,v_eff ] = inv_newton( par,m_start,twt,x_ship,y_ship,z_ship,v_ship_twt,H )
+function [ m_final,models,v_eff ] = inv_newtons( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H)
+%[ m_final,models,v_eff ] = inv_newton( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H )
 % 
 %   Conduct interative inversion for OBS location and other parameters
 %   using Newton's method to step down an error gradient according to
@@ -8,8 +7,20 @@ function [ m_final,models,v_eff ] = ...
 %   parameters. 
 % 
 % INPUTS:
-%   m_start:  starting model
-%   x_ship
+%   m_start:  starting model (x,y,z location of OBS, TAT, and dvp)
+%   twt:      two-way travel time data, in s
+%   x_ship:   x position of ship relative to drop point, in m
+%   y_ship:   y position of ship relative to drop point, in m
+%   z_ship:   z position of ship relative to drop point, in m (should be zero!)
+%   v_ship:   absolute velocity of ship, in m/s
+%   H:        norm damping matrix, with weights set in the main script
+% OUTPUTS:
+%   m_final:  output model after Newton's method iterations cease 
+%   models:   output structure with all models from the iterative inversion
+%             (and their associated data errors)
+%   v_eff:    effective number of degrees of freedom for the inverted data
+% 
+% J. Russell & Z. Eilon, 2018
 
 vp_w = par.vp_w;
 E_thresh = par.E_thresh;

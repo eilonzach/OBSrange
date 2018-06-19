@@ -1,6 +1,13 @@
-function [ xx ] = round_level( x, y )
+function [ xx ] = round_level( x, level )
 %[xx] = round_level(x,level)
-% rounds the number/vector x to the nearest y (the level)
-xx = round(x./y).*y;
+% 
+% Rounds the number/vector x to the nearest "level". 
+% E.g. round_level(5,4) = 4;
+% E.g. round_level(5,3) = 6;
+% 
+% Z. Eilon, 2012
+
+xx = round(x./level).*level;
+
 end
 

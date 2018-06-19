@@ -19,7 +19,7 @@ function [ P ] = ftest_dof( res1,v1,res2,v2 )
 % The residuals are just equal to dobs-dpred, so we square and sum these to
 % get the chi^2 values (Ea)
 % 
-% Z. Eilon
+% Z. Eilon, 2015
 %
 % J. Russell : This version takes the degrees of freedom as input (instead of model parameters)
 % for the case where v = N - M is not accurate.
@@ -27,7 +27,7 @@ function [ P ] = ftest_dof( res1,v1,res2,v2 )
 % P = 1 : Model 1 fits the data same as model 2 (same chi^2)
 % P < 1 : Model 2 fits the data better than model 1 (model 2 smaller chi^2)
 % P < 0.05 : Model 2 fits the data better model 1 with 95% confidence
-%
+
 
 % calculate chi^2 sums
 Ea_1 = sum(res1.^2);

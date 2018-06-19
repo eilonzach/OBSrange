@@ -1,3 +1,5 @@
+function save2pdf(pdfFileName,handle,dpi)
+% save2pdf(pdfFileName,handle,dpi)
 %SAVE2PDF Saves a figure as a properly cropped pdf
 %
 %   save2pdf(pdfFileName,handle,dpi)
@@ -18,7 +20,6 @@
 %   Revised 9/22/2007
 %   Revised 1/14/2007
 
-function save2pdf(pdfFileName,handle,dpi)
 
 % Verify correct number of arguments
 % error(nargchk(0,3,nargin));
