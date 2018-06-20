@@ -16,7 +16,7 @@ clear; close all;
 
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
-projpath = '/Users/zeilon/Work/OBSrange/projects/PacificORCA/'; 
+projpath = '/home/stevo/Seismo/projects/OBSrange/projects/PacificORCA/'; 
 % path to survey data from the project directory
 datapath = './'; 
 % path to output directory from project directory(will be created if it does not yet exist)
