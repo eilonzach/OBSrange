@@ -38,7 +38,7 @@ function [s,az] = vdist(lat1,lon1,lat2,lon2)
 % Written by Michael Kleder, September 2004
 % https://www.mathworks.com/matlabcentral/fileexchange/5379-geodetic-distance-on-wgs84-earth-ellipsoid
 % 
-% Lightly edited by Z. Eilon, 2018 for vectorisation and km, az
+% Lightly edited by Z. Eilon, 2018 for vectorisation and km, az *
 
 % Input check:
 if abs(lat1)>90 | abs(lat2)>90
@@ -64,7 +64,7 @@ U1 = atan((1-f)*tan(lat1));
 U2 = atan((1-f)*tan(lat2));
 lon1 = mod(lon1,2*pi);
 lon2 = mod(lon2,2*pi);
-L = abs(lon2-lon1);
+L = lon2-lon1; % NB was abs value in original - not correct
 if L > pi
     L = 2*pi - L;
 end
@@ -108,13 +108,13 @@ s = s./1e3; % km
 
 % From point #1 to point #2
 a12 = atan2d((cos(U2).*sin(lambda)),(cos(U1).*sin(U2)-sin(U1).*cos(U2).*cos(lambda)));
-if a12 < 0
-    a12 = a12+360;
+while any(a12 < 0)
+    a12(a12 < 0) = a12(a12 < 0)+360;
 end
 % from point #2 to point #1
-a21 = atan2(cos(U1).*sin(lambda),-sin(U1).*cos(U2)+cos(U1).*sin(U2).*cos(lambda));
-if a21 < 0
-    a21 = a21+pi;
+a21 = atan2d(cos(U1).*sin(lambda),-sin(U1).*cos(U2)+cos(U1).*sin(U2).*cos(lambda));
+while any(a21 < 0)
+    a21(a21 < 0) = a21(a21 < 0)+360;
 end
 if (L>0) & (L<pi)
     a21 = a21 + pi;
