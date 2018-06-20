@@ -7,7 +7,7 @@ clr = lines(4);
 latlim = [min(lats_ship) max(lats_ship)]+[-1 1]*.2/111; % 200m outside ship circle
 lonlim = [min(lons_ship) max(lons_ship)]+[-1 1]*.2/111; % 200m outside ship circle
 deplim = [mean(z_sta) 0]+[-100 20];
-londist = distance_km(mean(lats_ship),lonlim(1),mean(lats_ship),lonlim(2));
+londist = vdist(mean(lats_ship),lonlim(1),mean(lats_ship),lonlim(2));
 
 % make axes
 ax1 = axes('pos',[0.10 0.1100 0.38 0.8150]); hold(ax1,'on')

@@ -11,9 +11,7 @@ ax4 = axes('pos',[0.55 0.08 0.37 0.38]);  hold(ax4,'on');
 % limits
 latlim = [min(lats_ship) max(lats_ship)]+[-1 1]*.2/111; % 200m outside ship circle
 lonlim = [min(lons_ship) max(lons_ship)]+[-1 1]*.2/111; % 200m outside ship circle
-londist = distance_km(mean(lats_ship),lonlim(1),mean(lats_ship),lonlim(2));
-
-
+londist = vdist(mean(lats_ship),lonlim(1),mean(lats_ship),lonlim(2));
 
 
 % Plot Velocities

@@ -34,14 +34,14 @@ title(ax5,'\textbf{Water Velocity (m/s)}','fontsize',18,'interpreter','latex');
 title(ax6,'\textbf{Drift (m)}','fontsize',18,'interpreter','latex');
 
 %% ticks for the histograms - in m about central value
-[cent_x,cent_y] = lonlat2xy(mean(cent_lon),mean(cent_lat),cent_lon,cent_lat);
+[cent_x,cent_y] = lonlat2xy_nomap(mean(cent_lon),mean(cent_lat),cent_lon,cent_lat);
 % ticks every two m
 tick_x = [2*floor(min(cent_x)/2):2:2*ceil(max(cent_x)/2)];
 tick_y = [2*floor(min(cent_y)/2):2:2*ceil(max(cent_y)/2)];
-[~,tick_lat] = xy2lonlat(mean(cent_lon),mean(cent_lat),0,tick_y);
-[tick_lon,~] = xy2lonlat(mean(cent_lon),mean(cent_lat),tick_x,0);
-[~,latlim] = xy2lonlat(mean(cent_lon),mean(cent_lat),0,1.2*[min(cent_y),max(cent_y)]);
-[lonlim,~] = xy2lonlat(mean(cent_lon),mean(cent_lat),1.2*[min(cent_x),max(cent_x)],0);
+[~,tick_lat] = xy2lonlat_nomap(mean(cent_lon),mean(cent_lat),0,tick_y);
+[tick_lon,~] = xy2lonlat_nomap(mean(cent_lon),mean(cent_lat),tick_x,0);
+[~,latlim] = xy2lonlat_nomap(mean(cent_lon),mean(cent_lat),0,1.2*[min(cent_y),max(cent_y)]);
+[lonlim,~] = xy2lonlat_nomap(mean(cent_lon),mean(cent_lat),1.2*[min(cent_x),max(cent_x)],0);
 set(ax1,'xtick',tick_lat,'xticklabel',tick_y,'xlim',latlim)
 set(ax2,'xtick',tick_lon,'xticklabel',tick_x,'xlim',lonlim)
 xlabel(ax1,sprintf('m from %.5f$^{\\circ}$',mean(cent_lat)),'interpreter','latex');

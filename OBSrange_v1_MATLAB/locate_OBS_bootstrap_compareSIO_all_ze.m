@@ -46,7 +46,7 @@ for is = 1:Nstas
     
     %% Compare with SIO
   
-    [ dataSIO.x_sta, dataSIO.y_sta ] = lonlat2xy( olon, olat, dataSIO.lon_sta, dataSIO.lat_sta);
+    [ dataSIO.x_sta, dataSIO.y_sta ] = lonlat2xy_nomap( olon, olat, dataSIO.lon_sta, dataSIO.lat_sta);
     dloc = sqrt( (dataSIO.x_sta-mean(invdata.x_sta_bs)).^2 + (dataSIO.y_sta-mean(invdata.y_sta_bs)).^2 + (dataSIO.z_sta-mean(invdata.z_sta_bs)).^2 );
     
     % Plot in map view and depth

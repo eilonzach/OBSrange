@@ -108,8 +108,8 @@ Nobs = length(twt);
 z_ship = zeros(Nobs,1); % ship is always at surface
 
 % Convert Lon/Lat to x/y
-[ x_ship, y_ship ] = lonlat2xy( olon, olat, lons_ship, lats_ship );
-[ x_drop, y_drop ] = lonlat2xy( olon, olat, lon_drop, lat_drop );
+[ x_ship, y_ship ] = lonlat2xy_nomap( olon, olat, lons_ship, lats_ship );
+[ x_drop, y_drop ] = lonlat2xy_nomap( olon, olat, lon_drop, lat_drop );
 
 % Calculate velocity of ship
 v_ship = pt_veloc( x_ship, y_ship, z_ship, t_ship );
@@ -173,7 +173,7 @@ for ibs = 1:par.N_bs
     twtcorr_mat(:,ibs) = models(end).twt_corr;
     dtwtcorr_mat(:,ibs) = models(end).dtwtcorr;
     vr_mat(:,ibs) = models(end).vr;
-    [lon_sta(ibs), lat_sta(ibs)] = xy2lonlat(olon, olat, x_sta(ibs), y_sta(ibs));
+    [lon_sta(ibs), lat_sta(ibs)] = xy2lonlat_nomap(olon, olat, x_sta(ibs), y_sta(ibs));
     
     % Calculate OBS drift distance and azimuth
     dx_drift(ibs) = m_final(1) - x_drop;
@@ -217,7 +217,7 @@ dz = 2*Dz/ngridpts;
 x_grid = [mean(x_sta)-Dx:dx:mean(x_sta)+Dx];
 y_grid = [mean(y_sta)-Dy:dy:mean(y_sta)+Dy];
 z_grid = [mean(z_sta)-Dz:dz:mean(z_sta)+Dz];
-[lon_grid, lat_grid] = xy2lonlat(olon, olat, x_grid, y_grid);
+[lon_grid, lat_grid] = xy2lonlat_nomap(olon, olat, x_grid, y_grid);
 Nx = length(x_grid);
 Ny = length(y_grid);
 Nz = length(z_grid);

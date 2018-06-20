@@ -26,8 +26,8 @@ lats_ship = data.lats;
 lons_ship = data.lons;
 twt = data.twt;
 
-[ x_ship, y_ship ] = lonlat2xy( lon_drop, lat_drop, lons_ship, lats_ship );
-% [ x_drop, y_drop ] = lonlat2xy( lon_drop, lat_drop, lon_drop, lat_drop );
+[ x_ship, y_ship ] = lonlat2xy_nomap( lon_drop, lat_drop, lons_ship, lats_ship );
+% [ x_drop, y_drop ] = lonlat2xy_nomap( lon_drop, lat_drop, lon_drop, lat_drop );
 x_drop=0;
 y_drop=0;
 
