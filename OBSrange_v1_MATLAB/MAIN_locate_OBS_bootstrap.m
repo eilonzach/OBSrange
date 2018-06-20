@@ -10,13 +10,13 @@
 % water column (dvp), and the velocity of the ship in the radial
 % direction of the survey circle (vr0).
 %
-% Josh R. & Zach E. 4/16/18
+% Josh Russell & Zach Eilon 4/16/18
 
 clear; close all;
 
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
+projpath = '/Users/zeilon/Work/OBSrange/projects/PacificORCA/'; 
 % path to survey data from the project directory
 datapath = './'; 
 % path to output directory from project directory(will be created if it does not yet exist)
@@ -60,7 +60,10 @@ par.epsilon = 1e-10;
 %% ================ NOT ADVISED TO EDIT BELOW THIS LINE ================ %%
 %% ===================================================================== %%
 
-addpath('./functions');
+% prepend functions directory to MATLAB path
+fullMAINpath = mfilename('fullpath');
+functionspath = [fullMAINpath(1:regexp(fullMAINpath,mfilename)-1),'functions'];
+addpath(functionspath);
 
 %% Load 2-way Travel Time Data
 wd = pwd;
