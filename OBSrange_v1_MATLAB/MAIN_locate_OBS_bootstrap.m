@@ -23,11 +23,11 @@ datapath = './';
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = '';
+onesta = 'CC01';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
-ifplot = 0; % Plot results?
+ifplot = 1; % Plot results?
 
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
@@ -314,14 +314,14 @@ fclose(fid);
 
 if ifsave && ifplot
 % Save plots
-if ~exist([outdir,'/plots/'])
-	mkdir([outdir,'/plots/']);
+if ~exist([modified_outdir,'/plots/'])
+	mkdir([modified_outdir,'/plots/']);
 end
-save2pdf([outdir,'/plots/',data.sta,'_1_OBSlocation.pdf'],f1,500)
-save2pdf([outdir,'/plots/',data.sta,'_2_misfit.pdf'],f2,500)
-save2pdf([outdir,'/plots/',data.sta,'_3_VelCorrs.pdf'],f3,500)
-save2pdf([outdir,'/plots/',data.sta,'_4_bootstrap.pdf'],f100,500)
-save2pdf([outdir,'/plots/',data.sta,'_5_Ftest.pdf'],f101,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_1_OBSlocation.pdf'],f1,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_2_misfit.pdf'],f2,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_3_VelCorrs.pdf'],f3,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_4_bootstrap.pdf'],f100,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_5_Ftest.pdf'],f101,500)
 end
 
 if ifsave
