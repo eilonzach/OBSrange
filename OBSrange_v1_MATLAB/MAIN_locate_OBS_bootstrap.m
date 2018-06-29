@@ -27,7 +27,7 @@ onesta = '';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
-ifplot = 1; % Plot results?
+ifplot = 0; % Plot results?
 
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
@@ -35,7 +35,7 @@ par.N_bs = 500; % Number of bootstrap iterations
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
-par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
+par.if_twtcorr = 0; % Apply a traveltime correction to account for ship velocity?
 par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
@@ -288,19 +288,17 @@ end
 
 %% Save output
 % output directory
-if is == 1
-    if par.if_twtcorr
-        outdir = [outdir,'OUT_wcorr'];
-    elseif ~par.if_twtcorr
-        outdir = [outdir,'OUT_nocorr'];
-    end  
-    if ~exist(outdir)
-        mkdir(outdir);
-    end
+if par.if_twtcorr
+    modified_outdir = [outdir,'OUT_wcorr/'];
+elseif ~par.if_twtcorr
+    modified_outdir = [outdir,'OUT_nocorr/'];
+end  
+if ~exist(modified_outdir)
+	mkdir(modified_outdir);
 end
 
 % Save textfile
-fid = fopen([outdir,'/',data.sta,'_location.txt'],'w');
+fid = fopen([modified_outdir,'/',data.sta,'_location.txt'],'w');
 fprintf(fid,'Bootstrap inversion results (2sigma uncertainty)');
 fprintf(fid,'\nStation: %s',data.sta);
 fprintf(fid,'\nLat:   %.5f deg (%f) \nLon:   %.5f deg (%f) \nX:     %f m (%f) \nY:    %f m (%f) \nDepth: %f m (%f) \nTAT:   %f ms (%f) \nWater Vel.: %f m/s (%f)',mean(lat_sta),std(lat_sta)*2,mean(lon_sta),std(lon_sta)*2,mean(x_sta),std(x_sta)*2,mean(y_sta),std(y_sta)*2,mean(z_sta),std(z_sta)*2,mean(TAT)*1000,std(TAT)*1000*2,mean(V_w),std(V_w)*2);
@@ -352,10 +350,10 @@ if ifsave
 	datamat.loc_xyz = [mean(x_sta),mean(y_sta),mean(z_sta)];
 	datamat.loc_lolaz = [mean(lon_sta),mean(lat_sta),mean(z_sta)];
 	datamat.mean_drift_az = [mean(drift) r2d(mean_ang(d2r(azi)))];
-	if ~exist([outdir,'/mats'])
-		mkdir([outdir,'/mats']);
+	if ~exist([modified_outdir,'/mats'])
+		mkdir([modified_outdir,'/mats']);
 	end
-	save([outdir,'/mats/',data.sta,'_data.mat'],'datamat');
+	save([modified_outdir,'/mats/',data.sta,'_data.mat'],'datamat');
 end
 
 
