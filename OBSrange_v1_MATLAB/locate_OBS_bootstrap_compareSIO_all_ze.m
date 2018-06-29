@@ -11,13 +11,13 @@ clear; close all;
 addpath('./functions');
 
 %% Parameters
-projpath = '/Users/zeilon/Work/Fieldwork/PacArray18/OBS_survey'; % path to project
-datapath = './OrcaAcousticSurvey/'; % path to survey data
-datapathSIO = './OrcaAcousticSurvey/'; % path to survey data
-outdir_OBSrange = './OUT_OBSrange/OUT_wcorr/'; % output directory
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % path to project
+datapath = './'; % path to survey data
+datapathSIO = './'; % path to survey data
+outdir_OBSrange = './OUT_OBSrange/OUT_wcorr_1pts/'; % output directory
 outdir_SIOcomp = './OUT_OBSrange/SIO_compare/'; % output directory
 is_savemat = 1; % Save *.mat file of results?
-Nbins = 15;
+Nbins = 15; % Bins for histogram plots
 
 wd = pwd;
 cd(projpath);
