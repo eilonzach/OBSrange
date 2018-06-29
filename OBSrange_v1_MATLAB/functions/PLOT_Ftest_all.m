@@ -31,13 +31,14 @@ fill(ax3,[-2000,2000,2000,-2000,-2000],[-8000,-8000,8000,8000,-8000],col(1,:))
 
 ang = [0:0.1:2*pi];
 %X-Y
-contourf(ax1,x_grid,y_grid,P(:,:,Iz_max),'linestyle','none');
+contourf(ax1,Xgrd(:,:,Iz_max),Ygrd(:,:,Iz_max),P(:,:,Iz_max),'linestyle','none');
 % shading(ax1,'flat');
-contour(ax1,x_grid,y_grid,P(:,:,Iz_max),[[0.05 0.05],[0.67 0.67]],'-w','linewidth',2); hold on;
+contour(ax1,Xgrd(:,:,Iz_max),Ygrd(:,:,Iz_max),P(:,:,Iz_max),[[0.05 0.05],[0.32 0.32]],'-w','linewidth',2); hold on;
 plot(ax1,Xgrd(Ix_max,Iy_max,Iz_max),Ygrd(Ix_max,Iy_max,Iz_max),'ok','markerfacecolor',[1 0 0],'markersize',12,'linewidth',1)
 set(ax1,'fontsize',16,'linewidth',2,'box','on','layer','top',...
     'xlim',x_bds,'ylim',y_bds,...
-    'xtick',x_tix,'xticklabel',x_tix_lab,'ytick',y_tix,'yticklabel',y_tix_lab);
+    'xtick',x_tix,'xticklabel',x_tix_lab,'ytick',y_tix,'yticklabel',y_tix_lab,...
+    'TickDir','out');
 xlabel(ax1,'$\delta$X (m)','fontsize',18,'interpreter','latex');
 ylabel(ax1,'$\delta$Y (m)','fontsize',18,'interpreter','latex');
 title(ax1,'\textbf{X-Y}','fontsize',18,'interpreter','latex');
@@ -49,13 +50,14 @@ hty1 = text(ax1,x_bds(1)+0.04*diff(axlim(ax1,1:2)),y_bds(1)+0.05*diff(axlim(ax1,
 % axis equal;
 
 %X-Z
-contourf(ax2,x_grid,z_grid,squeeze(P(:,Iy_max,:))','linestyle','none');
+contourf(ax2,squeeze(Xgrd(Iy_max,:,:)),squeeze(Zgrd(Iy_max,:,:)),squeeze(P(Iy_max,:,:)),'linestyle','none');
 % shading(ax1,'flat');
-contour(ax2,x_grid,z_grid,squeeze(P(:,Iy_max,:))',[[0.05 0.05],[0.67 0.67]],'-w','linewidth',2); hold on;
+contour(ax2,squeeze(Xgrd(Iy_max,:,:)),squeeze(Zgrd(Iy_max,:,:)),squeeze(P(Iy_max,:,:)),[[0.05 0.05],[0.32 0.32]],'-w','linewidth',2); hold on;
 plot(ax2,Xgrd(Ix_max,Iy_max,Iz_max),Zgrd(Ix_max,Iy_max,Iz_max),'ok','markerfacecolor',[1 0 0],'markersize',12,'linewidth',1)
 set(ax2,'fontsize',16,'linewidth',2,'box','on','layer','top',...
     'xlim',x_bds,'ylim',z_bds,...
-    'xtick',x_tix,'xticklabel',x_tix_lab,'ytick',z_tix,'yticklabel',z_tix_lab);
+    'xtick',x_tix,'xticklabel',x_tix_lab,'ytick',z_tix,'yticklabel',z_tix_lab,...
+    'TickDir','out');
 xlabel(ax2,'$\delta$X (m)','fontsize',18,'interpreter','latex');
 ylabel(ax2,'$\delta$Z (m)','fontsize',18,'interpreter','latex');
 title(ax2,'\textbf{X-Z}','fontsize',18,'interpreter','latex');
@@ -67,13 +69,14 @@ htz2 = text(ax2,x_bds(1)+0.04*diff(axlim(ax2,1:2)),z_bds(1)+0.05*diff(axlim(ax2,
 % axis equal;
 
 %Y-Z
-contourf(ax3,y_grid,z_grid,squeeze(P(Ix_max,:,:))','linestyle','none');
+contourf(ax3,squeeze(Ygrd(:,Ix_max,:)),squeeze(Zgrd(:,Ix_max,:)),squeeze(P(:,Ix_max,:)),'linestyle','none');
 % shading(ax1,'flat');
-contour(ax3,y_grid,z_grid,squeeze(P(Ix_max,:,:))',[[0.05 0.05],[0.67 0.67]],'-w','linewidth',2); hold on;
+contour(ax3,squeeze(Ygrd(:,Ix_max,:)),squeeze(Zgrd(:,Ix_max,:)),squeeze(P(:,Ix_max,:)),[[0.05 0.05],[0.32 0.32]],'-w','linewidth',2); hold on;
 plot(ax3,Ygrd(Ix_max,Iy_max,Iz_max),Zgrd(Ix_max,Iy_max,Iz_max),'ok','markerfacecolor',[1 0 0],'markersize',12,'linewidth',1)
 set(ax3,'fontsize',16,'linewidth',2,'box','on','layer','top','xdir','reverse',...
     'xlim',y_bds,'ylim',z_bds,...
-    'xtick',y_tix,'xticklabel',y_tix_lab,'ytick',z_tix,'yticklabel',z_tix_lab);
+    'xtick',y_tix,'xticklabel',y_tix_lab,'ytick',z_tix,'yticklabel',z_tix_lab,...
+    'TickDir','out');
 xlabel(ax3,'$\longleftarrow$ $\delta$Y (m)','fontsize',18,'interpreter','latex');
 ylabel(ax3,'$\delta$Z (m)','fontsize',18,'interpreter','latex');
 title(ax3,'\textbf{Y-Z}','fontsize',18,'interpreter','latex');

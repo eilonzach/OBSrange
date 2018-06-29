@@ -16,14 +16,14 @@ clear; close all;
 
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
-projpath = '/home/stevo/Seismo/projects/OBSrange/projects/PacificORCA/'; 
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
 % path to survey data from the project directory
 datapath = './'; 
 % path to output directory from project directory(will be created if it does not yet exist)
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = ''; 
+onesta = '';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -35,8 +35,8 @@ par.N_bs = 500; % Number of bootstrap iterations
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
-par.if_twtcorr = 0; % Apply a traveltime correction to account for ship velocity?
-par.npts_movingav = 5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
+par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
+par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
 ifQC_ping = 1; % Do quality control on pings?
@@ -246,12 +246,12 @@ for ix = 1:Nx
 	for iy = 1:Ny
 		for iz = 1:Nz
 			% Apply scaling to vp_w and TAT to account for tradeoffs with Z
-			dz = z_grid(iz) - mean(z_sta);
+			dz = Zgrd(ix,iy,iz) - mean(z_sta);
 			dvw = (eig3_vw/eig3_z)*dz; % perturbation to water velocity to account for dz
 			dTAT = (eig3_TAT/eig3_z)*dz; % perturbation to TAT to account for dz
 
 			% Grid search residual;
-			twt_pre_gs = calcTWT(x_grid(ix), y_grid(iy), z_grid(iz), mean(dvp)+dvw, mean(TAT)+dTAT, x_ship, y_ship, z_ship, par.vp_w);
+			twt_pre_gs = calcTWT(Xgrd(ix,iy,iz), Ygrd(ix,iy,iz), Zgrd(ix,iy,iz), mean(dvp)+dvw, mean(TAT)+dTAT, x_ship, y_ship, z_ship, par.vp_w);
 			resid_gs = twtcorr_bs-twt_pre_gs;
 
 			% Calculate P statistic
@@ -288,13 +288,15 @@ end
 
 %% Save output
 % output directory
-if par.if_twtcorr
-    outdir = [outdir,'OUT_wcorr'];
-elseif ~par.if_twtcorr
-    outdir = [outdir,'OUT_nocorr'];
-end  
-if ~exist(outdir)
-	mkdir(outdir);
+if is == 1
+    if par.if_twtcorr
+        outdir = [outdir,'OUT_wcorr'];
+    elseif ~par.if_twtcorr
+        outdir = [outdir,'OUT_nocorr'];
+    end  
+    if ~exist(outdir)
+        mkdir(outdir);
+    end
 end
 
 % Save textfile
