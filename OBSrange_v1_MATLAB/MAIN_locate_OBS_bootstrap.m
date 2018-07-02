@@ -16,14 +16,20 @@ clear; close all;
 
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
+
+% JOSH
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
+
+% ZACH
+projpath = '~/Work/OBSrange/projects/PacificORCA/'; 
+
 % path to survey data from the project directory
 datapath = './'; 
 % path to output directory from project directory(will be created if it does not yet exist)
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = 'CC01';
+onesta = '';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
