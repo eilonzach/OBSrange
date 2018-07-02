@@ -16,14 +16,20 @@ clear; close all;
 
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
-projpath = '/Users/zeilon/Work/OBSrange/projects/PacificORCA/'; 
+
+% JOSH
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
+
+% ZACH
+projpath = '~/Work/OBSrange/projects/PacificORCA/'; 
+
 % path to survey data from the project directory
 datapath = './'; 
 % path to output directory from project directory(will be created if it does not yet exist)
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = ''; 
+onesta = '';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -36,7 +42,7 @@ par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
 par.if_twtcorr = 0; % Apply a traveltime correction to account for ship velocity?
-par.npts_movingav = 5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
+par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
 ifQC_ping = 1; % Do quality control on pings?
@@ -246,12 +252,12 @@ for ix = 1:Nx
 	for iy = 1:Ny
 		for iz = 1:Nz
 			% Apply scaling to vp_w and TAT to account for tradeoffs with Z
-			dz = z_grid(iz) - mean(z_sta);
+			dz = Zgrd(ix,iy,iz) - mean(z_sta);
 			dvw = (eig3_vw/eig3_z)*dz; % perturbation to water velocity to account for dz
 			dTAT = (eig3_TAT/eig3_z)*dz; % perturbation to TAT to account for dz
 
 			% Grid search residual;
-			twt_pre_gs = calcTWT(x_grid(ix), y_grid(iy), z_grid(iz), mean(dvp)+dvw, mean(TAT)+dTAT, x_ship, y_ship, z_ship, par.vp_w);
+			twt_pre_gs = calcTWT(Xgrd(ix,iy,iz), Ygrd(ix,iy,iz), Zgrd(ix,iy,iz), mean(dvp)+dvw, mean(TAT)+dTAT, x_ship, y_ship, z_ship, par.vp_w);
 			resid_gs = twtcorr_bs-twt_pre_gs;
 
 			% Calculate P statistic
@@ -289,16 +295,16 @@ end
 %% Save output
 % output directory
 if par.if_twtcorr
-    outdir = [outdir,'OUT_wcorr'];
+    modified_outdir = [outdir,'OUT_wcorr/'];
 elseif ~par.if_twtcorr
-    outdir = [outdir,'OUT_nocorr'];
+    modified_outdir = [outdir,'OUT_nocorr/'];
 end  
-if ~exist(outdir)
-	mkdir(outdir);
+if ~exist(modified_outdir)
+	mkdir(modified_outdir);
 end
 
 % Save textfile
-fid = fopen([outdir,'/',data.sta,'_location.txt'],'w');
+fid = fopen([modified_outdir,'/',data.sta,'_location.txt'],'w');
 fprintf(fid,'Bootstrap inversion results (2sigma uncertainty)');
 fprintf(fid,'\nStation: %s',data.sta);
 fprintf(fid,'\nLat:   %.5f deg (%f) \nLon:   %.5f deg (%f) \nX:     %f m (%f) \nY:    %f m (%f) \nDepth: %f m (%f) \nTAT:   %f ms (%f) \nWater Vel.: %f m/s (%f)',mean(lat_sta),std(lat_sta)*2,mean(lon_sta),std(lon_sta)*2,mean(x_sta),std(x_sta)*2,mean(y_sta),std(y_sta)*2,mean(z_sta),std(z_sta)*2,mean(TAT)*1000,std(TAT)*1000*2,mean(V_w),std(V_w)*2);
@@ -314,14 +320,14 @@ fclose(fid);
 
 if ifsave && ifplot
 % Save plots
-if ~exist([outdir,'/plots/'])
-	mkdir([outdir,'/plots/']);
+if ~exist([modified_outdir,'/plots/'])
+	mkdir([modified_outdir,'/plots/']);
 end
-save2pdf([outdir,'/plots/',data.sta,'_1_OBSlocation.pdf'],f1,500)
-save2pdf([outdir,'/plots/',data.sta,'_2_misfit.pdf'],f2,500)
-save2pdf([outdir,'/plots/',data.sta,'_3_VelCorrs.pdf'],f3,500)
-save2pdf([outdir,'/plots/',data.sta,'_4_bootstrap.pdf'],f100,500)
-save2pdf([outdir,'/plots/',data.sta,'_5_Ftest.pdf'],f101,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_1_OBSlocation.pdf'],f1,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_2_misfit.pdf'],f2,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_3_VelCorrs.pdf'],f3,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_4_bootstrap.pdf'],f100,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_5_Ftest.pdf'],f101,500)
 end
 
 if ifsave
@@ -350,10 +356,10 @@ if ifsave
 	datamat.loc_xyz = [mean(x_sta),mean(y_sta),mean(z_sta)];
 	datamat.loc_lolaz = [mean(lon_sta),mean(lat_sta),mean(z_sta)];
 	datamat.mean_drift_az = [mean(drift) r2d(mean_ang(d2r(azi)))];
-	if ~exist([outdir,'/mats'])
-		mkdir([outdir,'/mats']);
+	if ~exist([modified_outdir,'/mats'])
+		mkdir([modified_outdir,'/mats']);
 	end
-	save([outdir,'/mats/',data.sta,'_data.mat'],'datamat');
+	save([modified_outdir,'/mats/',data.sta,'_data.mat'],'datamat');
 end
 
 
