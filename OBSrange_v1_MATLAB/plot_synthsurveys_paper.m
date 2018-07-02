@@ -9,7 +9,7 @@ projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/Pacifi
 % path to survey data from the project directory
 datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; 
 % path to output directory from project directory(will be created if it does not yet exist)
-outdir = [projpath,'/OUT_OBSrange_synthsurveys/OUT_wcorr_5pts/']; 
+outdir = [projpath,'/OUT_OBSrange_synthsurveys/OUT_wcorr_1pts/']; 
 
 % prepend functions directory to MATLAB path
 fullMAINpath = mfilename('fullpath');
