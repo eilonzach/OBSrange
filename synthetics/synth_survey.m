@@ -1,4 +1,5 @@
 clear
+close all
 addpath('~/Dropbox/MATLAB/myFUNCTIONS/');
 % profile clear 
 % profile on
@@ -10,7 +11,7 @@ datN = 10;
 ifsave = true;
 
 %% survey parameters
-survey = 'line2'; % 'PACMAN' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
+survey = 'line'; % 'PACMAN' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
 radius = 1.; % radius of survey, in Nm
 fprintf('Survey %s rad=%.00f\n',survey,radius);
 survstart = now;
@@ -22,7 +23,7 @@ vp_actual = 1.520; % km/s
 tat = 0.014; %s
 
 % if doing many iterations
-niter = 10000; % if niter>0, will not make plots or save output file in SIO format
+niter = 1e4; % if niter>0, will not make plots or save output file in SIO format
 x_std = 0.100; % in km
 y_std = 0.100; % in km
 z_std = 0.050; % in km
@@ -47,7 +48,7 @@ az = 0; % azimuth of +y direction
 if niter==1
 % obs location
 % [obs_location_laloz(1),obs_location_laloz(2)] = project_xy(proj,obs_location_xyz(1),obs_location_xyz(2),'inverse');
-[obs_location_laloz(2),obs_location_laloz(1)] = xy2lonlat(drop_location(2),drop_location(1),1e3*obs_location_xyz(1),1e3*obs_location_xyz(2));
+[obs_location_laloz(2),obs_location_laloz(1)] = xy2lonlat_nomap(drop_location(2),drop_location(1),1e3*obs_location_xyz(1),1e3*obs_location_xyz(2));
 
 obs_location_laloz(3) = obs_location_xyz(3);
 
@@ -111,7 +112,7 @@ if niter > 1
     obs_location_xyz = obs_default_xyz + [normrnd(0,x_std),normrnd(0,y_std),normrnd(0,z_std)];
     tat = tat_default + normrnd(0,tat_std);
     vp_actual = vp_default + normrnd(0,vp_std);
-    [obs_location_laloz(2),obs_location_laloz(1)] = xy2lonlat(drop_location(2),drop_location(1),1e3*obs_location_xyz(1),1e3*obs_location_xyz(2));
+    [obs_location_laloz(2),obs_location_laloz(1)] = xy2lonlat_nomap(drop_location(2),drop_location(1),1e3*obs_location_xyz(1),1e3*obs_location_xyz(2));
     obs_location_laloz(3) = obs_location_xyz(3);
     % save these true values
     data(jj).obs_loc_xyz = obs_location_xyz;
@@ -161,7 +162,7 @@ survt = rec_survt/24/60/60 + survstart;
 
 % project back to lon,lat
 % [survlat,survlon] = project_xy(proj,survx,survy,'inverse');
-[ survlon, survlat ] = xy2lonlat( drop_location(2),drop_location(1), survx*1.e3, survy*1.e3);
+[ survlon, survlat ] = xy2lonlat_nomap( drop_location(2),drop_location(1), survx*1.e3, survy*1.e3);
 [survgc,survaz] = distance(drop_location(1), drop_location(2),survlat,survlon);
 
 
