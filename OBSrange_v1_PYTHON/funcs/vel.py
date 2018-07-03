@@ -40,9 +40,9 @@ def smooth(vel, npts):
   vx = vel[:,0]
   vy = vel[:,1]
   vz = vel[:,2]
-  
+
   # Make sure npts is odd.
-  if npts % 2 == 1:
+  if npts % 2 != 1:
     npts = npts + 1
 
   dy = npts//2
@@ -66,12 +66,9 @@ def smooth(vel, npts):
   # complete moving average filter (not normalised).
   G = np.concatenate([D, C, np.rot90(D, 2)])
 
-  for v in [vx, vy, vz]:
-    # multiply and normalise.
-    v = np.dot(G,v)/np.sum(G, axis=1) 
-    
-    # throw away last point.
-    v = v[0:-1]
-
+  # Multiply and normalize.
+  vx = np.dot(G,vx)/np.sum(G, axis=1)
+  vy = np.dot(G,vy)/np.sum(G, axis=1)
+  vz = np.dot(G,vz)/np.sum(G, axis=1)
+  
   return np.vstack([vx, vy, vz]).T
-
