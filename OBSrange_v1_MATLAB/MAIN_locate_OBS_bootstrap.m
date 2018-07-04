@@ -21,7 +21,10 @@ clear; close all;
 projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
 
 % ZACH
-% projpath = '~/Work/OBSrange/projects/PacificORCA/'; 
+% projpath = '~/Work/OBSrange/projects/PacificORCA/';
+
+% STEVE
+% projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
 
 % path to survey data from the project directory
 datapath = './'; 
