@@ -1,4 +1,4 @@
-function [ m_final,models,v_eff,N,R,Covm,lambda ] = inv_newtons( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H)
+function [ m_final,models,v_eff ] = inv_newtons( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H)
 %[ m_final,models,v_eff ] = inv_newton( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H )
 % 
 %   Conduct interative inversion for OBS location and other parameters
@@ -84,11 +84,7 @@ while dE > E_thresh
     % Calculate the effective degrees of freedom (for F-test)
     v_eff = length(f) - trace(F*Finv);
     
-    if m1(4) < par.TAT_bounds(1)
-        m1(4) = par.TAT_bounds(1);
-    elseif m1(4) > par.TAT_bounds(2)
-        m1(4) = par.TAT_bounds(2);
-    end
+    if 
 
     models(iiter).m = m0;
     models(iiter).E = E;
@@ -103,11 +99,5 @@ while dE > E_thresh
 end
 m_final = m0;
 
-% Data Resolution
-N = F*Finv;
-% Model Resolution
-R = Finv*F;
-% Model Covariance
-Covm = Finv*Finv';
 end
 
