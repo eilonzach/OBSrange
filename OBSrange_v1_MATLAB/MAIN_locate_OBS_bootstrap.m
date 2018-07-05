@@ -18,13 +18,13 @@ clear; close all;
 % path to project
 
 % JOSH
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
 
 % ZACH
 % projpath = '~/Work/OBSrange/projects/PacificORCA/';
 
 % STEVE
-projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
+% projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
 
 % path to survey data from the project directory
 datapath = './'; 
@@ -44,7 +44,7 @@ par.N_bs = 500; % Number of bootstrap iterations
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
-par.if_twtcorr = 0; % Apply a traveltime correction to account for ship velocity?
+par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
 par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
@@ -53,6 +53,7 @@ res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnit
 
 % TAT - Define turnaround time to damp towards in the inversion
 par.TAT_start = 0.013; % (s)
+par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT
 
 % Norm damping for each model parameter (damping towards starting model)
 % Larger values imply more damping towards the starting model.
@@ -159,6 +160,8 @@ azi  = nan(par.N_bs,1);
 dist = cell(par.N_bs,1);
 azi_locs = cell(par.N_bs,1);
 models = cell(par.N_bs,1);
+R_mat = zeros(M,M,par.N_bs);
+Cm_mat = zeros(M,M,par.N_bs);
 for ibs = 1:par.N_bs
     x_ship_bs = xmat_ship_bs(:,ibs);
     y_ship_bs = ymat_ship_bs(:,ibs);
@@ -166,7 +169,7 @@ for ibs = 1:par.N_bs
     v_ship_bs = [vmat_ship_bs(1).amatbs(:,ibs)'; vmat_ship_bs(2).amatbs(:,ibs)'; vmat_ship_bs(3).amatbs(:,ibs)'];
     twt_bs = twtmat_bs(:,ibs);
     
-    [ m_final,models,v ] = ...
+    [ m_final,models,v,N,R,Cm ] = ...
         inv_newtons( par,m0_strt,twt_bs,...
                     x_ship_bs,y_ship_bs,z_ship_bs,...
                     v_ship_bs,H);
@@ -184,6 +187,8 @@ for ibs = 1:par.N_bs
     dtwtcorr_mat(:,ibs) = models(end).dtwtcorr;
     vr_mat(:,ibs) = models(end).vr;
     [lon_sta(ibs), lat_sta(ibs)] = xy2lonlat_nomap(olon, olat, x_sta(ibs), y_sta(ibs));
+    R_mat(:,:,ibs) = R;
+    Cm_mat(:,:,ibs) = Cm;
     
     % Calculate OBS drift distance and azimuth
     dx_drift(ibs) = m_final(1) - x_drop;
@@ -293,6 +298,8 @@ if ifplot
 	%% Geographic PLOTTING
 	PLOT_survey
 	PLOT_twt_corr
+    %% Model Resolution & Covariance
+    PLOT_resolution_covariance
 end
 
 
@@ -332,6 +339,7 @@ save2pdf([modified_outdir,'/plots/',data.sta,'_2_misfit.pdf'],f2,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_3_VelCorrs.pdf'],f3,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_4_bootstrap.pdf'],f100,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_5_Ftest.pdf'],f101,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_6_Resolution_Covariance.pdf'],f103,500)
 end
 
 if ifsave
@@ -360,6 +368,8 @@ if ifsave
 	datamat.loc_xyz = [mean(x_sta),mean(y_sta),mean(z_sta)];
 	datamat.loc_lolaz = [mean(lon_sta),mean(lat_sta),mean(z_sta)];
 	datamat.mean_drift_az = [mean(drift) r2d(mean_ang(d2r(azi)))];
+    datamat.R_mat = R_mat;
+    datamat.Cm_mat = Cm_mat;
 	if ~exist([modified_outdir,'/mats'])
 		mkdir([modified_outdir,'/mats']);
 	end

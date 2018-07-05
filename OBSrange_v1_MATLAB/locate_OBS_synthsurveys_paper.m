@@ -20,10 +20,18 @@ clear; close all;
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
 projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
+
 % path to survey data from the project directory
-datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; 
+datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/';
 % path to output directory from project directory(will be created if it does not yet exist)
 outdir = './OUT_OBSrange_synthsurveys/'; 
+
+% % path to survey data from the project directory
+% %datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/';
+% datapath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/synthetics/synth_surveys_paper/noise4ms/';
+% % path to output directory from project directory(will be created if it does not yet exist)
+% outdir = './OUT_OBSrange_synthsurveys_noise4ms/'; 
+
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
 onesurvey = '';
@@ -39,7 +47,8 @@ par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
 par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
-par.npts_movingav = 5; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
+par.if_perfectcorr = 0;
+par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
 ifQC_ping = 1; % Do quality control on pings?
@@ -47,13 +56,14 @@ res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnit
 
 % TAT - Define turnaround time to damp towards in the inversion
 par.TAT_start = 0.013; % (s)
+par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT
 
 % Norm damping for each model parameter (damping towards survrting model)
 % Larger values imply more damping towards the survrting model.
 par.dampx = 0;
 par.dampy = 0;
 par.dampz = 0; %0
-par.dampTAT = 2e-1; %2e-1
+par.dampTAT = 2e-1; %2e-1; %2e-1
 par.dampdvp = 5e-8; %5e-8
 
 % Global norm damping for survbilization
@@ -70,12 +80,14 @@ addpath(functionspath);
 
 % output directory
 if par.if_twtcorr
-    modified_outdir = [outdir,'OUT_wcorr/'];
+    if par.if_perfectcorr
+        modified_outdir = [outdir,'OUT_wperfectcorr/'];
+        display('*APPLYING PERFECT CORRECTIONS*');
+    elseif ~par.if_perfectcorr
+        modified_outdir = [outdir,'OUT_wcorr/'];
+    end
 elseif ~par.if_twtcorr
     modified_outdir = [outdir,'OUT_nocorr/'];
-end  
-if ~exist(modified_outdir)
-	mkdir(modified_outdir);
 end
 
 %% Load 2-way Travel Time Data
@@ -134,6 +146,9 @@ dist = cell(par.N_bs,1);
 azi_locs = cell(par.N_bs,1);
 models = cell(par.N_bs,1);
 
+RR = zeros(5,5,length(data));
+CCovm = zeros(5,5,length(data));
+
 for ii = 1:length(data)
     twt = data(ii).tot_dt;
     [Is0nan, ~] = find(~isnan(twt));
@@ -187,11 +202,18 @@ for ii = 1:length(data)
         z_ship_bs = zmat_ship_bs(:,ibs);
         v_ship_bs = [vmat_ship_bs(1).amatbs(:,ibs)'; vmat_ship_bs(2).amatbs(:,ibs)'; vmat_ship_bs(3).amatbs(:,ibs)'];
         twt_bs = twtmat_bs(:,ibs);
-
-        [ m_final,models,v ] = ...
-            inv_newtons( par,m0_strt,twt_bs,...
-                        x_ship_bs,y_ship_bs,z_ship_bs,...
-                        v_ship_bs,H);
+        
+        if ~par.if_perfectcorr
+            [ m_final,models,v,N,R,Cm ] = ...
+                inv_newtons( par,m0_strt,twt_bs,...
+                            x_ship_bs,y_ship_bs,z_ship_bs,...
+                            v_ship_bs,H);
+        elseif par.if_perfectcorr
+            [ m_final,models,v ] = ...
+                inv_newtons_perfectcorr( par,m0_strt,twt_bs,...
+                            x_ship_bs,y_ship_bs,z_ship_bs,...
+                            v_ship_bs,H,corr_dt);
+        end
 
         x_sta(ii) = m_final(1);
         y_sta(ii) = m_final(2);
@@ -255,6 +277,11 @@ for ii = 1:length(data)
     data(ii).misfit_dtwtcorr = data(ii).dtwtcorr(:)' - corr_dt(:)'; % correction time misfit
     data(ii).v_ship = v_ship;
     data(ii).misfit_v_ship = v_ship(1:2,:) - v_surv_true';
+    
+    RR(:,:,ii) = R;
+    CCm(:,:,ii) = Cm;
+    data(ii).R = R;
+    data(ii).Cm = Cm;
 end
 % Store output
 data(1).misfit_latsta = misfit_latsta(:);
@@ -308,6 +335,58 @@ if ifplot
     xlabel('Longitude','fontsize',18);
     ylabel('Latitude','fontsize',18);
     axis equal;
+    
+    %% Model resolution and Covariance
+    figure(103); clf;
+    set(gcf,'position',[91   260   829   438]);
+    cmap = cmocean('balance');
+    
+    ax1 = subplot(1,2,1);
+    ax1Pos = ax1.Position;
+    imagesc(ax1,mean(RR,3)); hold on;
+    for i = 1:5
+        plot([.5,5.5],[i-.5,i-.5],'k-','linewidth',2);
+        plot([i-.5,i-.5],[.5,5.5],'k-','linewidth',2);
+    end
+    R_spread = sum(sum((mean(RR,3)-eye(size(mean(RR,3)))).^2));
+    axis square;
+    axis tight;
+    set(ax1,'fontsize',16,'linewidth',2);
+    title(ax1,'\textbf{Model Resolution}','fontsize',18,'Interpreter','latex');
+    cb1 = colorbar(ax1);
+    colormap(cmap)
+%     caxis([-max(max(abs(mean(RR,3)))) max(max(abs(mean(RR,3))))]);
+    caxis([-1 1]);
+    
+    ax2 = subplot(1,2,2);
+    ax2Pos = ax2.Position;
+    imagesc(ax2,sign(mean(CCm,3)).*log10(abs(mean(CCm,3)))); hold on;
+    for i = 1:5
+        plot([.5,5.5],[i-.5,i-.5],'k-','linewidth',2);
+        plot([i-.5,i-.5],[.5,5.5],'k-','linewidth',2);
+    end
+    axis square;
+    axis tight;
+    set(ax2,'fontsize',16,'linewidth',2);
+    title(ax2,'\textbf{Model Covariance}','fontsize',18,'Interpreter','latex');
+    cb2 = colorbar(ax2);
+    ylabel(cb2,'$\log_{10}(C_m)$','fontsize',16,'Interpreter','latex');
+    colormap(cmap)
+    caxis([-max(max(log10(abs(mean(CCm,3))))) max(max(log10(abs(mean(CCm,3)))))])
+    
+%     tk = logspace(0,8,20);
+%     cmap = parula(19);
+%     ctable = [tk(1:end-1)' cmap*255 tk(2:end)' cmap*255];
+% %     cptcmap(ctable, 'mapping', 'direct');
+%     colormap(ctable)
+% %     cptcbar(ax2, ctable, 'eastoutside', false);
+    
+    set(ax1,'Position',[ax1Pos(1)-0.04 ax1Pos(2:4)]);
+    set(ax2,'Position',ax2Pos);
+    dx = 0.8;
+    dy = 0.1;
+    text(ax1,diff(ax1.XLim)*dx+ax1.XLim(1),diff(ax1.YLim)*dy+ax1.YLim(1),...
+    sprintf('\\textbf{ %.4f}',R_spread),'color',[0 0 0],'interpreter','latex','fontsize',14);
 end
 
 
@@ -336,6 +415,7 @@ end
 save2pdf([modified_outdir,'/plots/',surv,'_1_ModelHists.pdf'],100,500)
 save2pdf([modified_outdir,'/plots/',surv,'_2_MisfitHists.pdf'],101,500)
 save2pdf([modified_outdir,'/plots/',surv,'_3_Survey.pdf'],102,500)
+save2pdf([modified_outdir,'/plots/',surv,'_4_Resolution.pdf'],103,500)
 end
 
 if ifsave

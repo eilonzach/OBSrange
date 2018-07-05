@@ -3,6 +3,7 @@ function [ data_all,misfit,lgd,symbol ] = agg_synthsurveys( filenames,Nfils )
 misfit.agg = [];
 misfit.agg.dtwt_all = [];
 misfit.agg.dtwtcorr_all = [];
+misfit.agg.twtcorr_all = [];
 for ifil = 1:Nfils
     load(filenames{ifil});
     
@@ -48,6 +49,7 @@ for ifil = 1:Nfils
     misfit.dtwt_all_std(ifil,1) = std(data(1).dtwt_all);
     misfit.agg.dtwt_all = [misfit.agg.dtwt_all data(1).dtwt_all];
     misfit.agg.dtwtcorr_all = [misfit.agg.dtwtcorr_all data(1).misfit_dtwtcorr_all];
+    misfit.agg.twtcorr_all = [misfit.agg.twtcorr_all vertcat(data.dtwtcorr)'];
     
     lgd{ifil} = [data_all(ifil).survey,' ',num2str(data_all(ifil).radius),' nm']; %files(ifil).name(1:end-4);
     if any(regexp(lgd{ifil},'PACMAN'))
