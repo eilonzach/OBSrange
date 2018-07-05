@@ -78,15 +78,8 @@ def instruments(datafile, parameters):
   
   print('\n Performing bootstrap resampling ...')
   
-  # Randomly resample model data.
+  # Randomly resample model data. First columns are unpermutted input data.
   X, Y, Z, V, TWT, indxs = bootstrap.sampling(xs, ys, zs, vs, twts, N_bs)
-  
-  # Add a row of unpermutted data to each bootstrap matrix. Enables comparison
-  X = np.insert(X, 0, xs, axis=1)
-  Y = np.insert(Y, 0, ys, axis=1)
-  Z = np.insert(Z, 0, zs, axis=1)
-  V = np.insert(V, 0, vs, axis=2)
-  TWT = np.insert(TWT, 0, twts, axis=1)
 
   ################################## Inversion #################################
   
@@ -97,18 +90,18 @@ def instruments(datafile, parameters):
   
   # Initialize a results object to hold various inversion results.
   R = results.resl(N_bs, Nobs)
-  
+
   # Perform bootstrap inversion.
-  bootstrap.inv(X, Y, Z, V, TWT, R, parameters, m0_strt, coords)
-  
+  R = bootstrap.inv(X, Y, Z, V, TWT, R, parameters, m0_strt, coords)
+
   # Unscramble randomly sampled data for plotting and evaluation.
   R.dtwts = np.mean(bootstrap.unscramble(R.dtwts, indxs), axis=1)
   R.twts = np.mean(bootstrap.unscramble(R.twts, indxs), axis=1)
   R.corrs = np.mean(bootstrap.unscramble(R.corrs, indxs), axis=1)
   R.vrs = np.mean(bootstrap.unscramble(R.vrs, indxs), axis=1)
- 
+
   ################# F-test for uncertainty using a grid search #################
-  
+
   print('\n Performing F-test ...')
   xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz= ftest.test(R, coords, lat0, lon0, vpw0)
   

@@ -21,7 +21,7 @@ vpw = 1500.0      # Assumed velocity of sound in water (m/s)
 dvp = 0           # Assumed perturbation to vpw (m/s)
 tat = 0.013       # Assumed sensor turn-around time (s)
 N_bs = 500        # Number of bootstrap iterations
-E_thresh = 0.001  # RMS reduction threshold for inversion
+E_thresh = 1e-5   # RMS reduction threshold for inversion
 twtcorr = False   # Option to apply a travel-time correction for ship velocity
 npts = 1          # Npts in moving avg smoothing of ship vel. (1 = no smoothing)
 dampx = 0         # Norm damping for each model parameter             
