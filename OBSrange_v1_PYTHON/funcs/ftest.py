@@ -59,7 +59,6 @@ def test(R, coords, lat0, lon0, vpw):
   tatM = np.mean(R.tats)
   dvpM = np.mean(R.dvps)
   v_effM = np.mean(R.v_effs)
-  #v_effM = np.mean(R.v_effs[0:-1])
   
   # Set grid size and grids.
   ngridpts = 40
