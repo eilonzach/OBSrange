@@ -36,7 +36,7 @@ onesta = '';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
-ifplot = 1; % Plot results?
+ifplot = 0; % Plot results?
 
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
@@ -138,6 +138,7 @@ M = length(m0_strt);
 H = eye(M, M) .* diag([par.dampx, par.dampy, par.dampz, par.dampTAT, par.dampdvp]);
 
 [xmat_ship_bs, ymat_ship_bs, zmat_ship_bs, vmat_ship_bs, twtmat_bs, indxs] = bootstrap(x_ship, y_ship, z_ship, v_ship, twt, par.N_bs-1);
+
 % prepare bootstrap result vectors
 dtwt_mat = zeros(size(indxs));
 twtcorr_mat = zeros(size(indxs));

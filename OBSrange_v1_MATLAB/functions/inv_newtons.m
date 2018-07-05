@@ -65,7 +65,6 @@ while dE > E_thresh
     G = buildG( x0, y0, z0, dvp0, x_ship, y_ship, z_ship, vp_w, Nobs, M);
 
     % Set up norm damping for each parameter
-%     H = eye(M, M) .* diag([dampx, dampy, dampz, dampTAT, dampdvp]);
     h = zeros(M,1);
 
     % Predicted twt for this iteration
