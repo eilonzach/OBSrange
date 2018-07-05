@@ -43,14 +43,14 @@ def dof(res1, v1, res2, v2):
   
   Fobs = (Ea_1/v1)/(Ea_2/v2)
   P = 1 - ( f.cdf(Fobs, v1, v2) - f.cdf(1/Fobs, v1, v2) )
-
+  
   return P
 
 def test(R, coords, lat0, lon0, vpw):
   # Grab coords.
-  xs = coords[0][0]
-  ys = coords[0][1]
-  zs = coords[0][2]
+  xs = coords[1][0]
+  ys = coords[1][1]
+  zs = coords[1][2]
 
   # Grab intermediate variables from results.
   xM = np.mean(R.xs)
@@ -59,6 +59,7 @@ def test(R, coords, lat0, lon0, vpw):
   tatM = np.mean(R.tats)
   dvpM = np.mean(R.dvps)
   v_effM = np.mean(R.v_effs)
+  #v_effM = np.mean(R.v_effs[0:-1])
   
   # Set grid size and grids.
   ngridpts = 40
@@ -78,10 +79,10 @@ def test(R, coords, lat0, lon0, vpw):
   Nx = len(xg)
   Ny = len(yg)
   Nz = len(zg)
-  
+
   # Bootstrap residuals.
   twt_pre = calc.twt(xM, yM, zM, xs, ys, zs, vpw, dvpM, tatM)
-  resids = R.twts - twt_pre
+  resid_bs = R.twts - twt_pre
   
   # Determine the eigenvectors for z, vpw, and tat.
   X = np.vstack([R.zs, R.vpws, R.tats]).T
@@ -104,21 +105,22 @@ def test(R, coords, lat0, lon0, vpw):
     for j in range(Ny):
       for k in range(Nz):
         # Apply scaling to vpw and tat to account for tradeoffs with z.
-        dz = zg[k] - zM
+        dz = Zg[i,j,k] - zM
         # Perturbation to water velocity to account for dz.
         dvw = (eig3_vw/eig3_z) * dz
         # Perturbation to tat to account for dz. 
         dtat = (eig3_tat/eig3_z) * dz 
         
         # Grid search residual.
-        twt_pre_gs = \
-           calc.twt(xg[i], yg[j], zg[k], xs, ys, zs, vpw, dvpM+dvw, tatM+dtat)
+        twt_pre_gs = calc.twt(Xg[i,j,k], Yg[i,j,k], Zg[i,j,k], xs, ys, zs,
+                              vpw, dvpM + dvw, tatM + dtat)
+
         resid_gs = R.twts - twt_pre_gs
         
         # Calculate P statistic.
-        P[i,j,k] = dof(resid_gs, v_effM, resids, v_effM)  
+        P[i,j,k] = dof(resid_gs, v_effM, resid_bs, v_effM)  
         E_gs[i,j,k] = np.sqrt( np.sum(resid_gs**2) / len(resid_gs))
-  
+
   xmax, ymax, zmax = np.where( P == np.amax(P) )
-  
+
   return xg, yg, zg, Xg, Yg, Zg, P, xmax[0], ymax[0], zmax[0]
