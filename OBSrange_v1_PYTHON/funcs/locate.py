@@ -103,7 +103,7 @@ def instruments(datafile, parameters):
   ################# F-test for uncertainty using a grid search #################
 
   print('\n Performing F-test ...')
-  xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz= ftest.test(R, coords, lat0, lon0, vpw0)
+  #xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz= ftest.test(R, coords, lat0, lon0, vpw0)
   
   ################################### Plots ####################################
   
@@ -111,19 +111,22 @@ def instruments(datafile, parameters):
   
   # Histograms of model parameters.
   Nbins = 15
-  fig1 = plots.model_histos(R, Nbins)
+  #fig1 = plots.model_histos(R, Nbins)
   
   # Survey map.
-  fig2 = plots.survey_map(lat0, lon0, z0, lats, lons, zs, R, data_bad)
+  #fig2 = plots.survey_map(lat0, lon0, z0, lats, lons, zs, R, data_bad)
   
   # Model misfit histogram.
-  fig3 = plots.misfit(R.E_rms, Nbins)
+  #fig3 = plots.misfit(R.E_rms, Nbins)
   
   # Model residuals at each site.
-  fig4 = plots.residuals(lats, lons, xs, ys, vs, R, Nobs)
+  #fig4 = plots.residuals(lats, lons, xs, ys, vs, R, Nobs)
   
   # F-test plots
-  fig5 = plots.ftest(xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz, R)
+  #fig5 = plots.ftest(xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz, R)
+
+  # Resolution and covariance plots
+  fig6 = plots.resolution_covariance()
   
   ######################### Package and Return Results #########################
   
