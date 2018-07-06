@@ -421,13 +421,10 @@ def resolution_covariance():
   ax2 = axes[1]
 
   # Some parameters.
-
-
-
-
   from IPython.core.debugger import Tracer
   Tracer()()
-  fig = 7
+
+  # ...
   
   # Return fig.
-  return fig
+  return None
