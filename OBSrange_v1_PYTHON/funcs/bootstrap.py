@@ -82,6 +82,7 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
   dampdvp  = parameters[11]
   eps      = parameters[12]   
   M        = parameters[13]
+  bounds   = parameters[16]
   Nobs     = X.shape[0]
   x0       = coords[0][0]
   y0       = coords[0][1]
@@ -154,6 +155,12 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
       
       # Calculate the effective degrees of freedom (for F-test)
       v = len(f) - np.trace(np.dot(F, Finv))
+
+      # Apply turn-around time bounds if necessary.
+      if m1[3] < bounds[0]:
+        m1[3] = bounds[0]
+      elif m1[3] > bounds[1]:
+        m1[3] = bounds[1]
       
       # Record output of current iteration in m0, E, and dtwt.
       R.models[str(i)][str(j)] = {'m0': m0, 'E': E, 'dtwt': dtwt}

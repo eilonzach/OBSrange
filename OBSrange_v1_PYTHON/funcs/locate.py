@@ -19,20 +19,23 @@ def instruments(datafile, parameters):
   ################### Independent Parameter Initializations ####################
  
   print('\n Initializing independent parameters ...')
-  vpw0     = parameters[0]    
-  dvp0     = parameters[1]    
-  tat0     = parameters[2]    
-  N_bs     = parameters[3]    
-  E_thresh = parameters[4]
-  twtcorr  = parameters[5] 
-  npts     = parameters[6]    
-  dampx    = parameters[7]   
-  dampy    = parameters[8]   
-  dampz    = parameters[9]   
-  damptat  = parameters[10]
-  dampdvp  = parameters[11]
-  eps      = parameters[12]    
-  M        = parameters[13]      
+  vpw0       = parameters[0]    
+  dvp0       = parameters[1]    
+  tat0       = parameters[2]    
+  N_bs       = parameters[3]    
+  E_thresh   = parameters[4]
+  twtcorr    = parameters[5] 
+  npts       = parameters[6]    
+  dampx      = parameters[7]   
+  dampy      = parameters[8]   
+  dampz      = parameters[9]   
+  damptat    = parameters[10]
+  dampdvp    = parameters[11]
+  eps        = parameters[12]    
+  M          = parameters[13]
+  QC         = parameters[14]
+  res_thresh = parameters[15]
+  bounds     = parameters[16]     
   
   ######################### Load and Clean Input Data ##########################
   
@@ -41,10 +44,11 @@ def instruments(datafile, parameters):
   data = pings.load(datafile)
   
   # Perform quality control on loaded data.
-  print('\n Performing quality control ...')
-  data, data_bad = pings.qc(data, vpw0, thresh=500)
-  N_badpings = len(data_bad['twts'])
-  print(' Number of pings removed: ' + str(N_badpings))
+  if QC:
+    print('\n Performing quality control ...')
+    data, data_bad = pings.qc(data, vpw0, thresh=res_thresh)
+    N_badpings = len(data_bad['twts'])
+    print(' Number of pings removed: ' + str(N_badpings))
   
   ##################### Intermediate Variable Declarations #####################
   
@@ -111,7 +115,7 @@ def instruments(datafile, parameters):
   
   # Histograms of model parameters.
   Nbins = 15
-  fig1 = plots.model_histos(R, Nbins)
+  fig1 = plots.model_histos(R, lat0, lon0, Nbins)
   
   # Survey map.
   fig2 = plots.survey_map(lat0, lon0, z0, lats, lons, zs, R, data_bad)
@@ -124,6 +128,8 @@ def instruments(datafile, parameters):
   
   # F-test plots
   fig5 = plots.ftest(xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz, R)
+  
+  figs = [fig1, fig2, fig3, fig4, fig5]
   
   ######################### Package and Return Results #########################
   
@@ -155,8 +161,6 @@ def instruments(datafile, parameters):
                    'svy_ys': ys,        # y-coordinates of survey points
                    'svy_zs': zs         # z-coordinates of survey points
                    }
-
-  figs = [fig1, fig2, fig3, fig4, fig5]
 
   return final_results, figs
 

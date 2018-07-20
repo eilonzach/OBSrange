@@ -31,9 +31,13 @@ damptat = 2e-1    #             .
 dampdvp = 5e-8    #             .      
 eps = 1e-10       # Global norm damping for stabilization
 M = 5             # Number of model parameters being solved for by inversion
+QC = True         # Option to perform quality control on survey data points
+res_thresh = 500  # Threshold (in ms) beyond which survey data points are tossed
+bounds = [0.005, 
+          0.025]  # Acceptable bounds for turn-around time results.
 
 parameters = [vpw, dvp, tat, N_bs, E_thresh, twtcorr, npts, dampx, dampy, \
-              dampz, damptat, dampdvp, eps, M]
+              dampz, damptat, dampdvp, eps, M, QC, res_thresh, bounds]
 
 ###################### Run Inversion for Each Survey File ######################
 
@@ -53,11 +57,6 @@ if not os.path.exists(output_dir):
 
 # Perform locations for each survey site then save output.
 for survey_fle in survey_fles:
-
-  # If file has been previously processsed skip.
-  if output.exists(survey_fle, out_txts):
-    continue
-  
   results, figs = locate.instruments(survey_fle, parameters)
   output.out(results, figs, out_pkls, out_plts, out_txts)
   
