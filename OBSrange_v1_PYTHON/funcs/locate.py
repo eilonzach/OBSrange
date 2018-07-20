@@ -69,7 +69,7 @@ def instruments(datafile, parameters):
   xs, ys = coord_txs.latlon2xy(lat0, lon0, lats, lons)
   x0, y0 = coord_txs.latlon2xy(lat0, lon0, lat0, lon0)
 
-  # Package coordinates for passing to inversion and F-test functions.
+  # Package coordinates for passing to other functions.
   drop_coords = [x0, y0, z0, lat0, lon0]
   ship_coords = [xs, ys, zs]
   coords = [drop_coords, ship_coords]
@@ -92,7 +92,7 @@ def instruments(datafile, parameters):
   # Initialize starting model.
   m0_strt = np.array([x0, y0, z0, tat0, dvp0])
   
-  # Initialize a results object to hold various inversion results.
+  # Initialize a results object to hold various results.
   R = results.resl(N_bs, Nobs)
 
   # Perform bootstrap inversion.
@@ -128,6 +128,9 @@ def instruments(datafile, parameters):
   
   # F-test plots
   fig5 = plots.ftest(xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz, R)
+
+  # Resolution and covariance plots
+  #fig6 = plots.resolution_covariance()
   
   figs = [fig1, fig2, fig3, fig4, fig5]
   
