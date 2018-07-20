@@ -235,7 +235,7 @@ def residuals(lats, lons, xs, ys, vs, res, N):
 
   corrs = res.corrs * 1000
   resids = res.dtwts * 1000
-  azs = np.mean(res.az_locs, axis=0)
+  azs = np.mean(res.az_locs, axis=1)
   sq_sum_vs = np.sqrt(np.sum(vs**2, axis=1))
   fin_lat = np.mean(res.lats)
   fin_lon = np.mean(res.lons)
