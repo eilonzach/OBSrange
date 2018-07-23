@@ -93,7 +93,7 @@ def instruments(datafile, parameters):
   m0_strt = np.array([x0, y0, z0, tat0, dvp0])
   
   # Initialize a results object to hold various results.
-  R = results.resl(N_bs, Nobs)
+  R = results.resl(N_bs, Nobs, M)
 
   # Perform bootstrap inversion.
   R = bootstrap.inv(X, Y, Z, V, TWT, R, parameters, m0_strt, coords)
@@ -115,7 +115,7 @@ def instruments(datafile, parameters):
   
   # Histograms of model parameters.
   Nbins = 15
-  fig1 = plots.model_histos(R, lat0, lon0, Nbins)
+  fig1 = plots.model_histos(R, Nbins)
   
   # Survey map.
   fig2 = plots.survey_map(lat0, lon0, z0, lats, lons, zs, R, data_bad)
@@ -126,13 +126,13 @@ def instruments(datafile, parameters):
   # Model residuals at each site.
   fig4 = plots.residuals(lats, lons, xs, ys, vs, R, Nobs)
   
-  # F-test plots
+  # F-test plots.
   fig5 = plots.ftest(xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz, R)
-
-  # Resolution and covariance plots
-  #fig6 = plots.resolution_covariance()
   
-  figs = [fig1, fig2, fig3, fig4, fig5]
+  #Resolution and covariance.
+  fig6 = plots.resolution_covariance(R, M)
+  
+  figs = [fig1, fig2, fig3, fig4, fig5, fig6]
   
   ######################### Package and Return Results #########################
   

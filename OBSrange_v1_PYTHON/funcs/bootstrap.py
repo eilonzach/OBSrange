@@ -172,9 +172,15 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
       # Update model for next iteration and RMS counter.
       m0 = m1
       j += 1
-      
+
+    # Data resolution, model resolution, model covariance
+    #N = np.matmul(F, Finv)
+    resol = np.matmul(Finv, F)
+    cov = np.matmul(Finv, Finv.T)
+
     # Update results object with stabilized results of current bootstrap it.
-    R.update(i, m0, vpw0, E, v, dtwt, twtbs, cns, vr, x0, y0, z0, xs, ys)
+    R.update(i, m0, vpw0, E, v, dtwt, twtbs, cns, vr, x0, y0, z0, xs, ys, \
+             resol, cov)
     
     # Convert stabilized result coords of current iteration back to lat lon.
     R.lats[i], R.lons[i] = coord_txs.xy2latlon(R.xs[i], R.ys[i], lat0, lon0)

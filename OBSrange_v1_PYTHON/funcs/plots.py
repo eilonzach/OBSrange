@@ -414,17 +414,32 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
   return fig
 
 # Plot model resolution and covariance
-def resolution_covariance():
+def resolution_covariance(R, M):
   # Set up pyplot fig and axes objects.
   fig, axes = plt.subplots(nrows=1, ncols=2)
   ax1 = axes[0]
   ax2 = axes[1]
 
-  # Some parameters.
-  from IPython.core.debugger import Tracer
-  Tracer()()
+  # Parameters
+  resol = R.resol[:,:,0]
+  cov = R.cov[:,:,0]
+  model_cov = np.multiply( np.sign(cov), np.log10(np.abs(cov)))
+  low = -np.max(np.max(np.log10(np.abs(cov))))
+  high =  np.max(np.max(np.log10(np.abs(cov))))
 
-  # ...
-  
+  # Model Resolution
+  m1 = ax1.imshow(resol, cmap='RdBu_r', vmin=-1, vmax=1, aspect='equal')
+  ax1.set_title('Model Resolution')
+  plt.colorbar(m1, ax=ax1)
+
+  # Model Covariance
+  m2 = ax2.imshow(model_cov, cmap='RdBu_r', vmin=low, vmax=high, aspect='equal')
+  ax2.set_title('Model Covariance')
+  plt.colorbar(m2, ax=ax2)
+
+  # Display
+  plt.tight_layout()
+  #plt.show()
+
   # Return fig.
-  return None
+  return fig

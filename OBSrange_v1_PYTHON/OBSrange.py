@@ -34,7 +34,7 @@ M = 5             # Number of model parameters being solved for by inversion
 QC = True         # Option to perform quality control on survey data points
 res_thresh = 500  # Threshold (in ms) beyond which survey data points are tossed
 bounds = [0.005, 
-          0.025]  # Acceptable bounds for turn-around time results.
+          0.025]  # Acceptable bounds for turn-around time solutions.
 
 parameters = [vpw, dvp, tat, N_bs, E_thresh, twtcorr, npts, dampx, dampy, \
               dampz, damptat, dampdvp, eps, M, QC, res_thresh, bounds]
