@@ -132,7 +132,7 @@ def instruments(datafile, parameters):
   # Resolution and covariance.
   fig6 = plots.resolution_covariance(R, M)
   
-  #figs = [fig1, fig2, fig3, fig4, fig5, fig6]
+  figs = [fig1, fig2, fig3, fig4, fig5, fig6]
   
   ######################### Package and Return Results #########################
   
