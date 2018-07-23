@@ -129,10 +129,10 @@ def instruments(datafile, parameters):
   # F-test plots.
   fig5 = plots.ftest(xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz, R)
   
-  #Resolution and covariance.
+  # Resolution and covariance.
   fig6 = plots.resolution_covariance(R, M)
   
-  figs = [fig1, fig2, fig3, fig4, fig5, fig6]
+  #figs = [fig1, fig2, fig3, fig4, fig5, fig6]
   
   ######################### Package and Return Results #########################
   
