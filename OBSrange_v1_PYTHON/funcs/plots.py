@@ -76,7 +76,7 @@ def model_histos(res, bins):
 
   # Display fig.
   plt.tight_layout()
-  #plt.show()
+  plt.close()
 
   # Return fig.
   return fig
@@ -196,7 +196,7 @@ def survey_map(lat0, lon0, z0, lats1, lons1, zs1, res, bad):
 
   # Display fig.
   plt.tight_layout()
-  #plt.show()
+  plt.close()
 
   # Return fig.
   return fig
@@ -218,8 +218,10 @@ def misfit(data, bins):
 
   ax.set_title('Misfit')
   ax.set_xlabel('RMS (ms)')
-
-  #plt.show()
+  
+  # Display.
+  plt.tight_layout()
+  plt.close()
 
   # Return fig.
   return fig
@@ -292,7 +294,7 @@ def residuals(lats, lons, xs, ys, vs, res, N):
 
   # Display.
   plt.tight_layout()
-  #plt.show()
+  plt.close()
 
   # Return fig.
   return fig
@@ -408,7 +410,7 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
 
   # Display.
   plt.tight_layout()
-  #plt.show()
+  plt.close()
 
   # Return fig.
   return fig
@@ -463,7 +465,7 @@ def resolution_covariance(R, M):
 
   # Display
   plt.tight_layout()
-  #plt.show()
+  plt.close()
 
   # Return fig.
   return fig
