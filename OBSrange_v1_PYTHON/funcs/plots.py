@@ -424,18 +424,42 @@ def resolution_covariance(R, M):
   resol = R.resol[:,:,0]
   cov = R.cov[:,:,0]
   model_cov = np.multiply( np.sign(cov), np.log10(np.abs(cov)))
-  low = -np.max(np.max(np.log10(np.abs(cov))))
-  high =  np.max(np.max(np.log10(np.abs(cov))))
+  a = -np.max(np.max(np.log10(np.abs(cov))))
+  b =  np.max(np.max(np.log10(np.abs(cov))))
 
   # Model Resolution
   m1 = ax1.imshow(resol, cmap='RdBu_r', vmin=-1, vmax=1, aspect='equal')
+  
   ax1.set_title('Model Resolution')
-  plt.colorbar(m1, ax=ax1)
+  xlabels = ax1.get_xticks()
+  xlabels = [str(int(label) + 1) for label in xlabels]
+  ax1.set_xticklabels(xlabels)
+  ylabels = ax1.get_yticks()
+  ylabels = [str(int(label) + 1) for label in ylabels]
+  ax1.set_yticklabels(ylabels)
+  plt.colorbar(m1, fraction=0.046, pad=0.04, ax=ax1)
+
+  # Add grid lines
+  for x,y in zip(range(M), range(M)):
+    ax1.axvline(x=x+0.5, ymin=0, ymax=1, color='k', lw=2.0)
+    ax1.axhline(y=y+0.5, xmin=0, xmax=1, color='k', lw=2.0)
 
   # Model Covariance
-  m2 = ax2.imshow(model_cov, cmap='RdBu_r', vmin=low, vmax=high, aspect='equal')
+  m2 = ax2.imshow(model_cov, cmap='RdBu_r', vmin=a, vmax=b, aspect='equal')
+  
   ax2.set_title('Model Covariance')
-  plt.colorbar(m2, ax=ax2)
+  xlabels = ax2.get_xticks()
+  xlabels = [str(int(label) + 1) for label in xlabels]
+  ax2.set_xticklabels(xlabels)
+  ylabels = ax2.get_yticks()
+  ylabels = [str(int(label) + 1) for label in ylabels]
+  ax2.set_yticklabels(ylabels)
+  plt.colorbar(m2, fraction=0.046, pad=0.04, ax=ax2)
+
+  # Add grid lines
+  for x,y in zip(range(M), range(M)):
+    ax2.axvline(x=x+0.5, ymin=0, ymax=1, color='k', lw=2.0)
+    ax2.axhline(y=y+0.5, xmin=0, xmax=1, color='k', lw=2.0)
 
   # Display
   plt.tight_layout()
