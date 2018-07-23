@@ -23,7 +23,7 @@ vp_actual = 1.520; % km/s
 tat = 0.014; %s
 
 % if doing many iterations
-niter = 1e4; % if niter>0, will not make plots or save output file in SIO format
+niter = 1;%1e4; % if niter>0, will not make plots or save output file in SIO format
 x_std = 0.100; % in km
 y_std = 0.100; % in km
 z_std = 0.050; % in km
@@ -247,7 +247,7 @@ end
 fclose(fid);
 
 save(sprintf('SynthSurvey%.0f',datN));
-copyfile(sprintf('SynthSurvey%.0f.mat',datN),'/Volumes/km1807-Gaherty/Survey_Programs/synth_data_josh/');
+copyfile(sprintf('SynthSurvey%.0f.mat',datN),'synth_surveys_paper/');
 end             
 
 
