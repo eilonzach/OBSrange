@@ -37,20 +37,21 @@ from scipy.stats import f
 from funcs import coord_txs, calc
 
 def dof(res1, v1, res2, v2):
+
   # Calculate chi**2 sums.
-  Ea_1 = np.sum(res1**2)
-  Ea_2 = np.sum(res2**2)
+  Ea_1 = np.sum(res1**2, axis=0)
+  Ea_2 = np.sum(res2**2, axis=0)
   
   Fobs = (Ea_1/v1)/(Ea_2/v2)
   P = 1 - ( f.cdf(Fobs, v1, v2) - f.cdf(1/Fobs, v1, v2) )
-
+  
   return P
 
 def test(R, coords, lat0, lon0, vpw):
   # Grab coords.
-  xs = coords[0][0]
-  ys = coords[0][1]
-  zs = coords[0][2]
+  xs = coords[1][0]
+  ys = coords[1][1]
+  zs = coords[1][2]
 
   # Grab intermediate variables from results.
   xM = np.mean(R.xs)
@@ -78,10 +79,10 @@ def test(R, coords, lat0, lon0, vpw):
   Nx = len(xg)
   Ny = len(yg)
   Nz = len(zg)
-  
+
   # Bootstrap residuals.
   twt_pre = calc.twt(xM, yM, zM, xs, ys, zs, vpw, dvpM, tatM)
-  resids = R.twts - twt_pre
+  resid_bs = R.twts - twt_pre
   
   # Determine the eigenvectors for z, vpw, and tat.
   X = np.vstack([R.zs, R.vpws, R.tats]).T
@@ -93,32 +94,49 @@ def test(R, coords, lat0, lon0, vpw):
   eig3_z = eigvec3[0]
   eig3_vw = eigvec3[1]
   eig3_tat = eigvec3[2]
+
+  # Create spatial mesh and tensors (faster implementation than nested loops).
+  Xg, Yg, Zg = np.meshgrid(xg, yg, zg)
   
-  # Grid search
+  xtensor = np.repeat(Xg[np.newaxis,:,:,:], len(xs), axis=0)
+  ytensor = np.repeat(Yg[np.newaxis,:,:,:], len(ys), axis=0)
+  ztensor = np.repeat(Zg[np.newaxis,:,:,:], len(zs), axis=0)
+  
+  xtensor_minus_xs = np.ndarray(xtensor.shape)
+  ytensor_minus_ys = np.ndarray(ytensor.shape)
+  ztensor_minus_zs = np.ndarray(ztensor.shape)
+  
+  dz = np.ndarray(shape=xtensor.shape)
+  dvw = np.ndarray(shape=xtensor.shape)
+  dtat = np.ndarray(shape=xtensor.shape)
+  
+  # Intermediate calculations for grid search residuals and eigen-scaling.
+  for i, (x,y,z) in enumerate(zip(xs,ys,zs,)):
+    xtensor_minus_xs[i,:,:,:] = Xg - xs[i]
+    ytensor_minus_ys[i,:,:,:] = Yg - ys[i]
+    ztensor_minus_zs[i,:,:,:] = Zg - zs[i]
+    
+    dz[i,:,:,:] = Zg - zM
+
+  # Eigenvector scaling.
+  dvw_test = (eig3_vw/eig3_z) * dz 
+  dtat_test = (eig3_tat/eig3_z) * dz 
+  
+  # Compute travel times (grid search residuals).
+  tt = 2*np.sqrt(xtensor_minus_xs**2 + ytensor_minus_ys**2 + ztensor_minus_zs**2)
+  twt_pre_gs = (tt/(vpw+dvpM)) + (tatM+dtat)
+  
+  resid_gs = np.ndarray(shape=xtensor.shape)
+  for i, r in enumerate(R.twts):
+    resid_gs[i,:,:,:] = r - twt_pre_gs[i,:,:,:]
+
+  # P-statistic.
   P = np.ndarray(shape=(Nx, Ny, Nz))
   E_gs = np.ndarray(shape=(Nx, Ny, Nz))
-  Xg, Yg, Zg = np.meshgrid(xg, yg, zg)
-  LONgrd, LATgrd, Zgrd = np.meshgrid(lon_grid, lat_grid, zg)
-  
-  for i in range(Nx):
-    for j in range(Ny):
-      for k in range(Nz):
-        # Apply scaling to vpw and tat to account for tradeoffs with z.
-        dz = zg[k] - zM
-        # Perturbation to water velocity to account for dz.
-        dvw = (eig3_vw/eig3_z) * dz
-        # Perturbation to tat to account for dz. 
-        dtat = (eig3_tat/eig3_z) * dz 
-        
-        # Grid search residual.
-        twt_pre_gs = \
-           calc.twt(xg[i], yg[j], zg[k], xs, ys, zs, vpw, dvpM+dvw, tatM+dtat)
-        resid_gs = R.twts - twt_pre_gs
-        
-        # Calculate P statistic.
-        P[i,j,k] = dof(resid_gs, v_effM, resids, v_effM)  
-        E_gs[i,j,k] = np.sqrt( np.sum(resid_gs**2) / len(resid_gs))
-  
+
+  P = dof(resid_gs, v_effM, resid_bs, v_effM) 
+  E = np.sqrt( np.sum(resid_gs**2) / len(resid_gs))
+
   xmax, ymax, zmax = np.where( P == np.amax(P) )
-  
+
   return xg, yg, zg, Xg, Yg, Zg, P, xmax[0], ymax[0], zmax[0]

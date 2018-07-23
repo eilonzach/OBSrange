@@ -1,4 +1,4 @@
-function [ m_final,models,v_eff,N,R,Covm,lambda ] = inv_newtons( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H)
+function [ m_final,models,v_eff ] = inv_newtons_perfectcorr( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H,corr_dt)
 %[ m_final,models,v_eff ] = inv_newton( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H )
 % 
 %   Conduct interative inversion for OBS location and other parameters
@@ -50,8 +50,9 @@ while dE > E_thresh
     rmag = sqrt(sum(r.^2,1));
     r_hat = r./[rmag; rmag; rmag]; % direction vectors from OBS to ship
     vr = sum(v_ship.*r_hat,1)'; % ship velocity in the radial direction
-    dr = vr .* twt; % difference in distance from ship to OBS before and after ping
-    dtwtcorr = dr./(vp_w + dvp0); % traveltime correction due to velocity
+%     dr = vr .* twt; % difference in distance from ship to OBS before and after ping
+%     dtwtcorr = dr./(vp_w + dvp0); % traveltime correction due to velocity
+    dtwtcorr = corr_dt;
     if if_twtcorr == 1
         % (+) if logging ship location at receive time (*)
         twt_corr = twt + dtwtcorr; % Apply correction to the data
@@ -65,6 +66,7 @@ while dE > E_thresh
     G = buildG( x0, y0, z0, dvp0, x_ship, y_ship, z_ship, vp_w, Nobs, M);
 
     % Set up norm damping for each parameter
+%     H = eye(M, M) .* diag([dampx, dampy, dampz, dampTAT, dampdvp]);
     h = zeros(M,1);
 
     % Predicted twt for this iteration
@@ -82,12 +84,6 @@ while dE > E_thresh
 
     % Calculate the effective degrees of freedom (for F-test)
     v_eff = length(f) - trace(F*Finv);
-    
-    if m1(4) < par.TAT_bounds(1)
-        m1(4) = par.TAT_bounds(1);
-    elseif m1(4) > par.TAT_bounds(2)
-        m1(4) = par.TAT_bounds(2);
-    end
 
     models(iiter).m = m0;
     models(iiter).E = E;
@@ -102,11 +98,5 @@ while dE > E_thresh
 end
 m_final = m0;
 
-% Data Resolution
-N = F*Finv;
-% Model Resolution
-R = Finv*F;
-% Model Covariance
-Covm = Finv*Finv';
 end
 
