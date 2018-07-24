@@ -216,10 +216,19 @@ end
 % profile viewer
 
 %% output file
-if ifsave && niter==1
+if ifsave
+    sta = sprintf('syn%u',datN);
+
+% many iterations - output data structure
+if niter>1
+    save(sprintf('synth_surveys_paper/SynthBoot_%s_rad%.2f.mat',survey,radius),'data');
+end
+
+% single station - make output file to mimic SIO survey files
+if niter==1
 survlah = ['N','S'];
 survloh = ['E','W'];
-fid = fopen(['synth_obsloc',num2str(datN),'.dat'],'w');
+fid = fopen(['obsloc_',sta,'.dat'],'w');
 for ii = 1:length(survx)
 fprintf(fid,'%4.0f msec. Lat: %1.0f %07.4f %1s  Lon: %1.0f %07.4f %1s  Alt: %5.2f Time(UTC): %s:%3.0f:%s\n',...
                 tot_dt(ii)*1000,...
@@ -231,7 +240,18 @@ fprintf(fid,'%4.0f msec. Lat: %1.0f %07.4f %1s  Lon: %1.0f %07.4f %1s  Alt: %5.2
 end
 fclose(fid);
 
-fid = fopen(['synth_obsloc_wbads',num2str(datN),'.dat'],'w');
+fid = fopen([sta,'.txt'],'w');
+% header like real files
+fprintf(fid,'Ranging data taken on:  %s.%s\n',datestr(survstart,31),datestr(survstart,'fff'));
+fprintf(fid,'Cruise:                 synthetic_survey_%s\n',survey);
+fprintf(fid,'Site:                   %s\n',sta);
+fprintf(fid,'Instrument:\n');
+fprintf(fid,'Drop Point (Latitude):  %.5f\n',drop_location(1));
+fprintf(fid,'Drop Point (Longitude): %.5f\n',drop_location(2));
+fprintf(fid,'Depth (meters):         %.5f\n',drop_location(3)*1e3);
+fprintf(fid,'Comment:\n');
+fprintf(fid,'==================================================\n\n');
+
 for ii = 1:length(survx)
     if okpt(ii)
         fprintf(fid,'%4.0f msec. Lat: %1.0f %07.4f %1s  Lon: %1.0f %07.4f %1s  Alt: %5.2f Time(UTC): %s:%3.0f:%s\n',...
@@ -247,13 +267,9 @@ for ii = 1:length(survx)
 end
 fclose(fid);
 
-save(sprintf('SynthSurvey%.0f',datN));
-copyfile(sprintf('SynthSurvey%.0f.mat',datN),'synth_surveys_paper/');
+save(sprintf('trudata_%s',sta));
+% copyfile(sprintf('SynthSurvey%.0f.mat',datN),'synth_surveys_paper/');
 end             
 
-
-if niter>1
-    save(sprintf('synth_surveys_paper/SynthBoot_%s_rad%.2f.mat',survey,radius),'data');
 end
-
 
