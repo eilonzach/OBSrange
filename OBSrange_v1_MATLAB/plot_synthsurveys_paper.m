@@ -8,8 +8,8 @@ clear; close all;
 projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
 % path to survey data from the project directory
 datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; 
-% path to output directory from project directory(will be created if it does not yet exist)
-outdir = [projpath,'/OUT_OBSrange_synthsurveys/OUT_wcorr_1pts/']; 
+% path to output directory from project directory (actually input for this script)
+outdir = [projpath,'/OUT_OBSrange_synthsurveys/OUT_wcorr_1pts_TATdamp2e-1_3/']; %
 
 % prepend functions directory to MATLAB path
 fullMAINpath = mfilename('fullpath');
@@ -64,7 +64,7 @@ for ifil = 1:Nfils
     dtwt_all(ifil,1) = rms(data(1).dtwt_all);
     dtwt_all_std(ifil,1) = std(data(1).dtwt_all);
     
-    lgd{ifil} = [data_all(ifil).survey,' ',num2str(data_all(ifil).radius),' nm']; %files(ifil).name(1:end-4);
+    lgd{ifil} = [data_all(ifil).survey,' ',num2str(data_all(ifil).radius),' Nm']; %files(ifil).name(1:end-4);
     if any(regexp(lgd{ifil},'PACMAN'))
         symbol{ifil} = 'ok';
     elseif any(regexp(lgd{ifil},'cross'))
@@ -75,6 +75,8 @@ for ifil = 1:Nfils
         symbol{ifil} = 'pk';
     elseif any(regexp(lgd{ifil},'tri'))
         symbol{ifil} = '^k';
+    elseif any(regexp(lgd{ifil},'circle'))
+        symbol{ifil} = 'ok';
     end
     
 end
@@ -94,7 +96,7 @@ ax4.Position = [ax4.Position(1), ax4.Position(2), ax4.Position(3), ax4.Position(
 
 markersize = 14;
 %clr = parula(Nfils);
-clr = [brewermap(7,'Blues'); brewermap(2,'Greens'); brewermap(1,'Reds'); brewermap(2,'Purples'); brewermap(2,'RdPu')];
+clr = [brewermap(7,'Blues'); brewermap(3,'Greys'); brewermap(2,'Greens'); brewermap(1,'Reds'); brewermap(2,'Purples'); brewermap(2,'RdPu')];
 for ifil = 1:Nfils
     h(ifil) = plot(ax1,ifil,misfit_r_xy(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
     set(ax1,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[]);
@@ -108,17 +110,17 @@ for ifil = 1:Nfils
     
     plot(ax3,ifil,misfit_TAT(ifil)*1000,symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
     set(ax3,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[]);
-    ylabel(ax3,'$\mathbf{\delta TAT\, (ms)}$','fontsize',18,'Interpreter','latex')
+    ylabel(ax3,'{$\delta$\boldmath$\tau$ (\textbf{m})}','fontsize',18,'Interpreter','latex')
     xlim(ax3,[0 Nfils+1]);
     ylim(ax3,[2.9 3.9]);
 
     plot(ax4,ifil,misfit_Vw(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
     set(ax4,'yscale','log','linewidth',1.5,'fontsize',16);
-    ylabel(ax4,'$\mathbf{\delta V_{H_2O} \, (m/s)}$','fontsize',18,'Interpreter','latex')
+    ylabel(ax4,'$\mathbf{\delta V_{P} \, (m/s)}$','fontsize',18,'Interpreter','latex')
     xlim(ax4,[0 Nfils+1]);
     
     % Make shape legend
-    dy = 0.95/(Nfils+0.25);
+    dy = 0.958/(Nfils+0.25);
     ax(ifil) = axes('pos',[0.75 1-dy*ifil 0.05 0.05]); hold(ax1,'on');
     plot(ax(ifil),data_all(ifil).survx,data_all(ifil).survy,'-k','linewidth',1.5);
     axis equal;
@@ -144,9 +146,6 @@ end
 
 
 %% Save output
-if ~exist(outdir)
-    mkdir(outdir);
-end
 
 % Save plots
 if ~exist([outdir,'/plots/'])

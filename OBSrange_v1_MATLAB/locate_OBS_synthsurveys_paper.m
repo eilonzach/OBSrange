@@ -19,12 +19,12 @@ clear; close all;
 
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
-projpath = '~/Work/OBSrange/synthetics'; 
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % Josh
+% projpath = '~/Work/OBSrange/synthetics'; 
 
 % path to survey data from the project directory
-% datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/';
-datapath = './synth_surveys_paper/';
+datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; % Josh
+% datapath = './synth_surveys_paper/';
 % path to output directory from project directory(will be created if it does not yet exist)
 outdir = './OUT_OBSrange_synthsurveys/'; 
 
@@ -36,15 +36,15 @@ outdir = './OUT_OBSrange_synthsurveys/';
 
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
-onesurvey = 'SynthBoot_PACMAN_rad1.00';
+onesurvey = '';
 
 %% Parameters
-ifsave = 0; % Save results to *.mat?
+ifsave = 1; % Save results to *.mat?
 ifplot = 1; % Plot results?
 
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
-par.N_bs = 1; %500; % Number of bootstrap iterations
+par.N_bs = 1; %500; % Number of bootstrap iterations (= 1 for these tests)
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
@@ -369,57 +369,8 @@ if ifplot
     axis equal;
     
     %% Model resolution and Covariance
-    figure(103); clf;
-    set(gcf,'position',[91   260   829   438]);
-    cmap = cmocean('balance');
-    
-    ax1 = subplot(1,2,1);
-    ax1Pos = ax1.Position;
-    imagesc(ax1,mean(RR,3)); hold on;
-    for i = 1:5
-        plot([.5,5.5],[i-.5,i-.5],'k-','linewidth',2);
-        plot([i-.5,i-.5],[.5,5.5],'k-','linewidth',2);
-    end
-    R_spread = sum(sum((mean(R_mats,3)-eye(size(mean(R_mats,3)))).^2));
-    axis square;
-    axis tight;
-    set(ax1,'fontsize',16,'linewidth',2);
-    title(ax1,'\textbf{Model Resolution}','fontsize',18,'Interpreter','latex');
-    cb1 = colorbar(ax1);
-    colormap(cmap)
-%     caxis([-max(max(abs(mean(RR,3)))) max(max(abs(mean(RR,3))))]);
-    caxis([-1 1]);
-    
-    ax2 = subplot(1,2,2);
-    ax2Pos = ax2.Position;
-    imagesc(ax2,sign(mean(Cm_mats,3)).*log10(abs(mean(Cm_mats,3)))); hold on;
-    for i = 1:5
-        plot([.5,5.5],[i-.5,i-.5],'k-','linewidth',2);
-        plot([i-.5,i-.5],[.5,5.5],'k-','linewidth',2);
-    end
-    axis square;
-    axis tight;
-    set(ax2,'fontsize',16,'linewidth',2);
-    title(ax2,'\textbf{Model Covariance}','fontsize',18,'Interpreter','latex');
-    cb2 = colorbar(ax2);
-    ylabel(cb2,'$\log_{10}(C_m)$','fontsize',16,'Interpreter','latex');
-    colormap(cmap)
-    caxis([-max(max(log10(abs(mean(Cm_mats,3))))) max(max(log10(abs(mean(Cm_mats,3)))))])
-    
-%     tk = logspace(0,8,20);
-%     cmap = parula(19);
-%     ctable = [tk(1:end-1)' cmap*255 tk(2:end)' cmap*255];
-% %     cptcmap(ctable, 'mapping', 'direct');
-%     colormap(ctable)
-% %     cptcbar(ax2, ctable, 'eastoutside', false);
-    
-    set(ax1,'Position',[ax1Pos(1)-0.04 ax1Pos(2:4)]);
-    set(ax2,'Position',ax2Pos);
-    dx = 0.8;
-    dy = 0.1;
-    text(ax1,diff(ax1.XLim)*dx+ax1.XLim(1),diff(ax1.YLim)*dy+ax1.YLim(1),...
-    sprintf('\\textbf{ %.4f}',R_spread),'color',[0 0 0],'interpreter','latex','fontsize',14);
-
+    PLOT_resolution_covariance
+    %%
 
     % drift vs. misfit
     figure(107), clf, hold on

@@ -12,8 +12,8 @@ datN = 10;
 ifsave = true;
 
 %% survey parameters
-survey = 'PACMAN'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
-radius = 1.; % radius of survey, in Nm
+survey = 'circle'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
+radius = 0.5; % radius of survey, in Nm
 fprintf('Survey %s rad=%.00f\n',survey,radius);
 survstart = now;
 survey_dt = max([10,60*radius/1.3]); % time lapse of ranging
@@ -24,7 +24,7 @@ vp_actual = 1.520; % km/s
 tat = 0.014; %s
 
 % if doing many iterations
-niter = 1;%1e4; % if niter>0, will not make plots or save output file in SIO format
+niter = 1e4; %1;%1e4; % if niter>0, will not make plots or save output file in SIO format
 x_std = 0.100; % in km
 y_std = 0.100; % in km
 z_std = 0.050; % in km
