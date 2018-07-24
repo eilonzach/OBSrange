@@ -53,7 +53,7 @@ res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnit
 
 % TAT - Define turnaround time to damp towards in the inversion
 par.TAT_start = 0.013; % (s)
-par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT
+par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT (lower bound should never be < 0)
 
 % Norm damping for each model parameter (damping towards starting model)
 % Larger values imply more damping towards the starting model.
