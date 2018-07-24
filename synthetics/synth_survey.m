@@ -1,6 +1,7 @@
 clear
 close all
-addpath('/Users/russell/GRAD/FIELD_WORK/PacificArray_2018/UsefulMATLAB/'); % addpath('~/Dropbox/MATLAB/myFUNCTIONS/');
+% addpath('/Users/russell/GRAD/FIELD_WORK/PacificArray_2018/UsefulMATLAB/'); 
+addpath('~/Dropbox/MATLAB/myFUNCTIONS/');
 % profile clear 
 % profile on
 %% TRUE VALUES
@@ -23,7 +24,7 @@ vp_actual = 1.520; % km/s
 % tat = 0.014; %s
 
 % if doing many iterations
-niter = 1;%1e4; % if niter>0, will not make plots or save output file in SIO format
+niter = 1e4;%1e4; % if niter>0, will not make plots or save output file in SIO format
 x_std = 0.100; % in km
 y_std = 0.100; % in km
 z_std = 0.050; % in km
@@ -170,13 +171,13 @@ survt = rec_survt/24/60/60 + survstart;
 okpt = rand(size(survlat))>0.2;
 
 % drop out all within some distance of 3 bazs (if not line...
-if ~any(regexp(survey,'line'))
-badaz = 360*rand(3,1);
-badazw = abs(normrnd(0,20,3,1)); % width of drop-out bin
-for ibz = 1:3
-    okpt(ang_diff(survaz,badaz(ibz))<badazw(ibz)) = false;
-end
-end
+% if ~any(regexp(survey,'line'))
+% badaz = 360*rand(3,1);
+% badazw = abs(normrnd(0,20,3,1)); % width of drop-out bin
+% for ibz = 1:3
+%     okpt(ang_diff(survaz,badaz(ibz))<badazw(ibz)) = false;
+% end
+% end
 % reinstate points immediately on top of (<100m from) station
 okpt(survgc*111.1<0.1) = true;
 % kill not-ok points
