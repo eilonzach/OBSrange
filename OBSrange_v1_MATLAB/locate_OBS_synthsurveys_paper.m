@@ -278,10 +278,10 @@ for ii = 1:length(data)
     data(ii).v_ship = v_ship;
     data(ii).misfit_v_ship = v_ship(1:2,:) - v_surv_true';
     
-    RR(:,:,ii) = R;
-    CCm(:,:,ii) = Cm;
-    data(ii).R = R;
-    data(ii).Cm = Cm;
+    R_mat(:,:,ii) = R;
+    Cm_mat(:,:,ii) = Cm;
+    data(ii).R_mat = R;
+    data(ii).Cm_mat = Cm;
 end
 % Store output
 data(1).misfit_latsta = misfit_latsta(:);
@@ -336,57 +336,8 @@ if ifplot
     ylabel('Latitude','fontsize',18);
     axis equal;
     
-    %% Model resolution and Covariance
-    figure(103); clf;
-    set(gcf,'position',[91   260   829   438]);
-    cmap = cmocean('balance');
-    
-    ax1 = subplot(1,2,1);
-    ax1Pos = ax1.Position;
-    imagesc(ax1,mean(RR,3)); hold on;
-    for i = 1:5
-        plot([.5,5.5],[i-.5,i-.5],'k-','linewidth',2);
-        plot([i-.5,i-.5],[.5,5.5],'k-','linewidth',2);
-    end
-    R_spread = sum(sum((mean(RR,3)-eye(size(mean(RR,3)))).^2));
-    axis square;
-    axis tight;
-    set(ax1,'fontsize',16,'linewidth',2);
-    title(ax1,'\textbf{Model Resolution}','fontsize',18,'Interpreter','latex');
-    cb1 = colorbar(ax1);
-    colormap(cmap)
-%     caxis([-max(max(abs(mean(RR,3)))) max(max(abs(mean(RR,3))))]);
-    caxis([-1 1]);
-    
-    ax2 = subplot(1,2,2);
-    ax2Pos = ax2.Position;
-    imagesc(ax2,sign(mean(CCm,3)).*log10(abs(mean(CCm,3)))); hold on;
-    for i = 1:5
-        plot([.5,5.5],[i-.5,i-.5],'k-','linewidth',2);
-        plot([i-.5,i-.5],[.5,5.5],'k-','linewidth',2);
-    end
-    axis square;
-    axis tight;
-    set(ax2,'fontsize',16,'linewidth',2);
-    title(ax2,'\textbf{Model Covariance}','fontsize',18,'Interpreter','latex');
-    cb2 = colorbar(ax2);
-    ylabel(cb2,'$\log_{10}(C_m)$','fontsize',16,'Interpreter','latex');
-    colormap(cmap)
-    caxis([-max(max(log10(abs(mean(CCm,3))))) max(max(log10(abs(mean(CCm,3)))))])
-    
-%     tk = logspace(0,8,20);
-%     cmap = parula(19);
-%     ctable = [tk(1:end-1)' cmap*255 tk(2:end)' cmap*255];
-% %     cptcmap(ctable, 'mapping', 'direct');
-%     colormap(ctable)
-% %     cptcbar(ax2, ctable, 'eastoutside', false);
-    
-    set(ax1,'Position',[ax1Pos(1)-0.04 ax1Pos(2:4)]);
-    set(ax2,'Position',ax2Pos);
-    dx = 0.8;
-    dy = 0.1;
-    text(ax1,diff(ax1.XLim)*dx+ax1.XLim(1),diff(ax1.YLim)*dy+ax1.YLim(1),...
-    sprintf('\\textbf{ %.4f}',R_spread),'color',[0 0 0],'interpreter','latex','fontsize',14);
+    %% Resolution & Covariance matrices
+    PLOT_resolution_covariance
 end
 
 
