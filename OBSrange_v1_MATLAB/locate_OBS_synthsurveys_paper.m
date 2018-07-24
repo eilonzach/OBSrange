@@ -33,7 +33,7 @@ outdir = './OUT_OBSrange_synthsurveys/';
 % outdir = './OUT_OBSrange_synthsurveys_noise4ms/'; 
 
 % Put a string survtion name here to only consider that survtion. 
-% Otherwise, to locate all survtions, put ''
+% Otherwise, to locate all stations, put ''
 onesurvey = '';
 
 %% Parameters
@@ -66,7 +66,7 @@ par.dampz = 0; %0
 par.dampTAT = 2e-1; %2e-1; %2e-1
 par.dampdvp = 5e-8; %5e-8
 
-% Global norm damping for survbilization
+% Global norm damping for stabilization
 par.epsilon = 1e-10;
 
 %% ===================================================================== %%
@@ -278,11 +278,14 @@ for ii = 1:length(data)
     data(ii).v_ship = v_ship;
     data(ii).misfit_v_ship = v_ship(1:2,:) - v_surv_true';
     
-    R_mat(:,:,ii) = R;
-    Cm_mat(:,:,ii) = Cm;
+    R_mats(:,:,ii) = R;
+    Cm_mats(:,:,ii) = Cm;
     data(ii).R_mat = R;
     data(ii).Cm_mat = Cm;
 end
+R_mat = mean(R_mats,3);
+Cm_mat = mean(Cm_mats,3);
+
 % Store output
 data(1).misfit_latsta = misfit_latsta(:);
 data(1).misfit_lonsta = misfit_lonsta(:);
