@@ -39,12 +39,12 @@ outdir = './OUT_OBSrange_synthsurveys/';
 onesurvey = 'SynthBoot_PACMAN_rad1.00';
 
 %% Parameters
-ifsave = 1; % Save results to *.mat?
+ifsave = 0; % Save results to *.mat?
 ifplot = 1; % Plot results?
 
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
-par.N_bs = 500; %500; % Number of bootstrap iterations
+par.N_bs = 1; %500; % Number of bootstrap iterations
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
@@ -68,7 +68,7 @@ par.dampz = 0; %0
 par.dampTAT = 2e-1; %2e-1; %2e-1
 par.dampdvp = 5e-8; %5e-8
 
-% Global norm damping for survbilization
+% Global norm damping for stabilization
 par.epsilon = 1e-10;
 
 %% ===================================================================== %%
@@ -148,10 +148,10 @@ dist = cell(par.N_bs,1);
 azi_locs = cell(par.N_bs,1);
 models = cell(par.N_bs,1);
 
-RR = zeros(5,5,length(data));
-CCovm = zeros(5,5,length(data));
+R_mats = zeros(5,5,length(data));
+Cm_mats = zeros(5,5,length(data));
 
-for ii = 1:1000
+for ii = 1:length(data)
     if mod(ii,100)==0, fprintf('Iteration %u\n',ii); end
     twt = data(ii).tot_dt;
     [Is0nan, ~] = find(~isnan(twt));
@@ -284,11 +284,15 @@ for ii = 1:1000
     data(ii).v_ship = v_ship;
     data(ii).misfit_v_ship = v_ship(1:2,:) - v_surv_true';
     
-    RR(:,:,ii) = R;
-    CCm(:,:,ii) = Cm;
-    data(ii).R = R;
-    data(ii).Cm = Cm;
+
+    R_mats(:,:,ii) = R;
+    Cm_mats(:,:,ii) = Cm;
+    data(ii).R_mat = R;
+    data(ii).Cm_mat = Cm;
 end % loop on synth stations
+R_mat = mean(R_mats,3);
+Cm_mat = mean(Cm_mats,3);
+
 % Store output
 data(1).misfit_latsta = misfit_latsta(:);
 data(1).misfit_lonsta = misfit_lonsta(:);
@@ -376,7 +380,7 @@ if ifplot
         plot([.5,5.5],[i-.5,i-.5],'k-','linewidth',2);
         plot([i-.5,i-.5],[.5,5.5],'k-','linewidth',2);
     end
-    R_spread = sum(sum((mean(RR,3)-eye(size(mean(RR,3)))).^2));
+    R_spread = sum(sum((mean(R_mats,3)-eye(size(mean(R_mats,3)))).^2));
     axis square;
     axis tight;
     set(ax1,'fontsize',16,'linewidth',2);
@@ -388,7 +392,7 @@ if ifplot
     
     ax2 = subplot(1,2,2);
     ax2Pos = ax2.Position;
-    imagesc(ax2,sign(mean(CCm,3)).*log10(abs(mean(CCm,3)))); hold on;
+    imagesc(ax2,sign(mean(Cm_mats,3)).*log10(abs(mean(Cm_mats,3)))); hold on;
     for i = 1:5
         plot([.5,5.5],[i-.5,i-.5],'k-','linewidth',2);
         plot([i-.5,i-.5],[.5,5.5],'k-','linewidth',2);
@@ -400,7 +404,7 @@ if ifplot
     cb2 = colorbar(ax2);
     ylabel(cb2,'$\log_{10}(C_m)$','fontsize',16,'Interpreter','latex');
     colormap(cmap)
-    caxis([-max(max(log10(abs(mean(CCm,3))))) max(max(log10(abs(mean(CCm,3)))))])
+    caxis([-max(max(log10(abs(mean(Cm_mats,3))))) max(max(log10(abs(mean(Cm_mats,3)))))])
     
 %     tk = logspace(0,8,20);
 %     cmap = parula(19);
@@ -426,8 +430,8 @@ if ifplot
     xlabel('Drift distance (m)'); ylabel('Horizontal misfit (m)')
     % depth vs. tat
     figure(108)
-    plot(1000*data(1).misfit_zsta,data(1).misfit_Vw,'.')
-%     xlabel('Drift distance (m)'); ylabel('Horizontal misfit (m)')
+    plot(data(1).misfit_zsta,data(1).misfit_Vw,'.')
+    xlabel('Z misfit (m)'); ylabel('Vw misfit (m)')
 end
 
 

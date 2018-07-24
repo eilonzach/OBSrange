@@ -340,9 +340,12 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
   ax1.set_title('X-Y')
   plt.colorbar(c1, ax=ax1)
 
-  xpos = ax1.get_xlim()[0] + 10
-  ypos1 = ax1.get_ylim()[0] + 20
-  ypos2 = ax1.get_ylim()[0] + 10
+  # Text.
+  default_xlim = ax1.get_xlim()
+  default_ylim = ax1.get_ylim()
+  xpos = default_xlim[0] * 0.95
+  ypos1 = default_ylim[0] * 0.95
+  ypos2 = default_ylim[1] * 0.875
   ax1.text(x=xpos, y=ypos1, s='$\overline{x}$ = ' + xmed + ' m', color='white')
   ax1.text(x=xpos, y=ypos2, s='$\overline{y}$ = ' + ymed + ' m', color='white')
 
@@ -371,9 +374,12 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
   ax2.set_title('X-Z')
   plt.colorbar(c2, ax=ax2)
   
-  xpos = ax2.get_xlim()[0] + 10
-  ypos1 = ax2.get_ylim()[0] + 20
-  ypos2 = ax2.get_ylim()[0] + 10
+  # Text.
+  default_xlim = ax2.get_xlim()
+  default_ylim = ax2.get_ylim()
+  xpos = default_xlim[0] * 0.95
+  ypos1 = default_ylim[0] * 0.95
+  ypos2 = default_ylim[1] * 0.875
   ax2.text(x=xpos, y=ypos1, s='$\overline{x}$ = ' + xmed + ' m', color='white')
   ax2.text(x=xpos, y=ypos2, s='$\overline{z}$ = ' + zmed + ' m', color='white')
   
@@ -402,9 +408,12 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
   ax3.set_title('Y-Z')
   plt.colorbar(c3, ax=ax3)
   
-  xpos = ax3.get_xlim()[0] + 10
-  ypos1 = ax3.get_ylim()[0] + 20
-  ypos2 = ax3.get_ylim()[0] + 10
+  # Text.
+  default_xlim = ax3.get_xlim()
+  default_ylim = ax3.get_ylim()
+  xpos = default_xlim[0] * 0.95
+  ypos1 = default_ylim[0] * 0.95
+  ypos2 = default_ylim[1] * 0.875
   ax3.text(x=xpos, y=ypos1, s='$\overline{y}$ = ' + ymed + ' m', color='white')
   ax3.text(x=xpos, y=ypos2, s='$\overline{z}$ = ' + zmed + ' m', color='white')
 

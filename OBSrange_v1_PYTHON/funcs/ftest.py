@@ -119,12 +119,12 @@ def test(R, coords, lat0, lon0, vpw):
     dz[i,:,:,:] = Zg - zM
 
   # Eigenvector scaling.
-  dvw_test = (eig3_vw/eig3_z) * dz 
-  dtat_test = (eig3_tat/eig3_z) * dz 
-  
+  dvw = ((eig3_vw/eig3_z) * dz) + dvpM 
+  dtat = (eig3_tat/eig3_z) * dz 
+
   # Compute travel times (grid search residuals).
   tt = 2*np.sqrt(xtensor_minus_xs**2 + ytensor_minus_ys**2 + ztensor_minus_zs**2)
-  twt_pre_gs = (tt/(vpw+dvpM)) + (tatM+dtat)
+  twt_pre_gs = (tt/(vpw+dvw)) + (dtat+tatM)
   
   resid_gs = np.ndarray(shape=xtensor.shape)
   for i, r in enumerate(R.twts):

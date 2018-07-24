@@ -13,7 +13,9 @@
     R_spread = sum(sum((R_mat(:,:,1)-eye(size(R_mat(:,:,1)))).^2));
     axis square;
     axis tight;
-    set(ax1,'fontsize',16,'linewidth',2);
+    set(ax1,'fontsize',16,'linewidth',2, ...
+        'XTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','{\boldmath$\tau$}','$\mathbf{V_{P}}$'},'TickLabelInterpreter','latex', ...
+        'YTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','{\boldmath$\tau$}','$\mathbf{V_{P}}$'});
     title(ax1,'\textbf{Model Resolution}','fontsize',18,'Interpreter','latex');
     cb1 = colorbar(ax1);
     colormap(cmap)
@@ -29,7 +31,9 @@
     end
     axis square;
     axis tight;
-    set(ax2,'fontsize',16,'linewidth',2);
+    set(ax2,'fontsize',16,'linewidth',2, ...
+        'XTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','{\boldmath$\tau$}','$\mathbf{V_{P}}$'},'TickLabelInterpreter','latex', ...
+        'YTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','{\boldmath$\tau$}','$\mathbf{V_{P}}$'});
     title(ax2,'\textbf{Model Covariance}','fontsize',18,'Interpreter','latex');
     cb2 = colorbar(ax2);
     ylabel(cb2,'$\log_{10}(C_m)$','fontsize',16,'Interpreter','latex');
