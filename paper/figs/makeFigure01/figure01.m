@@ -4,7 +4,7 @@
 clear  
 close all
 
-ofile = 'Figure01';
+ofile = '../Figure01';
 
 systa = 'syn10'; % name of synthetic station
 
