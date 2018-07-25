@@ -32,7 +32,7 @@ plot(ax,[x_95_50(1) x_95_50(1)],[0 1.2*max(Ncount_norm)],'--','color',[0.8500 0.
 plot(ax,[x_95_50(3) x_95_50(3)],[0 1.2*max(Ncount_norm)],'--','color',[0.8500 0.3250 0.0980],'linewidth',3);
 plot(ax,[x_95_50(2) x_95_50(2)],[0 1.2*max(Ncount_norm)],'-','color',[0.8500 0.3250 0.0980],'linewidth',3);
 
-set(ax,'fontsize',16,'linewidth',2,'Xgrid','on','box','on',...
+set(ax,'fontsize',16,'linewidth',2,'Xgrid','on','box','on','layer','top',...
     'ylim',[0 1.05*max(Ncount_norm)]);
 
 
