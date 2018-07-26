@@ -52,14 +52,11 @@ while dE > E_thresh
     vr = sum(v_ship.*r_hat,1)'; % ship velocity in the radial direction
     dr = vr .* twt; % difference in distance from ship to OBS before and after ping
     dtwtcorr = dr./(vp_w + dvp0); % traveltime correction due to velocity
-    if if_twtcorr == 1
-        % (+) if logging ship location at receive time (*)
-        twt_corr = twt + dtwtcorr; % Apply correction to the data
-        % (-) if logging ship location at transmit time
-        % twt_corr = twt - dtwtcorr; % Apply correction to the data
-    else
-        twt_corr = twt; % No correction
-    end
+    
+    % apply correction (+ive, -ive, or not at all)
+    % (+) if logging ship location at receive time (*)
+    % (-) if logging ship location at transmit time
+    twt_corr = twt + if_twtcorr*dtwtcorr; % Apply correction to the data
 
     % Build the G matrix
     G = buildG( x0, y0, z0, dvp0, x_ship, y_ship, z_ship, vp_w, Nobs, M);
