@@ -1,6 +1,6 @@
 %% Function to produce Figure 02 
 %  Figure 02 shows the survey pattern and residuals for an example station
-function Figure01
+function Figure02
 
 ofile = '../Figure02';
 ifsave = 1;
@@ -14,7 +14,7 @@ load(['../figdata/',sta,'_data.mat']);
 %% ---------------------   PLOTTING   ---------------------   
 %% set up figure
 f902 = figure(902); clf;
-set(f902,'position',[3 20 1108 797],'color','white');
+set(f902,'position',[903 20 1108 797],'color','white');
 
 % axes
 ax1 = axes(f902,'pos',[0.08 0.54 0.40 0.40]);  hold(ax1,'on');
@@ -95,6 +95,7 @@ ylabel(hcb3,'\textbf{Doppler corrections (ms)}','interpreter','latex','fontsize'
 %% Misfit histogram
 Nbins = 15;
 plot_hist(ax4,datamat.E_rms*1000,Nbins);
+plot(ax4,rms(datamat.dtwt_bs)*1000,axlim(ax4,4)*.03,'pk','markerfacecolor',[1 0 0],'markersize',21,'linewidth',1);
 set(ax4,'fontsize',16,'linewidth',2); box on;
 title(ax4,'\textbf{Bootstrap misfits}','fontsize',18,'interpreter','latex');
 xlabel(ax4,'RMS (ms)','fontsize',18,'interpreter','latex');
