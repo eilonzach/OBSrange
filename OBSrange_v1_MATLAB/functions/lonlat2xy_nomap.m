@@ -1,9 +1,13 @@
-function [ x, y ] = lonlat2xy_nomap( olon, olat, lon, lat )
-% [ x, y ] = lonlat2xy_nomap( olon, olat, lon, lat )
+function [ x, y , z] = lonlat2xy_nomap( olon, olat, lon, lat,h )
+% [ x, y, z ] = lonlat2xy_nomap( olon, olat, lon, lat,h )
 %
 %  Identical usage to lonlat2xy, but for folks without the mapping toolbox!
 % 
 % Convert lon/lat (deg) to x/y (m) using the reference ellipsoid
+
+if nargin<5 || isempty(h)
+    h=0;
+end
 
 global ellipsoidGRS80
 if isempty(ellipsoidGRS80)
@@ -27,9 +31,9 @@ end
 % https://en.wikipedia.org/wiki/Geographic_coordinate_conversion#Geodetic_to/from_ENU_coordinates
 
 % geodetic to ECEF
-[Xo,Yo,Zo] = geodetic2ecef_ze(olat,olon,0,ellipsoidGRS80);
-[X,Y,Z] = geodetic2ecef_ze(lat,lon,0,ellipsoidGRS80);
-[x,y,~] = ecef2nu_ze(olat,olon,Xo,Yo,Zo,X,Y,Z);
+[Xo,Yo,Zo] = geodetic2ecef_ze(olat,olon,h,ellipsoidGRS80);
+[X,Y,Z] = geodetic2ecef_ze(lat,lon,h,ellipsoidGRS80);
+[x,y,z] = ecef2nu_ze(olat,olon,Xo,Yo,Zo,X,Y,Z);
 end
 
 function [X,Y,Z] = geodetic2ecef_ze(lat,lon,h,LIPSD)
