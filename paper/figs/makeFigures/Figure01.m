@@ -1,17 +1,13 @@
-%% Script to produce Figure 01 
+%% Function to produce Figure 01 
 %  Figure 01 contains the results of a synthetic test for a single station,
 %  comparing the true input model parameters to the inverted solution
-clear  
-close all
+function Figure01
 
 ofile = '../Figure01';
 
 systa = 'syn10'; % name of synthetic station
 
-projpath = '~/Work/OBSrange/synthetics/synth_recovery_1sta/'; % path to project
-datapath = './'; % path to true data
-outdir_OBSrange = 'OUT_OBSrange/OUT_wcorr/'; % output directory
-is_savemat = 1; % Save *.mat file of results?
+ifsave = 1; % Save pdf?
 Nbins = 15; % Bins for histogram plots
 col = colormap(parula); % colormap for f test plots
 trucol = [0.2 0.9 0.6];
@@ -21,8 +17,8 @@ close
 
 %% load 
 addpath('~/Work/OBSrange/OBSrange_v1_MATLAB/functions/');
-trudata = load([projpath,'trudata_',systa,'.mat']);
-load([projpath,outdir_OBSrange,'mats/',systa,'_data.mat']);
+trudata = load(['../figdata/trudata_',systa,'.mat']);
+load(['../figdata/',systa,'_data.mat']);
 
 
 %% ---------------------   PLOTTING   ---------------------   
@@ -168,4 +164,8 @@ plot(ax3,trudata.obs_location_xyz(2)*1e3 - y_mid,trudata.obs_location_xyz(3)*-1e
     'markerfacecolor',trucol,'markeredgecolor','k','linewidth',1.5,'markersize',13)
 
 %% SAVE
+if ifsave
 save2pdf(ofile,f901)
+end
+
+end

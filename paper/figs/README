@@ -8,6 +8,10 @@ each of the figures in the paper
 
 Contents:
 
-Figure1-X = folders containing scripts and any 
-	      data required to plot each of the 
-	      figures in the paper
+make_all_figs.m = wrapper script to execute all of the functions that make 
+                  each figure, so all figures can be re-made in bulk
+figdata     = folder containing any data required to plot each of the 
+	          figures in the paper
+makeFigures = folder containing the individual scripts to make each of the 
+              figures
+Figure*.pdf = the image files for the figures... obviously. 
