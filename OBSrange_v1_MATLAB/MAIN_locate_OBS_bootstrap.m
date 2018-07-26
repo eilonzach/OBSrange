@@ -14,14 +14,21 @@
 
 clear; close all;
 
-%% INPUTS - MAKE SURE THESE ARE 
+%% INPUTS
 % path to project
 
 % JOSH
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
 
 % ZACH
-projpath = '~/Work/OBSrange/projects/PacificORCA/'; 
+projpath = '~/Work/OBSrange/projects/PacificORCA/';
+% projpath = '~/Work/OBSrange/synthetics/synth_recovery_1sta/';
+
+% STEVE
+% projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
+
+% TESTING
+% projpath = '../Tests';
 
 % path to survey data from the project directory
 datapath = './'; 
@@ -29,7 +36,7 @@ datapath = './';
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = '';
+onesta = 'EC03';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -37,10 +44,11 @@ ifplot = 1; % Plot results?
 
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
-par.N_bs = 500; % Number of bootstrap iterations
+par.N_bs = 1000; % Number of bootstrap iterations
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
+% ==>  +1 if location is RECEIVE, -1 if location is SEND, 0 if no correction
 par.if_twtcorr = 0; % Apply a traveltime correction to account for ship velocity?
 par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
@@ -49,7 +57,8 @@ ifQC_ping = 1; % Do quality control on pings?
 res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnitude
 
 % TAT - Define turnaround time to damp towards in the inversion
-par.TAT_start = 0.013; % (s)
+par.TAT_start = 0.014; % (s)
+par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT (lower bound should never be < 0)
 
 % Norm damping for each model parameter (damping towards starting model)
 % Larger values imply more damping towards the starting model.
@@ -106,6 +115,7 @@ lats_ship = data.lats;
 lons_ship = data.lons;
 t_ship = data.t_ship;
 twt = data.twt;
+
 % Set origin of coordinate system to be lat/lon of drop point
 olon = lon_drop;
 olat = lat_drop;
@@ -135,6 +145,7 @@ M = length(m0_strt);
 H = eye(M, M) .* diag([par.dampx, par.dampy, par.dampz, par.dampTAT, par.dampdvp]);
 
 [xmat_ship_bs, ymat_ship_bs, zmat_ship_bs, vmat_ship_bs, twtmat_bs, indxs] = bootstrap(x_ship, y_ship, z_ship, v_ship, twt, par.N_bs-1);
+
 % prepare bootstrap result vectors
 dtwt_mat = zeros(size(indxs));
 twtcorr_mat = zeros(size(indxs));
@@ -155,6 +166,8 @@ azi  = nan(par.N_bs,1);
 dist = cell(par.N_bs,1);
 azi_locs = cell(par.N_bs,1);
 models = cell(par.N_bs,1);
+R_mat = zeros(M,M,par.N_bs);
+Cm_mat = zeros(M,M,par.N_bs);
 for ibs = 1:par.N_bs
     x_ship_bs = xmat_ship_bs(:,ibs);
     y_ship_bs = ymat_ship_bs(:,ibs);
@@ -162,7 +175,7 @@ for ibs = 1:par.N_bs
     v_ship_bs = [vmat_ship_bs(1).amatbs(:,ibs)'; vmat_ship_bs(2).amatbs(:,ibs)'; vmat_ship_bs(3).amatbs(:,ibs)'];
     twt_bs = twtmat_bs(:,ibs);
     
-    [ m_final,models,v ] = ...
+    [ m_final,models,v,N,R,Cm ] = ...
         inv_newtons( par,m0_strt,twt_bs,...
                     x_ship_bs,y_ship_bs,z_ship_bs,...
                     v_ship_bs,H);
@@ -180,6 +193,8 @@ for ibs = 1:par.N_bs
     dtwtcorr_mat(:,ibs) = models(end).dtwtcorr;
     vr_mat(:,ibs) = models(end).vr;
     [lon_sta(ibs), lat_sta(ibs)] = xy2lonlat_nomap(olon, olat, x_sta(ibs), y_sta(ibs));
+    R_mat(:,:,ibs) = R;
+    Cm_mat(:,:,ibs) = Cm;
     
     % Calculate OBS drift distance and azimuth
     dx_drift(ibs) = m_final(1) - x_drop;
@@ -213,7 +228,7 @@ end
 %% F-test for uncertainty using grid search
 % Set grid size
 ngridpts = 40;
-D = max([ std(x_sta) std(y_sta) std(z_sta) ]*4);
+D = max([ std(x_sta) std(y_sta) std(z_sta) ]*4.5);
 Dx = D;
 Dy = D; 
 Dz = D;
@@ -228,7 +243,7 @@ Nx = length(x_grid);
 Ny = length(y_grid);
 Nz = length(z_grid);
 
-% Bootstrap residual
+% residual of bootstrap mean result
 twt_pre_bs = calcTWT(mean(x_sta), mean(y_sta), mean(z_sta), mean(dvp), mean(TAT), x_ship, y_ship, z_ship, par.vp_w);
 resid_bs = twtcorr_bs-twt_pre_bs;
 
@@ -289,14 +304,18 @@ if ifplot
 	%% Geographic PLOTTING
 	PLOT_survey
 	PLOT_twt_corr
+    %% Model Resolution & Covariance
+    PLOT_resolution_covariance
 end
 
 
 %% Save output
 % output directory
-if par.if_twtcorr
-    modified_outdir = [outdir,'OUT_wcorr/'];
-elseif ~par.if_twtcorr
+if par.if_twtcorr == 1
+    modified_outdir = [outdir,'OUT_wcorr_xrec/'];
+elseif par.if_twtcorr == -1
+    modified_outdir = [outdir,'OUT_wcorr_xsend/'];
+elseif par.if_twtcorr == 0
     modified_outdir = [outdir,'OUT_nocorr/'];
 end  
 if ~exist(modified_outdir)
@@ -328,6 +347,7 @@ save2pdf([modified_outdir,'/plots/',data.sta,'_2_misfit.pdf'],f2,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_3_VelCorrs.pdf'],f3,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_4_bootstrap.pdf'],f100,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_5_Ftest.pdf'],f101,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_6_Resolution_Covariance.pdf'],f103,500)
 end
 
 if ifsave
@@ -339,6 +359,7 @@ if ifsave
 	datamat.y_ship = y_ship;
 	datamat.z_ship = z_ship;
 	datamat.v_ship = v_ship;
+	datamat.databad = data_bad;
 	datamat.dtwt_bs = dtwt_bs;
 	datamat.twtcorr_bs = twtcorr_bs;
 	datamat.dtwtcorr_bs = dtwtcorr_bs;
@@ -356,6 +377,8 @@ if ifsave
 	datamat.loc_xyz = [mean(x_sta),mean(y_sta),mean(z_sta)];
 	datamat.loc_lolaz = [mean(lon_sta),mean(lat_sta),mean(z_sta)];
 	datamat.mean_drift_az = [mean(drift) r2d(mean_ang(d2r(azi)))];
+    datamat.R_mat = R_mat;
+    datamat.Cm_mat = Cm_mat;
 	if ~exist([modified_outdir,'/mats'])
 		mkdir([modified_outdir,'/mats']);
 	end

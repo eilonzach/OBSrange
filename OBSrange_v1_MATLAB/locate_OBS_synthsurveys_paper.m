@@ -19,11 +19,21 @@ clear; close all;
 
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % Josh
+% projpath = '~/Work/OBSrange/synthetics'; 
+
 % path to survey data from the project directory
-datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; 
+datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; % Josh
+% datapath = './synth_surveys_paper/';
 % path to output directory from project directory(will be created if it does not yet exist)
 outdir = './OUT_OBSrange_synthsurveys/'; 
+
+% % path to survey data from the project directory
+% %datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/';
+% datapath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/synthetics/synth_surveys_paper/noise4ms/';
+% % path to output directory from project directory(will be created if it does not yet exist)
+% outdir = './OUT_OBSrange_synthsurveys_noise4ms/'; 
+
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
 onesurvey = '';
@@ -34,12 +44,13 @@ ifplot = 1; % Plot results?
 
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
-par.N_bs = 1; %500; % Number of bootstrap iterations
+par.N_bs = 1; %500; % Number of bootstrap iterations (= 1 for these tests)
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
 par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
-par.npts_movingav = 5; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
+par.if_perfectcorr = 0;
+par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
 ifQC_ping = 1; % Do quality control on pings?
@@ -47,16 +58,17 @@ res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnit
 
 % TAT - Define turnaround time to damp towards in the inversion
 par.TAT_start = 0.013; % (s)
+par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT
 
 % Norm damping for each model parameter (damping towards survrting model)
 % Larger values imply more damping towards the survrting model.
 par.dampx = 0;
 par.dampy = 0;
 par.dampz = 0; %0
-par.dampTAT = 2e-1; %2e-1
+par.dampTAT = 2e-1; %2e-1; %2e-1
 par.dampdvp = 5e-8; %5e-8
 
-% Global norm damping for survbilization
+% Global norm damping for stabilization
 par.epsilon = 1e-10;
 
 %% ===================================================================== %%
@@ -70,12 +82,14 @@ addpath(functionspath);
 
 % output directory
 if par.if_twtcorr
-    modified_outdir = [outdir,'OUT_wcorr/'];
+    if par.if_perfectcorr
+        modified_outdir = [outdir,'OUT_wperfectcorr/'];
+        display('*APPLYING PERFECT CORRECTIONS*');
+    elseif ~par.if_perfectcorr
+        modified_outdir = [outdir,'OUT_wcorr/'];
+    end
 elseif ~par.if_twtcorr
     modified_outdir = [outdir,'OUT_nocorr/'];
-end  
-if ~exist(modified_outdir)
-	mkdir(modified_outdir);
 end
 
 %% Load 2-way Travel Time Data
@@ -134,7 +148,11 @@ dist = cell(par.N_bs,1);
 azi_locs = cell(par.N_bs,1);
 models = cell(par.N_bs,1);
 
+R_mats = zeros(5,5,length(data));
+Cm_mats = zeros(5,5,length(data));
+
 for ii = 1:length(data)
+    if mod(ii,100)==0, fprintf('Iteration %u\n',ii); end
     twt = data(ii).tot_dt;
     [Is0nan, ~] = find(~isnan(twt));
     if length(Is0nan) < 2
@@ -187,43 +205,50 @@ for ii = 1:length(data)
         z_ship_bs = zmat_ship_bs(:,ibs);
         v_ship_bs = [vmat_ship_bs(1).amatbs(:,ibs)'; vmat_ship_bs(2).amatbs(:,ibs)'; vmat_ship_bs(3).amatbs(:,ibs)'];
         twt_bs = twtmat_bs(:,ibs);
+        
+        if ~par.if_perfectcorr
+            [ m_final,models,v,N,R,Cm ] = ...
+                inv_newtons( par,m0_strt,twt_bs,...
+                            x_ship_bs,y_ship_bs,z_ship_bs,...
+                            v_ship_bs,H);
+        elseif par.if_perfectcorr
+            [ m_final,models,v ] = ...
+                inv_newtons_perfectcorr( par,m0_strt,twt_bs,...
+                            x_ship_bs,y_ship_bs,z_ship_bs,...
+                            v_ship_bs,H,corr_dt);
+        end
 
-        [ m_final,models,v ] = ...
-            inv_newtons( par,m0_strt,twt_bs,...
-                        x_ship_bs,y_ship_bs,z_ship_bs,...
-                        v_ship_bs,H);
-
-        x_sta(ii) = m_final(1);
-        y_sta(ii) = m_final(2);
-        z_sta(ii) = m_final(3);
-        TAT(ii) = m_final(4);
-        dvp(ii) = m_final(5);
-        V_w(ii) = par.vp_w + dvp(ii);
-        E_rms(ii) = models(end).E;
-        v_eff(ii) = v;
+        x_sta(ibs) = m_final(1);
+        y_sta(ibs) = m_final(2);
+        z_sta(ibs) = m_final(3);
+        TAT(ibs) = m_final(4);
+        dvp(ibs) = m_final(5);
+        V_w(ibs) = par.vp_w + dvp(ibs);
+        E_rms(ibs) = models(end).E;
+        v_eff(ibs) = v;
         dtwt_mat(:,ibs) = models(end).dtwt;
         twtcorr_mat(:,ibs) = models(end).twt_corr;
         dtwtcorr_mat(:,ibs) = models(end).dtwtcorr;
         vr_mat(:,ibs) = models(end).vr;
-        [lon_sta(ii), lat_sta(ii)] = xy2lonlat_nomap(olon, olat, x_sta(ii), y_sta(ii));
+        [lon_sta(ibs), lat_sta(ibs)] = xy2lonlat_nomap(olon, olat, x_sta(ibs), y_sta(ibs));
 
-        % Calculate OBS drift disurvnce and azimuth
-        dx_drift(ii) = m_final(1) - x_drop;
-        dy_drift(ii) = m_final(2) - y_drop;
-        dz_sta(ii) = m_final(3) - z_drop;
-        drift(ii) = sqrt(dx_drift(ii).^2 + dy_drift(ii).^2);
-        azii = -atan2d(dy_drift(ii),dx_drift(ii))+90;
+        % Calculate OBS drift distance and azimuth
+        dx_drift(ibs) = m_final(1) - x_drop;
+        dy_drift(ibs) = m_final(2) - y_drop;
+        dz_sta(ibs) = m_final(3) - z_drop;
+        drift(ibs) = sqrt(dx_drift(ibs).^2 + dy_drift(ibs).^2);
+        azii = -atan2d(dy_drift(ibs),dx_drift(ibs))+90;
         azii(azii<0) = azii(azii<0) + 360;
-        azi(ii) = azii;
+        azi(ibs) = azii;
 
-        % Calculate ship disurvnce azimuth from OBS
+        % Calculate ship distance azimuth from OBS
         dx_ship = x_ship_bs-m_final(1);
         dy_ship = y_ship_bs-m_final(2);
         dist{ibs} = sqrt(dx_ship.^2 + dy_ship.^2);
         azi_locss = -atan2d(dy_ship , dx_ship) + 90;
         azi_locss(azi_locss<0) = azi_locss(azi_locss<0) + 360;
-        azi_locs{ii} = azi_locss;
-    end
+        azi_locs{ibs} = azi_locss;
+    end % loop on bootstrap (if any)
     dtwt_bs = mean(unscramble_randmat(dtwt_mat,indxs),2);
     twtcorr_bs = mean(unscramble_randmat(twtcorr_mat,indxs),2);
     dtwtcorr_bs = mean(unscramble_randmat(dtwtcorr_mat,indxs),2);
@@ -232,22 +257,25 @@ for ii = 1:length(data)
     range = sqrt( (mean(x_sta)-x_ship).^2 + (mean(y_sta)-y_ship).^2 + (mean(z_sta)-z_ship).^2 );
     
     % Store output
-    misfit_latsta(ii) = lat_sta(ii) - data(ii).obs_loc_laloz(1);
-    misfit_lonsta(ii) = lon_sta(ii) - data(ii).obs_loc_laloz(2);
-    misfit_xsta(ii) = x_sta(ii) - data(ii).obs_loc_xyz(1)*1000;
-    misfit_ysta(ii) = y_sta(ii) - data(ii).obs_loc_xyz(2)*1000;
-    misfit_zsta(ii) = z_sta(ii) - (-data(ii).obs_loc_xyz(3)*1000);
+    data(ii).lat_sta = mean(lat_sta);
+    data(ii).lon_sta = mean(lon_sta);
+    data(ii).x_sta = mean(x_sta);           if par.N_bs>1, data(ii).x_sta_std = std(x_sta); end
+    data(ii).y_sta = mean(y_sta);           if par.N_bs>1, data(ii).y_sta_std = std(y_sta); end
+    data(ii).z_sta = mean(z_sta);           if par.N_bs>1, data(ii).z_sta_std = std(z_sta); end
+    data(ii).TATsta = mean(TAT);            if par.N_bs>1, data(ii).TAT_std = std(TAT); end
+    data(ii).V_w = mean(V_w);               if par.N_bs>1, data(ii).V_w_std = std(V_w); end
+    data(ii).drift = mean(drift);           if par.N_bs>1, data(ii).drift_std = std(drift); end
+    data(ii).drift_true = sqrt(data(ii).obs_loc_xyz(1).^2 + data(ii).obs_loc_xyz(2).^2)*1000;
+    misfit_latsta(ii) = data(ii).lat_sta - data(ii).obs_loc_laloz(1);
+    misfit_lonsta(ii) = data(ii).lon_sta - data(ii).obs_loc_laloz(2);
+    misfit_xsta(ii) = data(ii).x_sta - data(ii).obs_loc_xyz(1)*1000;
+    misfit_ysta(ii) = data(ii).y_sta - data(ii).obs_loc_xyz(2)*1000;
+    misfit_zsta(ii) = data(ii).z_sta - (-data(ii).obs_loc_xyz(3)*1000);
     misfit_r_xy(ii) = sqrt( misfit_xsta(ii).^2 + misfit_ysta(ii).^2 );
     misfit_r_xyz(ii) = sqrt( misfit_xsta(ii).^2 + misfit_ysta(ii).^2 + misfit_zsta(ii).^2 );
-    misfit_TAT(ii) = TAT(ii) - data(ii).TAT;
-    misfit_Vw(ii) = V_w(ii) - data(ii).Vp_water*1000;
-    data(ii).lat_sta = lat_sta(ii);
-    data(ii).lon_sta = lon_sta(ii);
-    data(ii).x_sta = x_sta(ii);
-    data(ii).y_sta = y_sta(ii);
-    data(ii).z_sta = z_sta(ii);
-    data(ii).TATsta = TAT(ii);
-    data(ii).V_w = V_w(ii);
+    misfit_TAT(ii) = data(ii).TATsta - data(ii).TAT;
+    misfit_Vw(ii) = data(ii).V_w - data(ii).Vp_water*1000;
+    
     data(ii).Is0nan = Is0nan(:);
     data(ii).twtcorr = twtcorr_bs(:);
     data(ii).dtwt = dtwt_bs(:)';
@@ -255,7 +283,16 @@ for ii = 1:length(data)
     data(ii).misfit_dtwtcorr = data(ii).dtwtcorr(:)' - corr_dt(:)'; % correction time misfit
     data(ii).v_ship = v_ship;
     data(ii).misfit_v_ship = v_ship(1:2,:) - v_surv_true';
-end
+    
+
+    R_mats(:,:,ii) = R;
+    Cm_mats(:,:,ii) = Cm;
+    data(ii).R_mat = R;
+    data(ii).Cm_mat = Cm;
+end % loop on synth stations
+R_mat = mean(R_mats,3);
+Cm_mat = mean(Cm_mats,3);
+
 % Store output
 data(1).misfit_latsta = misfit_latsta(:);
 data(1).misfit_lonsta = misfit_lonsta(:);
@@ -270,6 +307,28 @@ data(1).E_rms = E_rms(:);
 data(1).misfit_v_ship_all = [data(:).misfit_v_ship];
 data(1).misfit_dtwtcorr_all = [data(:).misfit_dtwtcorr];
 data(1).dtwt_all = [data(:).dtwt];
+
+%% Print out some important parameters
+fprintf('\nStatistics for survey %s\n\n',surv);
+fprintf('Mean x-misfit   = %.2f m\n',mean(data(1).misfit_xsta));
+fprintf('Mean y-misfit   = %.2f m\n',mean(data(1).misfit_ysta));
+fprintf('Mean z-misfit   = %.2f m\n',mean(data(1).misfit_zsta));
+fprintf('Mean Vw-misfit  = %.2f m\n',mean(data(1).misfit_Vw));
+fprintf('Mean tat-misfit = %.2f m\n\n',mean(data(1).misfit_TAT));
+fprintf('Abs 2D error = %.2f ± %.2f m\n',mean(data(1).misfit_r_xy),std(data(1).misfit_r_xy));
+fprintf('Abs 3D error = %.2f ± %.2f m\n',mean(data(1).misfit_r_xyz),std(data(1).misfit_r_xyz));
+sor2De = sort(data(1).misfit_r_xy);
+fprintf('95%% percentile 2D error = %.2f m\n',sor2De(round(0.95*length(sor2De))));
+if par.N_bs>1
+fprintf('Fraction of x-misfit outside bootstrap 2sig = %.2f %%\n',  100*sum(abs(data(1).misfit_xsta)>2*[data.x_sta_std]')/length(data(1).misfit_xsta));
+fprintf('Fraction of y-misfit outside bootstrap 2sig = %.2f %%\n',  100*sum(abs(data(1).misfit_ysta)>2*[data.y_sta_std]')/length(data(1).misfit_ysta));
+fprintf('Fraction of z-misfit outside bootstrap 2sig = %.2f %%\n',  100*sum(abs(data(1).misfit_zsta)>2*[data.z_sta_std]')/length(data(1).misfit_zsta));
+fprintf('Fraction of Vw-misfit outside bootstrap 2sig = %.2f %%\n', 100*sum(abs(data(1).misfit_Vw)  >2*[data.V_w_std]')  /length(data(1).misfit_Vw));
+fprintf('Fraction of tat-misfit outside bootstrap 2sig = %.2f %%\n',100*sum(abs(data(1).misfit_TAT) >2*[data.TAT_std]')  /length(data(1).misfit_TAT));
+r_sta_std = (abs([data.x_sta]).*[data.x_sta_std] + abs([data.y_sta]).*[data.y_sta_std])./[data.drift];
+fprintf('Fraction of 2d-misfit outside bootstrap 2sig = %.2f %%\n', 100*sum(abs(data(1).misfit_r_xy)>2*r_sta_std')/length(data(1).misfit_r_xy));
+end
+
 
 %% HISTOGRAMS OF MODEL PARAMETERS
 if ifplot
@@ -308,6 +367,22 @@ if ifplot
     xlabel('Longitude','fontsize',18);
     ylabel('Latitude','fontsize',18);
     axis equal;
+    
+    %% Model resolution and Covariance
+    PLOT_resolution_covariance
+    %%
+
+    % drift vs. misfit
+    figure(107), clf, hold on
+    plot([data.drift_true],data(1).misfit_r_xy,'.')
+    drbin = [0:50:350;50:50:400]; clear('mfdr')
+    for idr = 1:size(drbin,2), mfdr(idr) = median(data(1).misfit_r_xy([data.drift_true]<= drbin(2,idr) & [data.drift_true]> drbin(1,idr))); end
+    plot(mean(drbin,1),mfdr,'o-r')
+    xlabel('Drift distance (m)'); ylabel('Horizontal misfit (m)')
+    % depth vs. tat
+    figure(108)
+    plot(data(1).misfit_zsta,data(1).misfit_Vw,'.')
+    xlabel('Z misfit (m)'); ylabel('Vw misfit (m)')
 end
 
 
@@ -336,6 +411,7 @@ end
 save2pdf([modified_outdir,'/plots/',surv,'_1_ModelHists.pdf'],100,500)
 save2pdf([modified_outdir,'/plots/',surv,'_2_MisfitHists.pdf'],101,500)
 save2pdf([modified_outdir,'/plots/',surv,'_3_Survey.pdf'],102,500)
+save2pdf([modified_outdir,'/plots/',surv,'_4_Resolution.pdf'],103,500)
 end
 
 if ifsave

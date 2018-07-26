@@ -31,6 +31,13 @@ switch survey
     % full survey path
     fsurvx = [mox,cix,mix]'; % in km
     fsurvy = [moy,ciy,miy]'; % in km
+    case 'circle'
+    %% CIRCLE
+    % round circle 
+    npercirc = round(2*pi*radius*nm2km./dl);
+    thetas = -linspace(0,2*pi,npercirc);
+    fsurvx = radius*nm2km*sin(thetas); % in km
+    fsurvy = radius*nm2km*cos(thetas); % in km
 
     case 'diamond'
     %% diamond

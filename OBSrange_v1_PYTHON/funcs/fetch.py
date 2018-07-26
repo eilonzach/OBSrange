@@ -9,7 +9,7 @@ Stephen M.
 import glob
 
 def data_paths(data_dir, matchkey):
-  print('Listing files in %s' % data_dir)
+  print(' Listing files in %s' % data_dir)
   files = glob.glob(data_dir + matchkey)
   
   # Return file paths.

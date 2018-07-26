@@ -1,33 +1,35 @@
 clear
+close all
+% addpath('/Users/russell/GRAD/FIELD_WORK/PacificArray_2018/UsefulMATLAB/'); 
 addpath('~/Dropbox/MATLAB/myFUNCTIONS/');
 % profile clear 
 % profile on
 %% TRUE VALUES
 drop_location = [-7.54 -133.62 5]; % [lat,lon,z]
-noise = 0.004; % std of timing error
+noise = 0.000; %0.004; % std of timing error
 
-datN = 10; 
+datN = 0; 
 ifsave = true;
 
 %% survey parameters
-survey = 'line2'; % 'PACMAN' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
-radius = 1.; % radius of survey, in Nm
+survey = 'PACMAN'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
+radius = 1.0; % radius of survey, in Nm
 fprintf('Survey %s rad=%.00f\n',survey,radius);
 survstart = now;
 survey_dt = max([10,60*radius/1.3]); % time lapse of ranging
 
 %% model parameters - if one iteration
-obs_location_xyz = [+.1 +.3 5.2578]; % x,y,z (km)
+obs_location_xyz = [+.1 +.3 5.050]; % x,y,z (km)
 vp_actual = 1.520; % km/s
 tat = 0.014; %s
 
 % if doing many iterations
-niter = 10000; % if niter>0, will not make plots or save output file in SIO format
+niter = 1; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
 x_std = 0.100; % in km
 y_std = 0.100; % in km
 z_std = 0.050; % in km
 vp_std = 0.010; % in km/s
-tat_std = 3e-3;
+tat_std = 3e-3; %1e-3; %3e-3;
 
 % system/default parameters
 nm2km = 1.852;
@@ -47,7 +49,7 @@ az = 0; % azimuth of +y direction
 if niter==1
 % obs location
 % [obs_location_laloz(1),obs_location_laloz(2)] = project_xy(proj,obs_location_xyz(1),obs_location_xyz(2),'inverse');
-[obs_location_laloz(2),obs_location_laloz(1)] = xy2lonlat(drop_location(2),drop_location(1),1e3*obs_location_xyz(1),1e3*obs_location_xyz(2));
+[obs_location_laloz(2),obs_location_laloz(1)] = xy2lonlat_nomap(drop_location(2),drop_location(1),1e3*obs_location_xyz(1),1e3*obs_location_xyz(2));
 
 obs_location_laloz(3) = obs_location_xyz(3);
 
@@ -111,7 +113,7 @@ if niter > 1
     obs_location_xyz = obs_default_xyz + [normrnd(0,x_std),normrnd(0,y_std),normrnd(0,z_std)];
     tat = tat_default + normrnd(0,tat_std);
     vp_actual = vp_default + normrnd(0,vp_std);
-    [obs_location_laloz(2),obs_location_laloz(1)] = xy2lonlat(drop_location(2),drop_location(1),1e3*obs_location_xyz(1),1e3*obs_location_xyz(2));
+    [obs_location_laloz(2),obs_location_laloz(1)] = xy2lonlat_nomap(drop_location(2),drop_location(1),1e3*obs_location_xyz(1),1e3*obs_location_xyz(2));
     obs_location_laloz(3) = obs_location_xyz(3);
     % save these true values
     data(jj).obs_loc_xyz = obs_location_xyz;
@@ -147,9 +149,9 @@ end
 corr_dt = rec_dt-send_dt;
 
 % calc instantaneous velocities
-v_surv = [1i*(rec_survx-send_survx)+(rec_survy-send_survy)]./(send_dt+rec_dt);
+v_surv = [1i*(rec_survx-send_survx)+(rec_survy-send_survy)]./(send_dt+rec_dt); % in m/s
 [abs(v_surv)*1000,r2d(angle(v_surv)) + az];
-v_surv_true = abs(v_surv).*1000.*[cosd(r2d(angle(v_surv)) + az),sind(r2d(angle(v_surv)) + az)];
+v_surv_true = abs(v_surv).*1000.*[cosd(r2d(angle(v_surv)) + az),sind(r2d(angle(v_surv)) + az)]; % in m/s
 
 % add a little noise
 tot_dt = tot_dt + normrnd(0,noise,size(tot_dt));
@@ -161,7 +163,7 @@ survt = rec_survt/24/60/60 + survstart;
 
 % project back to lon,lat
 % [survlat,survlon] = project_xy(proj,survx,survy,'inverse');
-[ survlon, survlat ] = xy2lonlat( drop_location(2),drop_location(1), survx*1.e3, survy*1.e3);
+[ survlon, survlat ] = xy2lonlat_nomap( drop_location(2),drop_location(1), survx*1.e3, survy*1.e3);
 [survgc,survaz] = distance(drop_location(1), drop_location(2),survlat,survlon);
 
 
@@ -169,13 +171,13 @@ survt = rec_survt/24/60/60 + survstart;
 okpt = rand(size(survlat))>0.2;
 
 % drop out all within some distance of 3 bazs (if not line...
-if ~any(regexp(survey,'line'))
-badaz = 360*rand(3,1);
-badazw = abs(normrnd(0,20,3,1)); % width of drop-out bin
-for ibz = 1:3
-    okpt(ang_diff(survaz,badaz(ibz))<badazw(ibz)) = false;
-end
-end
+% if ~any(regexp(survey,'line'))
+% badaz = 360*rand(3,1);
+% badazw = abs(normrnd(0,20,3,1)); % width of drop-out bin
+% for ibz = 1:3
+%     okpt(ang_diff(survaz,badaz(ibz))<badazw(ibz)) = false;
+% end
+% end
 % reinstate points immediately on top of (<100m from) station
 okpt(survgc*111.1<0.1) = true;
 % kill not-ok points
@@ -214,22 +216,31 @@ end
 % profile viewer
 
 %% output file
-if ifsave && niter==1
+if ifsave
+    sta = sprintf('syn%u',datN);
+
+% many iterations - output data structure
+if niter>1
+    save(sprintf('synth_surveys_paper/SynthBoot_%s_rad%.2f.mat',survey,radius),'data');
+end
+
+if niter==1
+% single station - make output file to mimic SIO survey files
 survlah = ['N','S'];
 survloh = ['E','W'];
-fid = fopen(['synth_obsloc',num2str(datN),'.dat'],'w');
-for ii = 1:length(survx)
-fprintf(fid,'%4.0f msec. Lat: %1.0f %07.4f %1s  Lon: %1.0f %07.4f %1s  Alt: %5.2f Time(UTC): %s:%3.0f:%s\n',...
-                tot_dt(ii)*1000,...
-                abs(fix(survlat(ii))),60*abs(rem(survlat(ii),1)),survlah(1.5-0.5*sign(survlat(ii))),...
-                abs(fix(survlon(ii))),60*abs(rem(survlon(ii),1)),survloh(1.5-0.5*sign(survlon(ii))),...
-                25 + normrnd(0,0.5),...
-                datestr(survt(ii),'yyyy'),doy(datestr(survt(ii),'yyyy'),datestr(survt(ii),'mm'),datestr(survt(ii),'dd')),...
-                datestr(survt(ii),'HH:MM:SS'));
-end
-fclose(fid);
 
-fid = fopen(['synth_obsloc_wbads',num2str(datN),'.dat'],'w');
+fid = fopen([sta,'.txt'],'w');
+% header like real files
+fprintf(fid,'Ranging data taken on:  %s.%s\n',datestr(survstart,31),datestr(survstart,'fff'));
+fprintf(fid,'Cruise:                 synthetic_survey_%s\n',survey);
+fprintf(fid,'Site:                   %s\n',sta);
+fprintf(fid,'Instrument:\n');
+fprintf(fid,'Drop Point (Latitude):  %.5f\n',drop_location(1));
+fprintf(fid,'Drop Point (Longitude): %.5f\n',drop_location(2));
+fprintf(fid,'Depth (meters):         %.5f\n',drop_location(3)*1e3);
+fprintf(fid,'Comment:\n');
+fprintf(fid,'==================================================\n\n');
+
 for ii = 1:length(survx)
     if okpt(ii)
         fprintf(fid,'%4.0f msec. Lat: %1.0f %07.4f %1s  Lon: %1.0f %07.4f %1s  Alt: %5.2f Time(UTC): %s:%3.0f:%s\n',...
@@ -245,13 +256,9 @@ for ii = 1:length(survx)
 end
 fclose(fid);
 
-save(sprintf('SynthSurvey%.0f',datN));
-copyfile(sprintf('SynthSurvey%.0f.mat',datN),'/Volumes/km1807-Gaherty/Survey_Programs/synth_data_josh/');
+save(sprintf('trudata_%s',sta));
+% copyfile(sprintf('SynthSurvey%.0f.mat',datN),'synth_surveys_paper/');
 end             
 
-
-if niter>1
-    save(sprintf('synth_surveys_paper/SynthBoot_%s_rad%.2f.mat',survey,radius),'data');
 end
-
 

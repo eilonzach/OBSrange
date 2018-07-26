@@ -1,0 +1,17 @@
+Each figure in the paper has its own directory and make script. 
+These should be self-contained, so all data required for each figure is in
+the directory for that figure. This way we can always re-create figures in 
+future even if paths change etc.. Important for reproducibility. 
+
+This folder contains all the data and MATLAB scripts to make 
+each of the figures in the paper
+
+Contents:
+
+make_all_figs.m = wrapper script to execute all of the functions that make 
+                  each figure, so all figures can be re-made in bulk
+figdata     = folder containing any data required to plot each of the 
+	          figures in the paper
+makeFigures = folder containing the individual scripts to make each of the 
+              figures
+Figure*.pdf = the image files for the figures... obviously. 

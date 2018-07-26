@@ -3,13 +3,13 @@ clear; close all;
 %% Parameters
 % projpath = '/Users/zeilon/Documents/MATLAB/OBS_range_dist/projects/Worcester_OBS-Relocations'; % path to project
 projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % path to project
-outdir_OBSrange_nocorr = [projpath,'/OUT_OBSrange_synthsurveys/OUT_nocorr/']; % Path to results WITHOUT velocity corrections
-outdir_OBSrange_wcorr = [projpath,'/OUT_OBSrange_synthsurveys/OUT_wcorr_1pts/']; % Path to results WITH velocity corrections
+% outdir_OBSrange_nocorr = [projpath,'/OUT_OBSrange_synthsurveys/OUT_nocorr/']; % Path to results WITHOUT velocity corrections
+% outdir_OBSrange_wcorr = [projpath,'/OUT_OBSrange_synthsurveys/OUT_wcorr_1pts/']; % Path to results WITH velocity corrections
+% outdir_OBSrange_wcorr = [projpath,'/OUT_OBSrange_synthsurveys/OUT_wcorr_1pts/']; % Path to results WITH velocity corrections
 
-% outdir_OBSrange = './OUT_OBSrange/OUT_Vshipcorrs/'; % output directory
-% if ~exist(outdir_OBSrange)
-%     mkdir(outdir_OBSrange);
-% end
+outdir_OBSrange_nocorr = [projpath,'/OUT_OBSrange_synthsurveys_noise0.01ms/OUT_nocorr/'];
+% outdir_OBSrange_wcorr = [projpath,'/OUT_OBSrange_synthsurveys_noise4ms/OUT_wperfectcorr/'];
+outdir_OBSrange_wcorr = [projpath,'/OUT_OBSrange_synthsurveys_noise0.01ms/OUT_wcorr_1pts/'];
 
 % prepend functions directory to MATLAB path
 fullMAINpath = mfilename('fullpath');
@@ -65,7 +65,7 @@ for ifil = 1:Nfils
     ylim(ax1,[0 max(abs(misfit_nocorr.dtwt_all))]*1000);
     colormap(clr);
     ax1.XTick = ax1.YTick;
-    if ifil == 1
+    if ifil == 1 && Nfils > 1
         [R_dtwt,P_dtwt] = corrcoef(misfit_nocorr.dtwt_all,misfit_wcorr.dtwt_all);
         fitvars = polyfit(misfit_nocorr.dtwt_all*1000, misfit_wcorr.dtwt_all*1000, 1);
         m = fitvars(1);
@@ -85,7 +85,7 @@ for ifil = 1:Nfils
     ylim(ax2,[0 max(abs(misfit_nocorr.r_xy))]);
     colormap(clr);
     ax2.XTick = ax2.YTick;
-    if ifil == 1
+    if ifil == 1 && Nfils > 1
         [R_rxy,P_rxy] = corrcoef(misfit_nocorr.r_xy,misfit_wcorr.r_xy);
         fitvars = polyfit(misfit_nocorr.r_xy, misfit_wcorr.r_xy, 1);
         m = fitvars(1);
@@ -105,7 +105,7 @@ for ifil = 1:Nfils
     ylim(ax3,[0 max(abs(misfit_nocorr.zsta))]);
     colormap(clr);
     ax3.XTick = ax3.YTick;
-    if ifil == 1
+    if ifil == 1 && Nfils > 1
         [R_zsta,P_zsta] = corrcoef(misfit_nocorr.zsta, misfit_wcorr.zsta);
         fitvars = polyfit(misfit_nocorr.zsta, misfit_wcorr.zsta, 1);
         m = fitvars(1);
@@ -125,7 +125,7 @@ for ifil = 1:Nfils
     ylim(ax4,[0 max(abs(misfit_nocorr.Vw))]);
     colormap(clr);
     ax4.XTick = ax4.YTick;
-    if ifil == 1
+    if ifil == 1 && Nfils > 1
         [R_Vw,P_Vw] = corrcoef(misfit_nocorr.Vw, misfit_wcorr.Vw);
         fitvars = polyfit(misfit_nocorr.Vw, misfit_wcorr.Vw, 1);
         m = fitvars(1);
@@ -145,7 +145,7 @@ for ifil = 1:Nfils
     ylim(ax5,[0 max(abs(misfit_nocorr.TAT))]*1000);
     colormap(clr);
     ax5.XTick = ax5.YTick;
-    if ifil == 1
+    if ifil == 1 && Nfils > 1
         [R_TAT,P_TAT] = corrcoef(misfit_nocorr.TAT*1000, misfit_wcorr.TAT*1000);
         fitvars = polyfit(misfit_nocorr.TAT*1000, misfit_wcorr.TAT*1000, 1);
         m = fitvars(1);
@@ -176,88 +176,81 @@ for ifil = 1:Nfils
 end
 
 save2pdf([outdir_OBSrange_wcorr,'analyze_Vshipcorrs.pdf'],f100,500)
+
 %% Plot residuals and Erms
-% figure(1); clf;
-% set(gcf,'position',[102   348   845   357]);
-% dt = 2/1000;
-% 
-% % Divergent colormap
-% % cmap = cmocean('balance');
-% dx = 0.1;
-% dy = 0.9;
-% 
-% % ax1 = subplot(1,2,1);
-% % [R_dtwt,P_dtwt] = corrcoef(misfit_nocorr.agg.dtwt_all,misfit_wcorr.agg.dtwt_all);
-% % plot([-100 100],[-100 100],'-k','linewidth',2); hold on;
-% % plot([0 0],[-100 100],'--','color',[0.5 0.5 0.5],'linewidth',2);
-% % plot([-100 100],[0 0],'--','color',[0.5 0.5 0.5],'linewidth',2);
-% % % plot(dtwt_all_nocorr*1000,dtwt_all_wcorr*1000,'ok','markerfacecolor',[0 0 0],'markersize',5); hold on;
-% % scatter(misfit_nocorr.agg.dtwt_all*1000,misfit_wcorr.agg.dtwt_all*1000,60,misfit_wcorr.agg.dtwtcorr_all*1000,'o','filled','markeredgecolor',[0 0 0],'linewidth',1); hold on;
-% % fitvars = polyfit(misfit_nocorr.agg.dtwt_all*1000, misfit_wcorr.agg.dtwt_all*1000, 1);
-% % m = fitvars(1);
-% % b = fitvars(2);
-% % plot([-100:100],m*[-100:100]+c,'-r','linewidth',2);
-% % set(gca,'fontsize',16,'linewidth',2,'box','on')
-% % axis equal;
-% % xlabel('No Correction','Interpreter','latex');
-% % ylabel('Corrected','Interpreter','latex');
-% % title('\textbf{TWT Residuals (ms)}','Interpreter','latex');
-% % xlim([-max(abs(misfit_nocorr.agg.dtwt_all))-dt max(abs(misfit_nocorr.agg.dtwt_all))+dt]*1000);
-% % ylim([-max(abs(misfit_nocorr.agg.dtwt_all))-dt max(abs(misfit_nocorr.agg.dtwt_all))+dt]*1000);
-% % cb = colorbar('peer',ax1);
-% % ylabel(cb,'TWT corrections (ms)','fontsize',16,'Interpreter','latex');
-% % colormap(cmap);
-% % caxis([-max(abs(misfit_wcorr.agg.dtwtcorr_all)) max(abs(misfit_wcorr.agg.dtwtcorr_all))]*1000);
-% % ax1.XTick = ax1.YTick;
-% % text(ax1,diff(ax1.XLim)*dx+ax1.XLim(1),diff(ax1.YLim)*dy+ax1.YLim(1),...
-% %     sprintf('\\textbf{ %.2f ms}',m),'color',[0 0 0],'interpreter','latex','fontsize',14);
-% 
-% ax1 = subplot(1,2,1);
-% [R_dtwt,P_dtwt] = corrcoef(misfit_nocorr.dtwt_all,misfit_wcorr.dtwt_all);
-% plot([-100 100],[-100 100],'-k','linewidth',2); hold on;
-% % plot(dtwt_all_nocorr*1000,dtwt_all_wcorr*1000,'ok','markerfacecolor',[0 0 0],'markersize',5); hold on;
-% h = scatter(misfit_nocorr.dtwt_all*1000,misfit_wcorr.dtwt_all*1000,60,misfit_wcorr.dtwtcorr_all*1000,'filled','markeredgecolor',[0 0 0],'linewidth',1); hold on;
-% fitvars = polyfit(misfit_nocorr.dtwt_all*1000, misfit_wcorr.dtwt_all*1000, 1);
+figure(1); clf;
+set(gcf,'position',[102   348   845   357]);
+dt = 2/1000;
+
+% Divergent colormap
+cmap = cmocean('balance');
+dx = 0.1;
+dy = 0.9;
+
+ax1 = subplot(1,2,1);
+[R_dtwt,P_dtwt] = corrcoef(misfit_nocorr.agg.dtwt_all,misfit_wcorr.agg.dtwt_all);
+plot([-100 100],[-100 100],'-k','linewidth',2); hold on;
+plot([0 0],[-100 100],'--','color',[0.5 0.5 0.5],'linewidth',2);
+plot([-100 100],[0 0],'--','color',[0.5 0.5 0.5],'linewidth',2);
+% plot(dtwt_all_nocorr*1000,dtwt_all_wcorr*1000,'ok','markerfacecolor',[0 0 0],'markersize',5); hold on;
+scatter(misfit_nocorr.agg.dtwt_all*1000,misfit_wcorr.agg.dtwt_all*1000,60,misfit_wcorr.agg.twtcorr_all*1000,'o','filled','markeredgecolor',[0 0 0],'linewidth',1); hold on;
+% scatter(misfit_nocorr.agg.dtwt_all*1000,misfit_wcorr.agg.dtwt_all*1000,60,misfit_wcorr.agg.dtwtcorr_all*1000,'o','filled','markeredgecolor',[0 0 0],'linewidth',1); hold on;
+% fitvars = polyfit(misfit_nocorr.agg.dtwt_all*1000, misfit_wcorr.agg.dtwt_all*1000, 1);
 % m = fitvars(1);
 % b = fitvars(2);
-% % plot([-100:100],m*[-100:100]+b,'-r','linewidth',2);
-% set(gca,'fontsize',16,'linewidth',2,'box','on')
-% axis equal;
-% xlabel('No Correction','Interpreter','latex');
-% ylabel('Corrected','Interpreter','latex');
-% title('\textbf{TWT Residuals (ms)}','Interpreter','latex');
-% xlim([0 max(abs(misfit_nocorr.dtwt_all))+dt]*1000);
-% ylim([0 max(abs(misfit_nocorr.dtwt_all))+dt]*1000);
-% % cb = colorbar('peer',ax1);
-% % ylabel(cb,'TWT corrections (ms)','fontsize',16,'Interpreter','latex');
-% colormap(clr);
-% % caxis([-max(abs(misfit_wcorr.dtwtcorr_all)) max(abs(misfit_wcorr.dtwtcorr_all))]*1000);
-% ax1.XTick = ax1.YTick;
+% plot([-100:100],m*[-100:100]+b,'-r','linewidth',2);
+set(gca,'fontsize',16,'linewidth',2,'box','on')
+axis equal;
+xlabel('No Correction','Interpreter','latex');
+ylabel('Corrected','Interpreter','latex');
+title('\textbf{TWT Residuals (ms)}','Interpreter','latex');
+xlim([-max(abs(misfit_nocorr.agg.dtwt_all))-dt max(abs(misfit_nocorr.agg.dtwt_all))+dt]*1000);
+ylim([-max(abs(misfit_nocorr.agg.dtwt_all))-dt max(abs(misfit_nocorr.agg.dtwt_all))+dt]*1000);
+cb = colorbar('peer',ax1);
+ylabel(cb,'TWT corrections (ms)','fontsize',16,'Interpreter','latex');
+colormap(cmap);
+caxis([-max(abs(misfit_wcorr.agg.twtcorr_all)) max(abs(misfit_wcorr.agg.twtcorr_all))]*1000);
+ax1.XTick = ax1.YTick;
+text(ax1,diff(ax1.XLim)*dx+ax1.XLim(1),diff(ax1.YLim)*dy+ax1.YLim(1),...
+    sprintf('\\textbf{ %.2f}',R_dtwt(2,1)),'color',[0 0 0],'interpreter','latex','fontsize',14);
+
+
+ax2 = subplot(1,2,2);
+ax2Pos = get(ax2,'position');
+plot([-100 100],[-100 100],'-k','linewidth',2); hold on;
+plot([0 0],[-100 100],'--','color',[0.5 0.5 0.5],'linewidth',2);
+plot([-100 100],[0 0],'--','color',[0.5 0.5 0.5],'linewidth',2);
+% plot(dtwt_all_nocorr*1000,dtwt_all_wcorr*1000,'ok','markerfacecolor',[0 0 0],'markersize',5); hold on;
+% scatter(misfit_nocorr.agg.dtwt_all*1000,misfit_wcorr.agg.dtwt_all*1000,60,misfit_wcorr.agg.twtcorr_all*1000,'o','filled','markeredgecolor',[0 0 0],'linewidth',1); hold on;
+scatter(misfit_nocorr.agg.dtwt_all*1000,misfit_wcorr.agg.dtwt_all*1000,60,misfit_wcorr.agg.dtwtcorr_all*1000,'o','filled','markeredgecolor',[0 0 0],'linewidth',1); hold on;
+% fitvars = polyfit(misfit_nocorr.agg.dtwt_all*1000, misfit_wcorr.agg.dtwt_all*1000, 1);
+% m = fitvars(1);
+% b = fitvars(2);
+% plot([-100:100],m*[-100:100]+b,'-r','linewidth',2);
+set(gca,'fontsize',16,'linewidth',2,'box','on')
+axis equal;
+xlabel('No Correction','Interpreter','latex');
+ylabel('Corrected','Interpreter','latex');
+title('\textbf{TWT Residuals (ms)}','Interpreter','latex');
+xlim([-max(abs(misfit_nocorr.agg.dtwt_all))-dt max(abs(misfit_nocorr.agg.dtwt_all))+dt]*1000);
+ylim([-max(abs(misfit_nocorr.agg.dtwt_all))-dt max(abs(misfit_nocorr.agg.dtwt_all))+dt]*1000);
+cb = colorbar('peer',ax2);
+ylabel(cb,'$\delta$TWT corrections (ms)','fontsize',16,'Interpreter','latex');
+colormap(cmap);
+caxis([-max(abs(misfit_wcorr.agg.dtwtcorr_all)) max(abs(misfit_wcorr.agg.dtwtcorr_all))]*1000);
+ax2.XTick = ax2.YTick;
 % text(ax1,diff(ax1.XLim)*dx+ax1.XLim(1),diff(ax1.YLim)*dy+ax1.YLim(1),...
-%     sprintf('\\textbf{ %.2f}',m),'color',[0 0 0],'interpreter','latex','fontsize',14);
-% 
-% ax2 = subplot(1,2,2);
-% [R_Erms,P_Erms] = corrcoef(misfit_nocorr.E_rms,misfit_wcorr.E_rms);
-% plot(misfit_nocorr.E_rms*1000,misfit_wcorr.E_rms*1000,'ok','markerfacecolor',[0.5 0.5 0.5],'markersize',8); hold on;
-% plot([-100 100],[-100 100],'-k','linewidth',2);
-% set(gca,'fontsize',16,'linewidth',2,'box','on')
-% axis equal;
-% xlabel('No Correction','Interpreter','latex');
-% ylabel('Corrected','Interpreter','latex');
-% title('\textbf{RMS (ms)}','Interpreter','latex');
-% xlim([0 max(misfit_nocorr.E_rms)+dt]*1000);
-% ylim([0 max(misfit_nocorr.E_rms)+dt]*1000);
-% ax2.XTick = ax2.YTick;
-% 
-% % resize axis 1
-% ax1Pos = get(ax1,'position');
-% ax2Pos = get(ax2,'position');
-% ax1Pos(3:4) = [ax2Pos(3:4)];
-% ax1Pos(1) = ax1Pos(1)-0.04;
-% set(ax1,'position',ax1Pos);
-% set(ax2,'position',[ax2Pos(1)+0.04,ax2Pos(2:4)]);
-% 
-% save2pdf([outdir_OBSrange_wcorr,'analyze_Vshipcorrs.pdf'],1,500)
+%     sprintf('\\textbf{ %.2f}',R_dtwt(2,1)),'color',[0 0 0],'interpreter','latex','fontsize',14);
+
+% resize axis 1
+ax1Pos = get(ax1,'position');
+ax1Pos(3:4) = [ax2Pos(3:4)];
+ax1Pos(1) = ax1Pos(1)-0.06;
+set(ax1,'position',ax1Pos);
+set(ax2,'position',ax2Pos);
+set(ax2,'position',[ax2Pos(1),ax2Pos(2:4)]);
+
+save2pdf([outdir_OBSrange_wcorr,'TWTresiduals.pdf'],1,500)
 
 %% print to csv file:
 % fid = fopen([projname,'_allstas.csv'],'w');

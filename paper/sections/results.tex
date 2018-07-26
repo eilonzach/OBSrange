@@ -1,8 +1,22 @@
 
 \subsection{Demonstration on synthetic data}
+We validated our algorithm by checking that it correctly recovers the (known) location of synthetic test stations. Figure \ref{fig:one_sta_synth} 
+
+In order to obtain statistics on the quality of the synthetic recovery, we performed this test for 10,000 synthetic OBS stations, as follows: For each iteration, a synthetic station location was determined relative to a fixed drop point by drawing x- and y- drifts from zero-centered Gaussian distributions with standard deviations of 100 m (only in rare cases are stations thought to drift further than $\sim$200 m). The depth perturbation, turn-around time, and water velocity perturbation were similarly randomly selected, with mean values of 5000 m, 13 m/s, and 1500 m/s and standard deviations of 50 m, 3 ms, and 10 m/s, respectively. For the given station location, two-way travel times to the ship were computed by interpolating the ship's position within a fixed survey pattern at one-minute intervals, sending straight-line rays to the instrument and back, and adding the turn-around time. Since the position of the ship at the time it receives the acoustic pulse is itself dependent on the travel time, we iterated on this value until the time and position converged to give an error of \mbox{$<10^{-6}$ s}. Only the location and absolute time at the time the ship receives the acoustic pulse was recorded for the inversion, mimicking the data obtained from the EdgeTech deck box. We then added Gaussian random noise to the resultant travel times using a standard deviation of 4 ms, to account for measurement noise, errors in ship GPS location, and local changes in water velocity. Lastly, we randomly dropped out $\sim$20\% of the travel time data points, simulating the occasional null return from the acoustic survey. For tests of the basic location algorithm, we held the survey geometry constant, using the \textit{PACMAN} configuration with a radius of 1 Nm (Section \ref{sec:surv_geom_tests}). This testing procedure was designed to mimic the idiosyncrasies of real acoustic surveys as closely as possible. 
+
+Unlike for the real data, we did not bootstrap the individual synthetic locations and take a median, but inverted each station once using Newton's method (Equation \ref{eq:inverse}).   
+
+The results of these tests show that on average our inversion is extremely successful in correctly locating the OBS stations. The mean location errors in the x-, y-, and z- directions were 0.079 m, -0.013 m, and 0.123 m respectively, demonstrating there was no systematic bias in the locations. The mean errors in water velocity and turn-around time were indistinguishable from zero, showing that estimation of these parameters was also not biased. The mean absolute horizontal location error was 2.34 m, with a standard deviation of 1.24 m. 95\% of the absolute horizontal station location errors were less than 4.60 m. Given the water depth of approximately 5 km, and the survey radius of $\sim$1850 m, this level of location precision was highly encouraging. There was no statistically significant relationship observed between location error and the drift (\textit{i.e.}, the distance between the synthetic OBS station and the drop point).
+
+We observed a strong trade-off between water velocity and depth, which was responsible for the somewhat larger standard error in station depth estimates, which was \mbox{9.6 m}. This uncertainty is likely of negligible concern for most OBS practitioners, but if precise depths are important then a survey geometry that includes more tracks towards and away from the station would be preferable (in addition to verification using acoustic echo-sounders that implement precise water-velocity profiles from XBT data).
 
 \subsection{Application to PacificArray deployment}
 
 \subsection{Comparison to previous tools}
+Re-run synthetics with damped Vw, etc.
+Talk about null points
+Show difference in error between our method and theirs
+latlon2xy conversion
 
-\subsection{Exploration of survey pattern geometries}
+
+\subsection{Exploration of survey pattern geometries} \label{sec:surv_geom_tests}

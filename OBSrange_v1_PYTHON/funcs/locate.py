@@ -19,20 +19,23 @@ def instruments(datafile, parameters):
   ################### Independent Parameter Initializations ####################
  
   print('\n Initializing independent parameters ...')
-  vpw0     = parameters[0]    
-  dvp0     = parameters[1]    
-  tat0     = parameters[2]    
-  N_bs     = parameters[3]    
-  E_thresh = parameters[4]
-  twtcorr  = parameters[5] 
-  npts     = parameters[6]    
-  dampx    = parameters[7]   
-  dampy    = parameters[8]   
-  dampz    = parameters[9]   
-  damptat  = parameters[10]
-  dampdvp  = parameters[11]
-  eps      = parameters[12]    
-  M        = parameters[13]      
+  vpw0       = parameters[0]    
+  dvp0       = parameters[1]    
+  tat0       = parameters[2]    
+  N_bs       = parameters[3]    
+  E_thresh   = parameters[4]
+  twtcorr    = parameters[5] 
+  npts       = parameters[6]    
+  dampx      = parameters[7]   
+  dampy      = parameters[8]   
+  dampz      = parameters[9]   
+  damptat    = parameters[10]
+  dampdvp    = parameters[11]
+  eps        = parameters[12]    
+  M          = parameters[13]
+  QC         = parameters[14]
+  res_thresh = parameters[15]
+  bounds     = parameters[16]     
   
   ######################### Load and Clean Input Data ##########################
   
@@ -41,10 +44,11 @@ def instruments(datafile, parameters):
   data = pings.load(datafile)
   
   # Perform quality control on loaded data.
-  print('\n Performing quality control ...')
-  data, data_bad = pings.qc(data, vpw0, thresh=500)
-  N_badpings = len(data_bad['twts'])
-  print(' Number of pings removed: ' + str(N_badpings))
+  if QC:
+    print('\n Performing quality control ...')
+    data, data_bad = pings.qc(data, vpw0, thresh=res_thresh)
+    N_badpings = len(data_bad['twts'])
+    print(' Number of pings removed: ' + str(N_badpings))
   
   ##################### Intermediate Variable Declarations #####################
   
@@ -65,7 +69,7 @@ def instruments(datafile, parameters):
   xs, ys = coord_txs.latlon2xy(lat0, lon0, lats, lons)
   x0, y0 = coord_txs.latlon2xy(lat0, lon0, lat0, lon0)
 
-  # Package coordinates for passing to inversion and F-test functions.
+  # Package coordinates for passing to other functions.
   drop_coords = [x0, y0, z0, lat0, lon0]
   ship_coords = [xs, ys, zs]
   coords = [drop_coords, ship_coords]
@@ -78,15 +82,8 @@ def instruments(datafile, parameters):
   
   print('\n Performing bootstrap resampling ...')
   
-  # Randomly resample model data.
+  # Randomly resample model data. First columns are unpermutted input data.
   X, Y, Z, V, TWT, indxs = bootstrap.sampling(xs, ys, zs, vs, twts, N_bs)
-  
-  # Add a row of unpermutted data to each bootstrap matrix. Enables comparison
-  X = np.insert(X, 0, xs, axis=1)
-  Y = np.insert(Y, 0, ys, axis=1)
-  Z = np.insert(Z, 0, zs, axis=1)
-  V = np.insert(V, 0, vs, axis=2)
-  TWT = np.insert(TWT, 0, twts, axis=1)
 
   ################################## Inversion #################################
   
@@ -95,20 +92,20 @@ def instruments(datafile, parameters):
   # Initialize starting model.
   m0_strt = np.array([x0, y0, z0, tat0, dvp0])
   
-  # Initialize a results object to hold various inversion results.
-  R = results.resl(N_bs, Nobs)
-  
+  # Initialize a results object to hold various results.
+  R = results.resl(N_bs, Nobs, M)
+
   # Perform bootstrap inversion.
-  bootstrap.inv(X, Y, Z, V, TWT, R, parameters, m0_strt, coords)
-  
+  R = bootstrap.inv(X, Y, Z, V, TWT, R, parameters, m0_strt, coords)
+
   # Unscramble randomly sampled data for plotting and evaluation.
   R.dtwts = np.mean(bootstrap.unscramble(R.dtwts, indxs), axis=1)
   R.twts = np.mean(bootstrap.unscramble(R.twts, indxs), axis=1)
   R.corrs = np.mean(bootstrap.unscramble(R.corrs, indxs), axis=1)
   R.vrs = np.mean(bootstrap.unscramble(R.vrs, indxs), axis=1)
- 
+
   ################# F-test for uncertainty using a grid search #################
-  
+
   print('\n Performing F-test ...')
   xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz= ftest.test(R, coords, lat0, lon0, vpw0)
   
@@ -129,8 +126,13 @@ def instruments(datafile, parameters):
   # Model residuals at each site.
   fig4 = plots.residuals(lats, lons, xs, ys, vs, R, Nobs)
   
-  # F-test plots
+  # F-test plots.
   fig5 = plots.ftest(xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz, R)
+  
+  # Resolution and covariance.
+  fig6 = plots.resolution_covariance(R, M)
+  
+  figs = [fig1, fig2, fig3, fig4, fig5, fig6]
   
   ######################### Package and Return Results #########################
   
@@ -162,8 +164,6 @@ def instruments(datafile, parameters):
                    'svy_ys': ys,        # y-coordinates of survey points
                    'svy_zs': zs         # z-coordinates of survey points
                    }
-
-  figs = [fig1, fig2, fig3, fig4, fig5]
 
   return final_results, figs
 

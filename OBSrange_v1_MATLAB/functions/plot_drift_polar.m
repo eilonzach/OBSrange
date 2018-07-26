@@ -24,7 +24,7 @@ polarplot(ax,d2r(mean_drift_az+[0 0 7 0 -7]),max(hpol.Values)*[0 0.97 0.85 0.97 
 polarplot(ax,d2r([0:1:360]'),ones(361,1)*max(get(ax,'rlim')),'k','linewidth',3);
 
 % station
-polarplot(ax,0,0,'^','linewidth',2,'markersize',12,'markerfacecolor',[ 0.0980 0.9500 0.4250],'markeredgecolor','k');
+polarplot(ax,0,0,'sk','markerfacecolor',[0.5 0.5 0.5],'markersize',15,'linewidth',1);
 
 set(ax,'ThetaZeroLocation','top','ThetaDir','clockwise',...
     'thetatick',[0:90:270],'thetaticklabel',{'N','E','S','W'},...
