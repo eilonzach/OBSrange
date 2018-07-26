@@ -6,25 +6,25 @@ addpath('~/Dropbox/MATLAB/myFUNCTIONS/');
 % profile on
 %% TRUE VALUES
 drop_location = [-7.54 -133.62 5]; % [lat,lon,z]
-noise = 0.004; %0.004; % std of timing error
+noise = 0.000; %0.004; % std of timing error
 
-datN = 10; 
+datN = 0; 
 ifsave = true;
 
 %% survey parameters
-survey = 'circle'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
-radius = 0.5; % radius of survey, in Nm
+survey = 'PACMAN'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
+radius = 1.0; % radius of survey, in Nm
 fprintf('Survey %s rad=%.00f\n',survey,radius);
 survstart = now;
 survey_dt = max([10,60*radius/1.3]); % time lapse of ranging
 
 %% model parameters - if one iteration
-obs_location_xyz = [+.1 +.3 5.2578]; % x,y,z (km)
+obs_location_xyz = [+.1 +.3 5.050]; % x,y,z (km)
 vp_actual = 1.520; % km/s
 tat = 0.014; %s
 
 % if doing many iterations
-niter = 1e4; %1;%1e4; % if niter>0, will not make plots or save output file in SIO format
+niter = 1; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
 x_std = 0.100; % in km
 y_std = 0.100; % in km
 z_std = 0.050; % in km
@@ -149,9 +149,9 @@ end
 corr_dt = rec_dt-send_dt;
 
 % calc instantaneous velocities
-v_surv = [1i*(rec_survx-send_survx)+(rec_survy-send_survy)]./(send_dt+rec_dt);
+v_surv = [1i*(rec_survx-send_survx)+(rec_survy-send_survy)]./(send_dt+rec_dt); % in m/s
 [abs(v_surv)*1000,r2d(angle(v_surv)) + az];
-v_surv_true = abs(v_surv).*1000.*[cosd(r2d(angle(v_surv)) + az),sind(r2d(angle(v_surv)) + az)];
+v_surv_true = abs(v_surv).*1000.*[cosd(r2d(angle(v_surv)) + az),sind(r2d(angle(v_surv)) + az)]; % in m/s
 
 % add a little noise
 tot_dt = tot_dt + normrnd(0,noise,size(tot_dt));
@@ -224,21 +224,10 @@ if niter>1
     save(sprintf('synth_surveys_paper/SynthBoot_%s_rad%.2f.mat',survey,radius),'data');
 end
 
-% single station - make output file to mimic SIO survey files
 if niter==1
+% single station - make output file to mimic SIO survey files
 survlah = ['N','S'];
 survloh = ['E','W'];
-fid = fopen(['obsloc_',sta,'.dat'],'w');
-for ii = 1:length(survx)
-fprintf(fid,'%4.0f msec. Lat: %1.0f %07.4f %1s  Lon: %1.0f %07.4f %1s  Alt: %5.2f Time(UTC): %s:%3.0f:%s\n',...
-                tot_dt(ii)*1000,...
-                abs(fix(survlat(ii))),60*abs(rem(survlat(ii),1)),survlah(1.5-0.5*sign(survlat(ii))),...
-                abs(fix(survlon(ii))),60*abs(rem(survlon(ii),1)),survloh(1.5-0.5*sign(survlon(ii))),...
-                25 + normrnd(0,0.5),...
-                datestr(survt(ii),'yyyy'),doy(datestr(survt(ii),'yyyy'),datestr(survt(ii),'mm'),datestr(survt(ii),'dd')),...
-                datestr(survt(ii),'HH:MM:SS'));
-end
-fclose(fid);
 
 fid = fopen([sta,'.txt'],'w');
 % header like real files

@@ -9,6 +9,7 @@
 \usepackage[round,sort,comma]{natbib}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+\graphicspath{{./figs/}}
 
 \title{OBSrange: A new tool for the precise remote location of Ocean Bottom Seismometers}
 \author{Russell~J., Eilon~Z., and Mosher~S. }
@@ -43,6 +44,11 @@
 \newpage
 %\bibliographystyle{srl.bst}
 %\bibliography{refs}
+
+%% ---------------- FIGUERES ---------------- %%
+\newpage
+\section{Figures and Tables }
+\input{sections/figures.tex}
 
 
 \end{document}  

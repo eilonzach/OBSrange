@@ -14,17 +14,21 @@
 
 clear; close all;
 
-%% INPUTS - MAKE SURE THESE ARE 
+%% INPUTS
 % path to project
 
 % JOSH
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
 
 % ZACH
-% projpath = '~/Work/OBSrange/projects/PacificORCA/';
+projpath = '~/Work/OBSrange/projects/PacificORCA/';
+% projpath = '~/Work/OBSrange/synthetics/synth_recovery_1sta/';
 
 % STEVE
 % projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
+
+% TESTING
+% projpath = '../Tests';
 
 % path to survey data from the project directory
 datapath = './'; 
@@ -36,14 +40,15 @@ onesta = '';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
-ifplot = 0; % Plot results?
+ifplot = 1; % Plot results?
 
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
-par.N_bs = 500; % Number of bootstrap iterations
+par.N_bs = 1000; % Number of bootstrap iterations
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
+% ==>  +1 if location is RECEIVE, -1 if location is SEND, 0 if no correction
 par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
 par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
@@ -52,7 +57,7 @@ ifQC_ping = 1; % Do quality control on pings?
 res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnitude
 
 % TAT - Define turnaround time to damp towards in the inversion
-par.TAT_start = 0.013; % (s)
+par.TAT_start = 0.014; % (s)
 par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT (lower bound should never be < 0)
 
 % Norm damping for each model parameter (damping towards starting model)
@@ -110,6 +115,7 @@ lats_ship = data.lats;
 lons_ship = data.lons;
 t_ship = data.t_ship;
 twt = data.twt;
+
 % Set origin of coordinate system to be lat/lon of drop point
 olon = lon_drop;
 olat = lat_drop;
@@ -237,7 +243,7 @@ Nx = length(x_grid);
 Ny = length(y_grid);
 Nz = length(z_grid);
 
-% Bootstrap residual
+% residual of bootstrap mean result
 twt_pre_bs = calcTWT(mean(x_sta), mean(y_sta), mean(z_sta), mean(dvp), mean(TAT), x_ship, y_ship, z_ship, par.vp_w);
 resid_bs = twtcorr_bs-twt_pre_bs;
 
@@ -305,9 +311,11 @@ end
 
 %% Save output
 % output directory
-if par.if_twtcorr
-    modified_outdir = [outdir,'OUT_wcorr/'];
-elseif ~par.if_twtcorr
+if par.if_twtcorr == 1
+    modified_outdir = [outdir,'OUT_wcorr_xrec/'];
+elseif par.if_twtcorr == -1
+    modified_outdir = [outdir,'OUT_wcorr_xsend/'];
+elseif par.if_twtcorr == 0
     modified_outdir = [outdir,'OUT_nocorr/'];
 end  
 if ~exist(modified_outdir)
