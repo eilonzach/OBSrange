@@ -23,14 +23,17 @@ for ifile = 1:Nfiles
     end
 end
 
+% save('/Users/zeilon/Work/OBSrange/paper/data/yORCA_locations','allstas');
+
         
-%% water speed map
+%% Some error estimates
 Erms = zeros(Nstas,1);
 r_sta_stds = zeros(Nstas,1);
+F_err_xy95= zeros(Nstas,1);
 for is = 1:Nstas
     Vp(is) = mean(allstas(is).V_w_bs);
     Erms(is) = mean(allstas(is).E_rms);
-    F(is) = mean(allstas(is).E_rms);
+    F_err_xy95(is) = allstas(is).Ftest_res.uncertainties.xy95;
 end
 drop_lolaz = reshape([allstas.drop_lonlatz],3,Nstas)';
 loc_lolaz = reshape([allstas.loc_lolaz],3,Nstas)';
