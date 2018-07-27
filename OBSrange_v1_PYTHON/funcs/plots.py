@@ -181,6 +181,7 @@ def survey_map(lat0, lon0, z0, lats1, lons1, zs1, res, bad):
               edgecolors='k',
               lw=1.0)
 
+  ax2.locator_params(axis='x', nbins=4)
   xlabels = ax2.get_xticks()
   xlabels = ['{: .3f}'.format(label) for label in xlabels]
   ax2.set_xticklabels(xlabels)
@@ -338,7 +339,6 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
   ax1.set_xlabel('$\delta$X (m)')
   ax1.set_ylabel('$\delta$Y (m)')
   ax1.set_title('X-Y')
-  plt.colorbar(c1, ax=ax1)
 
   # Text.
   default_xlim = ax1.get_xlim()
@@ -372,7 +372,6 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
   ax2.set_xlabel('$\delta$X (m)')
   ax2.set_ylabel('$\delta$Z (m)')
   ax2.set_title('X-Z')
-  plt.colorbar(c2, ax=ax2)
   
   # Text.
   default_xlim = ax2.get_xlim()
@@ -442,12 +441,13 @@ def resolution_covariance(R, M):
   m1 = ax1.imshow(resol, cmap='RdBu_r', vmin=-1, vmax=1, aspect='equal')
   
   ax1.set_title('Model Resolution')
-  xlabels = ax1.get_xticks()
-  xlabels = [str(int(label) + 1) for label in xlabels]
+  #xlabels = ax1.get_xticks()
+  #xlabels = [str(int(label) + 1) for label in xlabels]
+  #ylabels = ax1.get_yticks()
+  #ylabels = [str(int(label) + 1) for label in ylabels]
+  xlabels = ['', 'X', 'Y', 'Z', 'twt', 'vpw']
   ax1.set_xticklabels(xlabels)
-  ylabels = ax1.get_yticks()
-  ylabels = [str(int(label) + 1) for label in ylabels]
-  ax1.set_yticklabels(ylabels)
+  ax1.set_yticklabels(xlabels)
   plt.colorbar(m1, fraction=0.046, pad=0.04, ax=ax1)
 
   # Add grid lines
@@ -459,12 +459,13 @@ def resolution_covariance(R, M):
   m2 = ax2.imshow(model_cov, cmap='RdBu_r', vmin=a, vmax=b, aspect='equal')
   
   ax2.set_title('Model Covariance')
-  xlabels = ax2.get_xticks()
-  xlabels = [str(int(label) + 1) for label in xlabels]
+  #xlabels = ax2.get_xticks()
+  #xlabels = [str(int(label) + 1) for label in xlabels]
+  #ylabels = ax2.get_yticks()
+  #ylabels = [str(int(label) + 1) for label in ylabels]
+  xlabels = ['', 'X', 'Y', 'Z', 'twt', 'vpw']
   ax2.set_xticklabels(xlabels)
-  ylabels = ax2.get_yticks()
-  ylabels = [str(int(label) + 1) for label in ylabels]
-  ax2.set_yticklabels(ylabels)
+  ax2.set_yticklabels([])
   plt.colorbar(m2, fraction=0.046, pad=0.04, ax=ax2)
 
   # Add grid lines

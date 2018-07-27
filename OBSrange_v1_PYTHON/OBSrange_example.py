@@ -13,6 +13,7 @@ Stephen M. & Zach E. & Josh R. 4/23/18
 # Import modules and functions
 import os
 import pickle
+import numpy as np
 from funcs import fetch, locate, output
 
 ############################# Inversion Parameters #############################
@@ -53,10 +54,14 @@ survey_fles = fetch.data_paths(survey_dir, matchkey='*.txt')
 out_pkls = output_dir+'data_pkls/'
 out_plts = output_dir+'plots/'
 out_txts = output_dir+'data_txts/'
-os.mkdir(output_dir)
-os.mkdir(out_pkls)
-os.mkdir(out_plts)
-os.mkdir(out_txts)
+if not os.path.exists(output_dir):
+  os.mkdir(output_dir)
+  os.mkdir(out_pkls)
+  os.mkdir(out_plts)
+  os.mkdir(out_txts)
+
+# Fix random sampling. For example only.
+np.random.seed(0)
 
 # Perform location for example survey then write results to output.
 for survey_fle in survey_fles:
