@@ -7,19 +7,27 @@ Figure \ref{fig:one_sta_synth} shows the result of an inversion at a single stat
 In order to obtain statistics on the general quality of the synthetic recovery, we performed this test for 10,000 synthetic OBS stations, as follows: For each iteration, a synthetic station location was determined relative to a fixed drop point by drawing x- and y- drifts from zero-centered Gaussian distributions with standard deviations of 100 m (only in rare cases are stations thought to drift further than $\sim$200 m). The depth perturbation, turn-around time, and water velocity perturbation were similarly randomly selected, with mean values of 5000 m, 13 m/s, and 1500 m/s and standard deviations of 50 m, 3 ms, and 10 m/s, respectively.  For tests of the basic location algorithm, we held the survey geometry constant, using the \textit{PACMAN} configuration with a radius of 1 Nm (Section \ref{sec:surv_geom_tests}). 
 
 %Unlike for the real data, we did not bootstrap the individual synthetic locations and take a median, but inverted each station once using Newton's method (Equation \ref{eq:inverse}).   
-The results of these tests show that on average our inversion is extremely successful in correctly locating the OBS stations. The mean location errors in the x-, y-, and z- directions were 0.038 m, 0.152 m, and -0.599 m respectively, demonstrating there was no systematic bias in the locations. The mean errors in water velocity and turn-around time were indistinguishable from zero, showing that estimation of these parameters was also not biased. The mean absolute horizontal location error was 2.31 m, with a standard deviation of 1.22 m. 95\% of the absolute horizontal station location errors were less than 4.58 m. There was no relationship observed between station drift (\textit{i.e.}, the distance between the synthetic OBS station and the drop point) and the location error, indicating that as long as stations settle within the survey bounds they will be well located. A corollary to this observation is that location estimates should not be biased by incorrectly recorded drop locations. 
+The results of these tests show that on average our inversion is highly successful in correctly locating the OBS stations. The mean location errors in the x-, y-, and z- directions were 0.038 m, 0.152 m, and -0.599 m respectively, demonstrating there was no systematic bias in the locations. The mean errors in water velocity and turn-around time were indistinguishable from zero, showing that estimation of these parameters was also not biased. The mean absolute horizontal location error was 2.31 m, with a standard deviation of 1.22 m. 95\% of the absolute horizontal station location errors were less than 4.58 m. There was no relationship observed between station drift (\textit{i.e.}, the distance between the synthetic OBS station and the drop point) and the location error, indicating that as long as stations settle within the survey bounds they will be well located. A corollary to this observation is that location estimates should not be biased by incorrectly recorded drop locations. 
 
 We observed a strong trade-off between water velocity and depth, which was responsible for the somewhat larger standard error in station depth estimates, which was \mbox{9.6 m}. This uncertainty is likely of negligible concern for most OBS practitioners, but if precise depths are important then a survey geometry that includes more tracks towards and away from the station would be preferable (in addition to verification using acoustic echo-sounders that implement precise water-velocity profiles from XBT data).
 
 \subsection{Application to PacificArray deployment}
+We applied the location algorithm to acoustic surveys carried out during the \textit{Young Pacific ORCA (OBS Research into Convecting Asthenosphere)} deployment in the central Pacific ocean during April and May of 2018. The OBS array comprised 30 SIO broadband instruments deployed from the R/V Kilo Moana in water depths of $\sim$4400-4800 m. Acoustic  surveys were carried out using an EdgeTech 8011M Acoustic Transceiver command and ranging unit, attached to a hull-mounted 12 kHz transducer. The relatively calm seas allowed for ideal survey geometry at almost all sites, with a ship speed of \mbox{$\le$8 knots} at a maximum radius of \mbox{$\sim$1.3 Nm}. 
+
+An example station inversion, as well as the graphical outputs of the location software, is shown in Figures \ref{fig:fig:one_sta_real_survey}-\ref{fig:fig:one_sta_real_ftests}. Ship velocity is estimated from the survey data by differencing survey points. In theory, this could be used to correct doppler shifts (Figure \ref{fig:fig:one_sta_real_survey}c) in travel time (as in the synthetic tests), but we found that this correction did not substantially improve data fit for real stations and so did not apply it to this data set, although it is included as an option in the location codes. The small RMS data misfit of $\sim$1.6 ms attests to the quality of the survey measurements and the appropriateness of our relatively simple location algorithm. The southwestwards drift of \mbox{$\sim340$ m} demonstrates that ocean currents can substantially displace the final OBS location from their surface drop point. 
+
+The 30 stations in this array drifted an average distance of 170 m. The mean data RMS misfit was 1.96 ms and the estimated 95\% percentile location error from the bootstrap analysis was 1.13 m. 
+
 
 
 
 \subsection{Comparison to previous tools}
-Re-run synthetics with damped Vw, etc.
-Talk about null points
-Show difference in error between our method and theirs
-latlon2xy conversion
 
+\begin{itemize}
+\item Re-run synthetics with damped Vw, etc.\\
+\item Talk about null points\\
+\item Show difference in error between our method and theirs\\
+\item latlon2xy conversion\\
+\end{itemize}
 
 \subsection{Exploration of survey pattern geometries} \label{sec:surv_geom_tests}

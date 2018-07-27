@@ -36,7 +36,7 @@ datapath = './';
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = 'EC03';
+onesta = '';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -287,8 +287,11 @@ end
 [Py_max, Iy_max] = max(max(P(:,:,Iz_max)));
 [Px_max, Ix_max] = max(P(:,Iy_max,Iz_max));
 
+% statistics on F-test surface
+f_test_err = f_test_err_est(P,[68 95],x_grid,x_sta,y_grid,y_sta,z_grid,z_sta);
+
 Ftest_res = struct('x_grid',x_grid,'y_grid',y_grid,'z_grid',z_grid,...
-                  'Pstat',P,'Erms',E_gs);
+                  'Pstat',P,'Erms',E_gs,'uncertainties',f_test_err);
 
 fprintf('\nStation: %s',data.sta);
 fprintf('\nlat:   %.5f deg (%f) \nlon:   %.5f deg (%f) \nx:     %f m (%f) \ny:    %f m (%f) \ndepth: %f m (%f) \nTAT:   %f ms (%f) \nv_H20: %f m/s (%f)',mean(lat_sta),std(lat_sta)*2,mean(lon_sta),std(lon_sta)*2,mean(x_sta),std(x_sta)*2,mean(y_sta),std(y_sta)*2,mean(z_sta),std(z_sta)*2,mean(TAT)*1000,std(TAT)*1000*2,mean(V_w),std(V_w)*2);
