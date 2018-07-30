@@ -33,3 +33,25 @@ fprintf('Survey diameter %.0f m\n',2*truedat.radius*truedat.nm2km*1e3)
 % % Fraction of tat-misfit outside bootstrap 2sig = 85.62 %
 % % Fraction of 2d-misfit outside bootstrap 2sig = 5.67 %
 
+%% Section 3.2
+fprintf('\n ============ yORCA locations ============\n\n')
+
+% results of all station inversions for young Pac ORCA
+load('../data/yORCA_locations.mat');
+Nstas = length(allstas);
+drop_lolaz = reshape([allstas.drop_lonlatz],3,Nstas)';
+loc_lolaz = reshape([allstas.loc_lolaz],3,Nstas)';
+mean_drift_az = reshape([allstas.mean_drift_az],2,Nstas)';
+% some stats
+Erms = zeros(Nstas,1); 
+for is = 1:Nstas
+    Vp(is) = mean(allstas(is).V_w_bs);
+    Erms(is) = mean(allstas(is).E_rms);
+	r_sta_std(is) = (abs(mean(allstas(is).x_sta_bs))*std(allstas(is).x_sta_bs) + abs(mean(allstas(is).y_sta_bs))*std(allstas(is).y_sta_bs))./mean_drift_az(is,1);
+    F_sta_std(is) = allstas(is).Ftest_res.uncertainties.xy68;
+end
+% 
+fprintf('Mean drift = %.1f\n',mean(mean_drift_az(:,1)));
+fprintf('Mean RMS error = %.2f ms\n',1e3*mean(Erms));
+fprintf('Mean 2d location std (boots) = %.2f m\n',mean(r_sta_std));
+fprintf('Mean 2d location std (ftest) = %.2f m\n',mean(F_sta_std));
