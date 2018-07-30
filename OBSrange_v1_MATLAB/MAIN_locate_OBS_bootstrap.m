@@ -39,7 +39,7 @@ outdir = './OUT_OBSrange/';
 onesta = '';
 
 %% Parameters
-ifsave = 1; % Save results to *.mat?
+ifsave = 0; % Save results to *.mat?
 ifplot = 1; % Plot results?
 
 par = struct([]);
@@ -226,73 +226,10 @@ PLOT_histograms_all
 end
 
 %% F-test for uncertainty using grid search
-% Set grid size
-ngridpts = 40;
-D = max([ std(x_sta) std(y_sta) std(z_sta) ]*4.5);
-Dx = D;
-Dy = D; 
-Dz = D;
-dx = 2*Dx/ngridpts;
-dy = 2*Dy/ngridpts;
-dz = 2*Dz/ngridpts;
-x_grid = [mean(x_sta)-Dx:dx:mean(x_sta)+Dx];
-y_grid = [mean(y_sta)-Dy:dy:mean(y_sta)+Dy];
-z_grid = [mean(z_sta)-Dz:dz:mean(z_sta)+Dz];
-[lon_grid, lat_grid] = xy2lonlat_nomap(olon, olat, x_grid, y_grid);
-Nx = length(x_grid);
-Ny = length(y_grid);
-Nz = length(z_grid);
 
-% residual of bootstrap mean result
-twt_pre_bs = calcTWT(mean(x_sta), mean(y_sta), mean(z_sta), mean(dvp), mean(TAT), x_ship, y_ship, z_ship, par.vp_w);
-resid_bs = twtcorr_bs-twt_pre_bs;
+Ftest_res = f_test_gridsearch(par,x_ship,y_ship,x_sta,y_sta,z_sta,V_w,TAT,v_eff,twtcorr_bs,ifplot);        
 
-% Determine the eigenvectors for z_sta, V_w, and TAT
-X = [z_sta, V_w, TAT];
-[V, ~] = eig(X'*X);
-eigvec1 = V(:,1); % Closest to TAT axis
-eigvec2 = V(:,2); % Closest to V_w axis
-eigvec3 = V(:,3); % Closest to z_sta axis
-eig3_z = eigvec3(1);
-eig3_vw = eigvec3(2);
-eig3_TAT = eigvec3(3);
-
-% Grid search
-P = zeros(Nx,Ny,Nz);
-E_gs = zeros(Nx,Ny,Nz);
-[Xgrd,Ygrd,Zgrd] = meshgrid(x_grid,y_grid,z_grid);
-[LONgrd,LATgrd,~] = meshgrid(lon_grid,lat_grid,z_grid);
-Npara = length(m_final);
-for ix = 1:Nx
-	for iy = 1:Ny
-		for iz = 1:Nz
-			% Apply scaling to vp_w and TAT to account for tradeoffs with Z
-			dz = Zgrd(ix,iy,iz) - mean(z_sta);
-			dvw = (eig3_vw/eig3_z)*dz; % perturbation to water velocity to account for dz
-			dTAT = (eig3_TAT/eig3_z)*dz; % perturbation to TAT to account for dz
-
-			% Grid search residual;
-			twt_pre_gs = calcTWT(Xgrd(ix,iy,iz), Ygrd(ix,iy,iz), Zgrd(ix,iy,iz), mean(dvp)+dvw, mean(TAT)+dTAT, x_ship, y_ship, z_ship, par.vp_w);
-			resid_gs = twtcorr_bs-twt_pre_gs;
-
-			% Calculate P statistic
-			P(ix,iy,iz) = ftest_dof( resid_gs,mean(v_eff),resid_bs,mean(v_eff) );
-
-			E_gs(ix,iy,iz) = sqrt(resid_gs'*resid_gs/length(resid_gs));
-		end
-	end
-end
-
-[Pz_max, Iz_max] = max(max(max(P)));
-[Py_max, Iy_max] = max(max(P(:,:,Iz_max)));
-[Px_max, Ix_max] = max(P(:,Iy_max,Iz_max));
-
-% statistics on F-test surface
-f_test_err = f_test_err_est(P,[68 95],x_grid,x_sta,y_grid,y_sta,z_grid,z_sta);
-
-Ftest_res = struct('x_grid',x_grid,'y_grid',y_grid,'z_grid',z_grid,...
-                  'Pstat',P,'Erms',E_gs,'uncertainties',f_test_err);
-
+%% Print some results
 fprintf('\nStation: %s',data.sta);
 fprintf('\nlat:   %.5f deg (%f) \nlon:   %.5f deg (%f) \nx:     %f m (%f) \ny:    %f m (%f) \ndepth: %f m (%f) \nTAT:   %f ms (%f) \nv_H20: %f m/s (%f)',mean(lat_sta),std(lat_sta)*2,mean(lon_sta),std(lon_sta)*2,mean(x_sta),std(x_sta)*2,mean(y_sta),std(y_sta)*2,mean(z_sta),std(z_sta)*2,mean(TAT)*1000,std(TAT)*1000*2,mean(V_w),std(V_w)*2);
 fprintf('\nDrift Lon: %f m (%f) \nDrift Lat: %f m (%f) \nDrift:    %f m (%f) \nDrift Azi: %f deg (%f)\ndz: %f m (%f)\n',mean(dx_drift),std(dx_drift)*2,mean(dy_drift),std(dx_drift)*2,mean(drift),std(drift)*2,mean(azi),std(azi)*2,mean(dz_sta),std(dz_sta)*2);
@@ -300,8 +237,6 @@ fprintf('\nRMS:  %f ms (%f)\n',mean(E_rms)*1000,std(E_rms)*2*1000);
 
 %% PLOTTING
 if ifplot
-	%% F-plot plots
-	PLOT_Ftest_all
 	%% Plot Misfit
 	PLOT_misfit
 	%% Geographic PLOTTING
