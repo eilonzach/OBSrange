@@ -38,8 +38,10 @@ end
 drop_lolaz = reshape([allstas.drop_lonlatz],3,Nstas)';
 loc_lolaz = reshape([allstas.loc_lolaz],3,Nstas)';
 mean_drift_az = reshape([allstas.mean_drift_az],2,Nstas)';
-fprintf('Multibeam vs. relocated (+ means relocated shallower\n')
-abs(drop_lolaz(:,3))-abs(loc_lolaz(:,3));
+fprintf('Multibeam vs. relocated (+ means relocated shallower)\n')
+abs(drop_lolaz(:,3))-abs(loc_lolaz(:,3))
+fprintf('average = %.1f m\n', mean(abs(drop_lolaz(:,3))-abs(loc_lolaz(:,3))))
+
 normErms = Erms./max(Erms);
 
 
