@@ -19,12 +19,12 @@ clear; close all;
 
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % Josh
-% projpath = '~/Work/OBSrange/synthetics'; 
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % Josh
+projpath = '~/Work/OBSrange/synthetics/'; 
 
 % path to survey data from the project directory
-datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; % Josh
-% datapath = './synth_surveys_paper/';
+% datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; % Josh
+datapath = 'synth_surveys_paper/';
 % path to output directory from project directory(will be created if it does not yet exist)
 outdir = './OUT_OBSrange_synthsurveys/'; 
 
@@ -44,7 +44,7 @@ ifplot = 1; % Plot results?
 
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
-par.N_bs = 1; %500; % Number of bootstrap iterations (= 1 for these tests)
+par.N_bs = 500; %500; % Number of bootstrap iterations (= 1 for these tests)
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
@@ -310,15 +310,16 @@ data(1).dtwt_all = [data(:).dtwt];
 
 %% Print out some important parameters
 fprintf('\nStatistics for survey %s\n\n',surv);
-fprintf('Mean x-misfit   = %.2f m\n',mean(data(1).misfit_xsta));
-fprintf('Mean y-misfit   = %.2f m\n',mean(data(1).misfit_ysta));
-fprintf('Mean z-misfit   = %.2f m\n',mean(data(1).misfit_zsta));
-fprintf('Mean Vw-misfit  = %.2f m\n',mean(data(1).misfit_Vw));
-fprintf('Mean tat-misfit = %.2f m\n\n',mean(data(1).misfit_TAT));
-fprintf('Abs 2D error = %.2f ± %.2f m\n',mean(data(1).misfit_r_xy),std(data(1).misfit_r_xy));
-fprintf('Abs 3D error = %.2f ± %.2f m\n',mean(data(1).misfit_r_xyz),std(data(1).misfit_r_xyz));
+fprintf('Mean x-misfit   = %.3f m\n',mean(data(1).misfit_xsta));
+fprintf('Mean y-misfit   = %.3f m\n',mean(data(1).misfit_ysta));
+fprintf('Mean z-misfit   = %.3f m\n',mean(data(1).misfit_zsta));
+fprintf('Mean Vw-misfit  = %.3f m\n',mean(data(1).misfit_Vw));
+fprintf('Mean tat-misfit = %.3f m\n\n',mean(data(1).misfit_TAT));
+fprintf('Abs 2D error = %.3f ± %.3f m\n',mean(data(1).misfit_r_xy),std(data(1).misfit_r_xy));
+fprintf('Abs 3D error = %.3f ± %.3f m\n',mean(data(1).misfit_r_xyz),std(data(1).misfit_r_xyz));
 sor2De = sort(data(1).misfit_r_xy);
 fprintf('95%% percentile 2D error = %.2f m\n',sor2De(round(0.95*length(sor2De))));
+fprintf('Abs depth error = %.3f m\n',mean(abs(data(1).misfit_zsta)));
 if par.N_bs>1
 fprintf('Fraction of x-misfit outside bootstrap 2sig = %.2f %%\n',  100*sum(abs(data(1).misfit_xsta)>2*[data.x_sta_std]')/length(data(1).misfit_xsta));
 fprintf('Fraction of y-misfit outside bootstrap 2sig = %.2f %%\n',  100*sum(abs(data(1).misfit_ysta)>2*[data.y_sta_std]')/length(data(1).misfit_ysta));
