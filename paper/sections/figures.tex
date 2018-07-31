@@ -2,27 +2,35 @@
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure01.pdf}
 \caption{Test of location algorithm using synthetic data. A comparison of the true input values (green star and lines) with the inverted model parameters (red circle and red solid lines) demonstrates that the location, depth, and water velocity are extremely well recovered, and the estimated uncertainties on these parameters are consonant with the actual misfit. Top three plots show slices through the F-test surface, contoured by probability. Bottom three plots show histograms from a bootstrap analysis with 95th percentile values indicated by dashed red lines. Inset shows the direction of true (green dashed) and estimated (red) drift with respect to the starting location. }
-\label{fig:fig:one_sta_synth}
+\label{fig:one_sta_synth}
 \end{figure}
 
 %% Example real station - survey pattern + residuals
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure02.pdf}
 \caption{Example inversion at station EC03 in the 2018 Young Pacific ORCA deployment. a) Map view of acoustic survey; colored circles are successful acoustic range measurements, black crosses are bad measurements rejected by automatic quality control, grey square is drop location, red star is final location. b) Map view of data residuals based on travel times computed using bootstrap mean station location. c) Data residuals plotted as a function of azimuth, colored by the computed doppler correction (not used in this inversion). d) Histogram of data RMS from the bootstrap; the RMS of the final model is shown as a red star.}
-\label{fig:fig:one_sta_real_survey}
+\label{fig:one_sta_real_survey}
 \end{figure}
 
 %% Example real station - bootstrap histogram
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure03.pdf}
 \caption{Histograms of model parameters from the bootstrap inversion of station EC03 in the 2018 Young Pacific ORCA deployment. Red solid line shows mean value, while dashed lines indicate 95th percentiles. Latitude and longitude are plotted in meters from the mean point, for ease of interpretation. The inset plot shows the mean drift azimuth from the drop location (grey square).}
-\label{fig:fig:one_sta_real_histograms}
+\label{fig:one_sta_real_histograms}
 \end{figure}
 
 %% Example real station - F-tests
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure04.pdf}
-\caption{ Three orthogonal slices through the F-test probability volume for station EC03 in the 2018 Young Pacific ORCA deployment, contoured by probability of true station location relative to the best fitting inverted location ($\bar{x},\bar{y},\bar{z}$), indicated by the red star. White contours show 68\% and 95\% contours. Black dots show individual locations from the bootstrap analysis (Figure \ref{fig:fig:one_sta_real_histograms}). }
-\label{fig:fig:one_sta_real_ftests}
+\caption{ Three orthogonal slices through the F-test probability volume for station EC03 in the 2018 Young Pacific ORCA deployment, contoured by probability of true station location relative to the best fitting inverted location ($\bar{x},\bar{y},\bar{z}$), indicated by the red star. White contours show 68\% and 95\% contours. Black dots show individual locations from the bootstrap analysis (Figure \ref{fig:one_sta_real_histograms}). }
+\label{fig:one_sta_real_ftests}
+\end{figure}
+
+
+%% All stations meso eddy
+\begin{figure}[h]
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure08.pdf}
+\caption{Pacific ORCA deployment, showing drift directions and magnitudes of each OBS instrument relative to their drop points, as well as the water velocity each location. Note that drift arrows are not to geographic scale. The systematic pattern of drift within the water column seems to be related to a meso-scale ocean eddy moving through this region during the deployment. Station symbol sizes are inversely scaled to acoustic travel time data misfit (see inset).}
+\label{fig:meso_eddy}
 \end{figure}
 
