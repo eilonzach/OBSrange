@@ -105,31 +105,27 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
     vbs = V[:,:,i]
     twtbs = T[:,i]
 
-    # Reset starting model vector. Re-initialize RMS. 
-    m0 = np.zeros( len(m0_strt) )
-    m0[0] = m0_strt[0]
-    m0[1] = m0_strt[1]
-    m0[2] = m0_strt[2]
-    m0[3] = m0_strt[3]
-    m0[4] = m0_strt[4]
+    # Initialize.
+    m1 = m0_strt
     dE = 1000
-    
-    # Count the number of iterations until dE becomes < E_thresh.
     j = 0 
-    
     # Iterate models until RMS stabilizes.
     while dE > E_thresh:
+      # Increase j
+      j +=1
+
       # Set current model parameters
+      m0 = m1
       x = m0[0]
       y = m0[1]
       z = m0[2]
       tat = m0[3]
       dvp = m0[4]
-      
+
       # Apply correction to two-way travel-times due to ship velocity.
       ctd, cns, vr = calc.tt_corr(x, y, z, xbs, ybs, zbs, vbs, vpw0, dvp, twtbs)
       if twtcorr:
-        twtbs = ctd # ctd = corrected, cns = corrections 
+        twts = ctd # ctd = corrected, cns = corrections 
       
       # Build the G matrix.
       G = calc.G(x, y, z, dvp, xbs, ybs, zbs, vpw0, Nobs, M)
@@ -140,7 +136,7 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
       
       # Calculate predicted travel-times for this iteration and residuals.
       twt_pre = calc.twt(x, y, z, xbs, ybs, zbs, vpw0, dvp, tat)
-      dtwt = twtbs - twt_pre
+      dtwt = twts - twt_pre
 
       # Calculate RMS error.
       E = np.sqrt( np.sum(dtwt**2) / Nobs)
@@ -163,23 +159,18 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
         m1[3] = bounds[1]
       
       # Record output of current iteration in m0, E, and dtwt.
-      R.models[str(i)][str(j)] = {'m0': m0, 'E': E, 'dtwt': dtwt}
+      R.models[str(i)][str(j)] = {'m': m0, 'E': E, 'dtwt': dtwt}
       
       # Update inversion RMS.
-      if j > 0:
+      if j > 1:
         dE = R.models[str(i)][str(j-1)]['E'] - R.models[str(i)][str(j)]['E']
-      
-      # Update model for next iteration and RMS counter.
-      m0 = m1
-      j += 1
 
-    # Data resolution, model resolution, model covariance
-    #N = np.matmul(F, Finv)
+    # Model resolution and covariance
     resol = np.matmul(Finv, F)
     cov = np.matmul(Finv, Finv.T)
 
     # Update results object with stabilized results of current bootstrap it.
-    R.update(i, m0, vpw0, E, v, dtwt, twtbs, cns, vr, x0, y0, z0, xs, ys, \
+    R.update(i, m0, vpw0, E, v, dtwt, twts, cns, vr, x0, y0, z0, xs, ys, \
              resol, cov)
     
     # Convert stabilized result coords of current iteration back to lat lon.

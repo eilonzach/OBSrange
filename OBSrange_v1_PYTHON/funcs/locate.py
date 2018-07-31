@@ -61,7 +61,7 @@ def instruments(datafile, parameters):
   twts = data['twts']       # Two-way travel-times of points -- msecs
   Nobs = len(data['twts'])  # Number of survey points        -- integer 
   sta = data['sta']         # Station name                   -- string
-  
+
   # Convert coordinates of survey points to x-y and save in separate arrays. 
   xs = np.zeros(len(lons))
   ys = np.zeros(len(lats))
@@ -107,7 +107,7 @@ def instruments(datafile, parameters):
   ################# F-test for uncertainty using a grid search #################
 
   print('\n Performing F-test ...')
-  xg, yg, zg, Xg, Yg, Zg, P, mx, my, mz= ftest.test(R, coords, lat0, lon0, vpw0)
+  xg,yg,zg,Xg,Yg,Zg,P,mx,my,mz,E = ftest.test(R, coords, lat0, lon0, vpw0)
   
   ################################### Plots ####################################
   
@@ -136,33 +136,48 @@ def instruments(datafile, parameters):
   
   ######################### Package and Return Results #########################
   
-  final_results = {'sta': sta,          # station
-                   'xs': R.xs,          # sensor x-coordinate after each itr 
-                   'ys': R.ys,          # sensor y-coordinate after each itr 
-                   'zs': R.zs,          # sensor z-coordinate after each itr 
-                   'lats': R.lats,      # sensor latitude after each itr
-                   'lons': R.lons,      # sensor longitude after each itr
-                   'tats': R.tats,      # turn-around times after each itr
-                   'vpws': R.vpws,      # perturbations to vpw after each itr
-                   'x_sta': R.xs,       # sta x-coordinate after each itr
-                   'y_sta': R.ys,       # sta y-coordinate after each itr
-                   'z_sta': R.zs,       # sta z-coordinate after each itr
-                   'dzs': R.dzs,        # change to sensor depth after each itr
-                   'E_rms': R.E_rms,    # rms after each itr
-                   'twts': R.twts,      # two-way travel times
-                   'dtwts': R.dtwts,    # travel-time residuals 
-                   'corrs': R.corrs,    # travel-time corrections (if computed)
-                   'xdrfts': R.dxdrfts, # drift in x at each survey point
-                   'ydrfts': R.dydrfts, # drift in y at each survey point
-                   'drifts': R.drifts,  # sensor drift distance
-                   'azs': R.azs,        # sensor drift azimuth
-                   'vrs': R.vrs,        # radial velocities of ship.
-                   'Nbad': N_badpings,  # number of pings removed
-                   'svy_lats': lats,    # lats of survey points
-                   'svy_lons': lons,    # lons of survey points
-                   'svy_xs': xs,        # x-coordinates of survey points
-                   'svy_ys': ys,        # y-coordinates of survey points
-                   'svy_zs': zs         # z-coordinates of survey points
+  # Package some results.
+  drop_geo = [lat0, lon0, z0]
+  loc_xyz = [np.mean(R.xs), np.mean(R.ys), np.mean(R.zs)]
+  loc_geo = [np.mean(R.lats), np.mean(R.lons), np.mean(R.zs)]
+  drft_az = [np.mean(R.drifts), np.mean(R.azs)]
+  ft_res = {'x_grid': xg,
+            'y_grid': yg,
+            'z_grid': zg,
+            'Pstat': P,
+            'Erms':E}
+
+  # Put in a final dictionary.
+  final_results = {'sta': sta,           # station
+                   'drop_geo': drop_geo, # geographic drop coordinates
+                   'loc_xyz': loc_xyz,   # final location (cartesian)
+                   'loc_geo': loc_geo,   # final location (geographic)
+                   'svy_lats': lats,     # lats of survey points
+                   'svy_lons': lons,     # lons of survey points
+                   'svy_xs': xs,         # x-coordinates of survey points
+                   'svy_ys': ys,         # y-coordinates of survey points
+                   'svy_zs': zs,         # z-coordinates of survey points
+                   'svy_vs': vs,         # velocity vectors at survey points 
+                   'lat_sta': R.lats,    # sensor latitude for each itr
+                   'lon_sta': R.lons,    # sensor longitude for each itr
+                   'x_sta': R.xs,        # sensor x-coordinate for each itr
+                   'y_sta': R.ys,        # sensor y-coordinate for each itr
+                   'z_sta': R.zs,        # sensor z-coordinate for each itr
+                   'dzs': R.dzs,         # change in sensor depth for each itr
+                   'tats': R.tats,       # turn-around times for each itr
+                   'vpws': R.vpws,       # perturbations to vpw for each itr
+                   'E_rms': R.E_rms,     # rms for each itr
+                   'twts': R.twts,       # final two-way travel-times (twts)
+                   'dtwts': R.dtwts,     # final twt residuals 
+                   'corrs': R.corrs,     # final twt corrections(applied or not)
+                   'drifts': R.drifts,   # sensor drift distance for each itr
+                   'azs': R.azs,         # sensor drift azimuth for each itr
+                   'drift_az': drft_az,  # mean drift distance and azimuth
+                   'cov': R.cov,         # final model covariance 
+                   'resolution': R.resol,# final model resolution
+                   'Ftest_res': ft_res,  # results from the Ftest
+                   'Nbad': N_badpings,   # number of pings removed with QC
+                   'vrs': R.vrs          # ship's radial velocity
                    }
 
   return final_results, figs

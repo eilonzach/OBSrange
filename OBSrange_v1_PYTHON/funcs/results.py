@@ -15,34 +15,34 @@ class resl:
   '''
   def __init__(self, M=1, N=1, P=1):  
     # Vectors
-    self.lats    = np.zeros(M) # sensor latitudes
-    self.lons    = np.zeros(M) # sensor longitudes
-    self.xs      = np.zeros(M) # sensor x positions
-    self.ys      = np.zeros(M) # sensor y positions
-    self.zs      = np.zeros(M) # sensor z positions
-    self.dzs     = np.zeros(M) # changes in depth
-    self.tats    = np.zeros(M) # sensor turn-around times
-    self.vpws    = np.zeros(M) # sound speeds for water
-    self.dvps    = np.zeros(M) # perturbations to water sound speeds
-    self.drifts  = np.zeros(M) # sensor drift distance
-    self.dxdrfts = np.zeros(M) # changes to drift in x-direction
-    self.dydrfts = np.zeros(M) # changes to drift in y-direction
-    self.azs     = np.zeros(M) # sensor drift azimuth
-    self.E_rms   = np.zeros(M) # RMS error terms
-    self.v_effs  = np.zeros(M) # effective degrees of freedom for F-test
+    self.lats    = np.zeros(M)   # sensor latitudes
+    self.lons    = np.zeros(M)   # sensor longitudes
+    self.xs      = np.zeros(M)   # sensor x positions
+    self.ys      = np.zeros(M)   # sensor y positions
+    self.zs      = np.zeros(M)   # sensor z positions
+    self.dzs     = np.zeros(M)   # changes in depth
+    self.tats    = np.zeros(M)   # sensor turn-around times
+    self.vpws    = np.zeros(M)   # sound speeds for water
+    self.dvps    = np.zeros(M)   # perturbations to water sound speeds
+    self.drifts  = np.zeros(M)   # sensor drift distance
+    self.dxdrfts = np.zeros(M)   # changes to drift in x-direction
+    self.dydrfts = np.zeros(M)   # changes to drift in y-direction
+    self.azs     = np.zeros(M)   # sensor drift azimuth
+    self.E_rms   = np.zeros(M)   # RMS error terms
+    self.v_effs  = np.zeros(M)   # effective degrees of freedom for F-test
     
     # Matrices
-    self.dists   = np.ndarray(shape=(N, M))   # ship distances from OBS
-    self.az_locs = np.ndarray(shape=(N, M))   # ship azimuths from OBS
-    self.twts    = np.ndarray(shape=(N, M))   # travel-times
-    self.corrs   = np.ndarray(shape=(N, M))   # travel-time corrections
-    self.dtwts   = np.ndarray(shape=(N, M))   # travel-time residuals
-    self.vrs     = np.ndarray(shape=(N, M))   # radial velocities of ship
-    self.cov     = np.ndarray(shape=(P, P, M))# model covariance matrices
-    self.resol   = np.ndarray(shape=(P, P, M))# model resolution matrices
+    self.dists   = np.ndarray(shape=(N, M))    # ship distances from OBS
+    self.az_locs = np.ndarray(shape=(N, M))    # ship azimuths from OBS
+    self.twts    = np.ndarray(shape=(N, M))    # travel-times
+    self.corrs   = np.ndarray(shape=(N, M))    # travel-time corrections
+    self.dtwts   = np.ndarray(shape=(N, M))    # travel-time residuals
+    self.vrs     = np.ndarray(shape=(N, M))    # radial velocities of ship
+    self.cov     = np.ndarray(shape=(P, P, M)) # model covariance matrices
+    self.resol   = np.ndarray(shape=(P, P, M)) # model resolution matrices
     
     # Output dictionary
-    self.models  = {}                         # holds each model update
+    self.models  = {}                          # holds each model updates
   
   '''
   A function to update the results object.
