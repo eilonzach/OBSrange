@@ -21,7 +21,7 @@ clear; close all;
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
 
 % ZACH
-projpath = '~/Work/OBSrange/projects/PacificORCA/';
+% projpath = '~/Work/OBSrange/projects/PacificORCA/';
 % projpath = '~/Work/OBSrange/synthetics/synth_recovery_1sta/';
 
 % STEVE
