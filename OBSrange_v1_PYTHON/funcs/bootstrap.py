@@ -125,7 +125,9 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
       # Apply correction to two-way travel-times due to ship velocity.
       ctd, cns, vr = calc.tt_corr(x, y, z, xbs, ybs, zbs, vbs, vpw0, dvp, twtbs)
       if twtcorr:
-        twts = ctd # ctd = corrected, cns = corrections 
+        twts = ctd # ctd = corrected, cns = corrections
+      else:
+        twts = twtbs 
       
       # Build the G matrix.
       G = calc.G(x, y, z, dvp, xbs, ybs, zbs, vpw0, Nobs, M)
