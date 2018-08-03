@@ -1,4 +1,4 @@
-function [ m_final,models,v_eff,N,R,Covm,lambda ] = inv_newtons( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H)
+function [ m_final,models,v_eff,N,R,Covm ] = inv_newtons( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H)
 %[ m_final,models,v_eff ] = inv_newton( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H )
 % 
 %   Conduct interative inversion for OBS location and other parameters

@@ -1,15 +1,11 @@
 This is BibTeX, Version 0.99d (TeX Live 2015)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: OBS_locate_paper.aux
-I couldn't open style file srl.bst.bst
----line 18 of file OBS_locate_paper.aux
- : \bibstyle{srl.bst
- :                  }
-I'm skipping whatever remains of this command
-I found no style file---while reading file OBS_locate_paper.aux
+I found no \bibdata command---while reading file OBS_locate_paper.aux
+I found no \bibstyle command---while reading file OBS_locate_paper.aux
 You've used 2 entries,
             0 wiz_defined-function locations,
-            89 strings with 569 characters,
+            87 strings with 558 characters,
 and the built_in function-call counts, 0 in all, are:
 = -- 0
 > -- 0

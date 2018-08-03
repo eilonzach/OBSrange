@@ -15,9 +15,10 @@ projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/Pacifi
 datapath = './'; % path to survey data
 datapathSIO = './'; % path to survey data
 outdir_OBSrange = './OUT_OBSrange/OUT_wcorr_1pts/'; % output directory
-outdir_SIOcomp = './OUT_OBSrange/SIO_compare/'; % output directory
+outdir_SIOcomp = './OUT_OBSrange/SIO_compare_nobads/'; % output directory
 is_savemat = 1; % Save *.mat file of results?
 Nbins = 15; % Bins for histogram plots
+is_nobads = 1; % use SIO results with all bad pings removed
 
 wd = pwd;
 cd(projpath);
@@ -32,7 +33,11 @@ for is = 1:Nstas
     invdatafile = sprintf('%smats/%s_data.mat',outdir_OBSrange,sta);
     data = load_pings(rawdatafile);
     invdata = load(invdatafile); invdata = invdata.datamat;
-    dataSIO = loadSIO([datapathSIO,data.sta,'_SIOcorrected.txt']);
+    if is_nobads
+        dataSIO = loadSIO([datapathSIO,data.sta,'_SIOcorrected_nobads.txt']);
+    else
+        dataSIO = loadSIO([datapathSIO,data.sta,'_SIOcorrected.txt']);
+    end
     
     %% basic facts for this station
     % drop point
@@ -197,21 +202,39 @@ for is = 1:Nstas
     save2pdf([outdir_SIOcomp,'/plots/',data.sta,'_3_Ftest.pdf'],f3,500)
 %     save2eps(f3,[outdir_SIOcomp,'/plots/',data.sta,'_3_Ftest.eps'])
     
-%     if is_savemat
-%         datamat.x_sta = x_sta;
-%         datamat.y_sta = y_sta;
-%         datamat.z_sta = z_sta;
-%         datamat.lon_sta = lon_sta;
-%         datamat.lons_ship = lons_ship;
-%         datamat.lats_ship = lats_ship;
-%         datamat.E_rms = E_rms;
-%         datamat.dtwt_bs = dtwt_bs;
-%         datamat.twtcorr_bs = twtcorr_bs;
-%         datamat.dtwtcorr_bs = dtwtcorr_bs;
-%         datamat.dx_drift = dx_drift;
-%         datamat.dy_drift = dy_drift;
-%         datamat.drift = drift;
-%         datamat.azi = azi;
-%         save([outdir,'data.mat'],'datamat');
-%     end
+
+    if is_savemat
+        datamat.sta = sta;
+        datamat.drop_lonlatz = [dataSIO.lon_drop,dataSIO.lat_drop,dataSIO.z_drop];
+        datamat.lons_ship = dataSIO.lat;
+        datamat.lats_ship = dataSIO.lon;
+        datamat.x_ship = [];
+        datamat.y_ship = [];
+        datamat.z_ship = [];
+        datamat.v_ship = [];
+        datamat.databad = [];
+        datamat.dtwt_bs = dataSIO.res;
+        datamat.twtcorr_bs = [];
+        datamat.dtwtcorr_bs = [];
+        datamat.lon_sta_bs = dataSIO.lon_sta;
+        datamat.lat_sta_bs = dataSIO.lat_sta;
+        datamat.x_sta_bs = dataSIO.x_sta;
+        datamat.y_sta_bs = dataSIO.y_sta;
+        datamat.z_sta_bs = dataSIO.z_sta;
+        datamat.drift_bs = dataSIO.drift;
+        datamat.azi_bs = dataSIO.azi;
+        datamat.TAT_bs = [];
+        datamat.V_w_bs = [];
+        datamat.E_rms = [];
+        datamat.Ftest_res = [];
+        datamat.loc_xyz = [mean(dataSIO.x_sta),mean(dataSIO.y_sta),mean(dataSIO.z_sta)];
+        datamat.loc_lolaz = [mean(dataSIO.lon_sta),mean(dataSIO.lat_sta),mean(dataSIO.z_sta)];
+        datamat.mean_drift_az = [mean(dataSIO.drift) r2d(mean_ang(d2r(dataSIO.azi)))];
+        datamat.R_mat = [];
+        datamat.Cm_mat = [];
+        if ~exist([outdir_SIOcomp,'/mats_SIO'])
+            mkdir([outdir_SIOcomp,'/mats_SIO']);
+        end
+        save([outdir_SIOcomp,'/mats_SIO/',data.sta,'_data.mat'],'datamat');
+    end
 end

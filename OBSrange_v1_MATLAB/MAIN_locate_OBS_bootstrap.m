@@ -18,7 +18,7 @@ clear; close all;
 % path to project
 
 % JOSH
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
 
 % ZACH
 % projpath = '~/Work/OBSrange/projects/PacificORCA/';
@@ -39,7 +39,7 @@ outdir = './OUT_OBSrange/';
 onesta = '';
 
 %% Parameters
-ifsave = 0; % Save results to *.mat?
+ifsave = 1; % Save results to *.mat?
 ifplot = 1; % Plot results?
 
 par = struct([]);
@@ -64,9 +64,9 @@ par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT (lower bound should
 % Larger values imply more damping towards the starting model.
 par.dampx = 0;
 par.dampy = 0;
-par.dampz = 0; %0
-par.dampTAT = 2e-1; %2e-1
-par.dampdvp = 5e-8; %5e-8
+par.dampz = 1e3; %0
+par.dampTAT = 1e5; %2e-1
+par.dampdvp = 1e3; %5e-8
 
 % Global norm damping for stabilization
 par.epsilon = 1e-10;
@@ -244,6 +244,7 @@ if ifplot
 	PLOT_twt_corr
     %% Model Resolution & Covariance
     PLOT_resolution_covariance
+    drawnow;
 end
 
 
@@ -284,7 +285,7 @@ save2pdf([modified_outdir,'/plots/',data.sta,'_1_OBSlocation.pdf'],f1,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_2_misfit.pdf'],f2,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_3_VelCorrs.pdf'],f3,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_4_bootstrap.pdf'],f100,500)
-save2pdf([modified_outdir,'/plots/',data.sta,'_5_Ftest.pdf'],f101,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_5_Ftest.pdf'],101,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_6_Resolution_Covariance.pdf'],f103,500)
 end
 
