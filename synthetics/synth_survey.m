@@ -1,7 +1,7 @@
 clear
 close all
-% addpath('/Users/russell/GRAD/FIELD_WORK/PacificArray_2018/UsefulMATLAB/'); 
-addpath('~/Dropbox/MATLAB/myFUNCTIONS/');
+addpath('/Users/russell/GRAD/FIELD_WORK/PacificArray_2018/UsefulMATLAB/'); 
+% addpath('~/Dropbox/MATLAB/myFUNCTIONS/');
 % profile clear 
 % profile on
 %% TRUE VALUES
@@ -24,7 +24,7 @@ vp_actual = 1.520; % km/s
 tat = 0.014; %s
 
 % if doing many iterations
-niter = 1e4; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
+niter = 1; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
 x_std = 0.100; % in km
 y_std = 0.100; % in km
 z_std = 0.050; % in km

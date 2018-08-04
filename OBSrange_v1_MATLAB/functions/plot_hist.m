@@ -19,6 +19,8 @@ x_std = std(x);
 hold(ax,'on')
 
 [Ncount, cent] = hist(x,Nbins);
+Nbins_non0 = sum(diff(cent)~=0)+1;
+[Ncount, cent] = hist(x,Nbins_non0);
 Ncount_norm = Ncount./sum(Ncount);
 hb = bar(ax,cent,Ncount_norm,1,'facecolor',[0 0.1 0.9]);
 

@@ -49,6 +49,8 @@ end
 [Xo,Yo,Zo] = geodetic2ecef_ze(olat,olon,0,ellipsoidGRS80);
 [X,Y,Z] = enu2ecef_ze(olat,olon,x,y,0,Xo,Yo,Zo);
 [lon,lat,~] = ecef2geodetic_ze(X,Y,Z,ellipsoidGRS80);
+
+% [ lon, lat ] = dontuse_xy2lonlat( olon, olat, x, y ); % test old version
 end
 
 function [lon,lat,h] = ecef2geodetic_ze(X,Y,Z,LIPSD)

@@ -11,14 +11,16 @@ clear; close all;
 addpath('./functions');
 
 %% Parameters
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % path to project
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % path to project
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTH
 datapath = './'; % path to survey data
 datapathSIO = './'; % path to survey data
-outdir_OBSrange = './OUT_OBSrange/OUT_wcorr_1pts/'; % output directory
-outdir_SIOcomp = './OUT_OBSrange/SIO_compare_nobads/'; % output directory
+outdir_OBSrange = './OUT_OBSrange/2_OUT_wcorr_xrec/'; % output directory
+outdir_SIOcomp = './OUT_OBSrange/SIO_compare/'; % output directory
 is_savemat = 1; % Save *.mat file of results?
 Nbins = 15; % Bins for histogram plots
-is_nobads = 1; % use SIO results with all bad pings removed
+is_nobads = 0; % use SIO results with all bad pings removed
 
 wd = pwd;
 cd(projpath);
@@ -232,9 +234,9 @@ for is = 1:Nstas
         datamat.mean_drift_az = [mean(dataSIO.drift) r2d(mean_ang(d2r(dataSIO.azi)))];
         datamat.R_mat = [];
         datamat.Cm_mat = [];
-        if ~exist([outdir_SIOcomp,'/mats_SIO'])
-            mkdir([outdir_SIOcomp,'/mats_SIO']);
+        if ~exist([outdir_SIOcomp,'/mats'])
+            mkdir([outdir_SIOcomp,'/mats']);
         end
-        save([outdir_SIOcomp,'/mats_SIO/',data.sta,'_data.mat'],'datamat');
+        save([outdir_SIOcomp,'/mats/',data.sta,'_data.mat'],'datamat');
     end
 end

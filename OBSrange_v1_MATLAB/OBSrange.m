@@ -18,7 +18,9 @@ clear; close all;
 % path to project
 
 % JOSH
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; 
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % DATA
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03 only
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTHETIC
 
 % ZACH
 % projpath = '~/Work/OBSrange/projects/PacificORCA/';
@@ -36,7 +38,7 @@ datapath = './';
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = '';
+onesta = 'EC03'; %'EC03';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -64,9 +66,9 @@ par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT (lower bound should
 % Larger values imply more damping towards the starting model.
 par.dampx = 0;
 par.dampy = 0;
-par.dampz = 1e3; %0
-par.dampTAT = 1e5; %2e-1
-par.dampdvp = 1e3; %5e-8
+par.dampz = 0; %1e3; %0
+par.dampTAT = 2e-1; %1e5; %2e-1
+par.dampdvp = 5e-8; %1e3; %5e-8
 
 % Global norm damping for stabilization
 par.epsilon = 1e-10;
@@ -290,6 +292,7 @@ save2pdf([modified_outdir,'/plots/',data.sta,'_6_Resolution_Covariance.pdf'],f10
 end
 
 if ifsave
+    datamat.par = par;
     datamat.sta = data.sta;
 	datamat.drop_lonlatz = [data.lon_drop,data.lat_drop,data.z_drop];
 	datamat.lons_ship = lons_ship;
