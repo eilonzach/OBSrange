@@ -13,11 +13,12 @@ addpath('./functions');
 %% Parameters
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % path to project
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTH
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTH
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest3/'; % SYNTH 3
 datapath = './'; % path to survey data
 datapathSIO = './'; % path to survey data
 outdir_OBSrange = './OUT_OBSrange/2_OUT_wcorr_xrec/'; % output directory
-outdir_SIOcomp = './OUT_OBSrange/SIO_compare/'; % output directory
+outdir_SIOcomp = './OUT_OBSrange/SIO_compare_wbads/'; % output directory
 is_savemat = 1; % Save *.mat file of results?
 Nbins = 15; % Bins for histogram plots
 is_nobads = 0; % use SIO results with all bad pings removed
@@ -206,6 +207,7 @@ for is = 1:Nstas
     
 
     if is_savemat
+        datamat.par = [];
         datamat.sta = sta;
         datamat.drop_lonlatz = [dataSIO.lon_drop,dataSIO.lat_drop,dataSIO.z_drop];
         datamat.lons_ship = dataSIO.lat;
@@ -227,7 +229,7 @@ for is = 1:Nstas
         datamat.azi_bs = dataSIO.azi;
         datamat.TAT_bs = [];
         datamat.V_w_bs = [];
-        datamat.E_rms = [];
+        datamat.E_rms = dataSIO.E_rms;
         datamat.Ftest_res = [];
         datamat.loc_xyz = [mean(dataSIO.x_sta),mean(dataSIO.y_sta),mean(dataSIO.z_sta)];
         datamat.loc_lolaz = [mean(dataSIO.lon_sta),mean(dataSIO.lat_sta),mean(dataSIO.z_sta)];

@@ -21,7 +21,7 @@ clear; close all;
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % DATA
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03 only
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTHETIC
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest3/'; % SYNTHETIC 3
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest3/'; % SYNTHETIC 2
 
 % ZACH
 % projpath = '~/Work/OBSrange/projects/PacificORCA/';
@@ -41,10 +41,26 @@ outdir = './OUT_OBSrange/';
 % Otherwise, to locate all stations, put ''
 onesta = ''; %'EC03';
 
+modified_outdirs = {
+    '1_OUT_nocorr';
+    '2_OUT_wcorr_xrec';
+    '3_OUT_wcorr_xrec_TAT';
+    '4_OUT_wcorr_xrec_Vp';
+    '5_OUT_wcorr_xrec_Z';
+    '6_OUT_wcorr_xrec_TAT_Vp_Z';
+    };
+
+if_twtcorr = [0;    1;    1;    1;   1;    1;   ];
+dampz =      [0;    0;    0;    0;   1e3;  1e3; ];
+dampTAT =    [2e-1; 2e-1; 1e3;  1e1; 1e1;  1e5; ];
+dampdvp =    [5e-8; 5e-8; 5e-8; 1e3; 5e-8; 1e3; ];
+
 %% Parameters
 ifsave = 1; % Save results to *.mat?
 ifplot = 1; % Plot results?
 
+for irun = 1:length(modified_outdirs)
+    modified_outdir = [outdir,modified_outdirs{irun},'/'];
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
 par.N_bs = 1000; % Number of bootstrap iterations
@@ -52,7 +68,7 @@ par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
 % ==>  +1 if location is RECEIVE, -1 if location is SEND, 0 if no correction
-par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
+par.if_twtcorr = if_twtcorr(irun); %0; % Apply a traveltime correction to account for ship velocity?
 par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
@@ -67,9 +83,9 @@ par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT (lower bound should
 % Larger values imply more damping towards the starting model.
 par.dampx = 0;
 par.dampy = 0;
-par.dampz = 0; %1e3; %0
-par.dampTAT = 2e-1; %1e5; %2e-1
-par.dampdvp = 5e-8; %1e3; %5e-8
+par.dampz = dampz(irun); %0; %1e3; %0
+par.dampTAT = dampTAT(irun); %2e-1; %1e5; %2e-1
+par.dampdvp = dampdvp(irun); %5e-8; %1e3; %5e-8
 
 % Global norm damping for stabilization
 par.epsilon = 1e-10;
@@ -253,13 +269,13 @@ end
 
 %% Save output
 % output directory
-if par.if_twtcorr == 1
-    modified_outdir = [outdir,'OUT_wcorr_xrec/'];
-elseif par.if_twtcorr == -1
-    modified_outdir = [outdir,'OUT_wcorr_xsend/'];
-elseif par.if_twtcorr == 0
-    modified_outdir = [outdir,'OUT_nocorr/'];
-end  
+% if par.if_twtcorr == 1
+%     modified_outdir = [outdir,'OUT_wcorr_xrec/'];
+% elseif par.if_twtcorr == -1
+%     modified_outdir = [outdir,'OUT_wcorr_xsend/'];
+% elseif par.if_twtcorr == 0
+%     modified_outdir = [outdir,'OUT_nocorr/'];
+% end  
 if ~exist(modified_outdir)
 	mkdir(modified_outdir);
 end
@@ -336,3 +352,4 @@ if is==Nstas && ~exist('rawdatfile','var')
     fprintf('*********************\nStation %s does not seem to exist in that folder\n',onesta);
 end
 cd (wd)
+end

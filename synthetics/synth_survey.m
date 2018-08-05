@@ -8,7 +8,6 @@ addpath('/Users/russell/GRAD/FIELD_WORK/PacificArray_2018/UsefulMATLAB/');
 drop_location = [-7.54 -133.62 5]; % [lat,lon,z]
 noise = 0.004; %0.004; % std of timing error
 
-datN = 10; 
 ifsave = true;
 
 %% survey parameters
@@ -19,9 +18,23 @@ survstart = now;
 survey_dt = max([10,60*radius/1.3]); % time lapse of ranging
 
 %% model parameters - if one iteration
-obs_location_xyz = [+.1 +.3 5.050]; % x,y,z (km)
-vp_actual = 1.520; % km/s
-tat = 0.014; %s
+% % syn10
+% datN = 10; 
+% obs_location_xyz = [+.1 +.3 5.050]; % x,y,z (km)
+% vp_actual = 1.520; % km/s
+% tat = 0.014; %s
+
+% % syn11
+% datN = 11; 
+% obs_location_xyz = [+.2 -.3 5.100]; %[+.1 +.3 5.050]; % x,y,z (km)
+% vp_actual = 1.530; %1.520; % km/s
+% tat = 0.0145; %0.014; %s
+
+% syn12
+datN = 12; 
+obs_location_xyz = [+.2 -.4 5.050]; %[+.1 +.3 5.050]; % x,y,z (km)
+vp_actual = 1.520; %1.520; % km/s
+tat = 0.014; %0.014; %s
 
 % if doing many iterations
 niter = 1; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format

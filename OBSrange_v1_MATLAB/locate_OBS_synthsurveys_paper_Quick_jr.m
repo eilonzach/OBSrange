@@ -20,14 +20,14 @@ clear; close all;
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % Josh
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys/'; % Josh PAPER
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtestboot/'; % SYNTHETIC Boot
 % projpath = '~/Work/OBSrange/synthetics/'; 
 
 % path to survey data from the project directory
 datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; % Josh
 % datapath = 'synth_surveys_paper/';
 % path to output directory from project directory(will be created if it does not yet exist)
-outdir = './OUT_OBSrange_synthsurveys/'; 
+outdir = './OUT_OBSrange/'; 
 
 % % path to survey data from the project directory
 % %datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/';
@@ -37,19 +37,35 @@ outdir = './OUT_OBSrange_synthsurveys/';
 
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
-onesurvey = ''; %'SynthBoot_PACMAN_rad1.00';
+onesurvey = 'SynthBoot_PACMAN_rad1.00';
+
+modified_outdirs = {
+    '1_OUT_nocorr';
+    '2_OUT_wcorr_xrec';
+    '3_OUT_wcorr_xrec_TAT';
+    '4_OUT_wcorr_xrec_Vp';
+    '5_OUT_wcorr_xrec_Z';
+    '6_OUT_wcorr_xrec_TAT_Vp_Z';
+    };
+
+if_twtcorr = [0;    1;    1;    1;   1;    1;   ];
+dampz =      [0;    0;    0;    0;   1e3;  1e3; ];
+dampTAT =    [2e-1; 2e-1; 1e3;  1e1; 1e1;  1e5; ];
+dampdvp =    [5e-8; 5e-8; 5e-8; 1e3; 5e-8; 1e3; ];
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
 ifplot = 1; % Plot results?
 
+for irun = 1:length(modified_outdirs)
+    modified_outdir = [outdir,modified_outdirs{irun},'/'];
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
 par.N_bs = 1; %500; % Number of bootstrap iterations (= 1 for these tests)
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
-par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
+par.if_twtcorr = if_twtcorr(irun); %1; % Apply a traveltime correction to account for ship velocity?
 par.if_perfectcorr = 0;
 par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
@@ -65,9 +81,9 @@ par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT
 % Larger values imply more damping towards the survrting model.
 par.dampx = 0;
 par.dampy = 0;
-par.dampz = 0; %0
-par.dampTAT = 2e-1; %2e-1; %2e-1
-par.dampdvp = 5e-8; %5e-8
+par.dampz = dampz(irun); %0; %1e3; %0
+par.dampTAT = dampTAT(irun); %2e-1; %1e5; %2e-1
+par.dampdvp = dampdvp(irun); %5e-8; %1e3; %5e-8
 
 % Global norm damping for stabilization
 par.epsilon = 1e-10;
@@ -82,22 +98,19 @@ functionspath = [fullMAINpath(1:regexp(fullMAINpath,mfilename)-1),'functions'];
 addpath(functionspath);
 
 % output directory
-if par.if_twtcorr
-    if par.if_perfectcorr
-        modified_outdir = [outdir,'OUT_wperfectcorr/'];
-        display('*APPLYING PERFECT CORRECTIONS*');
-    elseif ~par.if_perfectcorr
-        modified_outdir = [outdir,'OUT_wcorr/'];
-    end
-elseif ~par.if_twtcorr
-    modified_outdir = [outdir,'OUT_nocorr/'];
-end
+% if par.if_twtcorr
+%     if par.if_perfectcorr
+%         modified_outdir = [outdir,'OUT_wperfectcorr/'];
+%         display('*APPLYING PERFECT CORRECTIONS*');
+%     elseif ~par.if_perfectcorr
+%         modified_outdir = [outdir,'OUT_wcorr/'];
+%     end
+% elseif ~par.if_twtcorr
+%     modified_outdir = [outdir,'OUT_nocorr/'];
+% end
 
 %% Load 2-way Travel Time Data
 wd = pwd;
-if ~exist(projpath)
-    mkdir(projpath);
-end
 cd(projpath);
 files = dir([datapath,'/*.mat']);
 surveys = extractBefore({files.name},'.mat');
@@ -434,3 +447,4 @@ if is==Nsurveys && ~exist('rawdatfile','var')
     fprintf('*********************\nsurvtion %s does not seem to exist in that folder\n',onesurvey);
 end
 cd (wd)
+end
