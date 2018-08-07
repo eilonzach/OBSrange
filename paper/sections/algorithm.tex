@@ -41,15 +41,26 @@ If travel times are known between the OBS and certain locations, but the positio
 
 where $\mathbf{G}$ is a matrix of partial derivatives: $G_{ij} = \partial d_i/\partial m_j$, as follows:
 
+%\begin{align*}
+%\frac{\partial d_i}{\partial x_O} &= 
+%	-\frac{2 x_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\
+%\frac{\partial d_i}{\partial y_O} &= 
+%	-\frac{2 y_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\
+%\frac{\partial d_i}{\partial z_O} &= 
+%	\frac{2 z_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\	
+%\frac{\partial d_i}{\partial V_P} &= 
+%	-\frac{2}{V_P^2} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{\frac{1}{2}}\\	
+%\frac{\partial d_i}{\partial \tau} &= 1\\	
+%\end{align*}
 \begin{align*}
 \frac{\partial d_i}{\partial x_O} &= 
-	-\frac{2 x_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\
+	-\frac{2 (x_i - x_O)}{V_P \, r_i}\\
 \frac{\partial d_i}{\partial y_O} &= 
-	-\frac{2 y_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\
+	-\frac{2 (y_i - y_O)}{V_P \, r_i} \\
 \frac{\partial d_i}{\partial z_O} &= 
-	\frac{2 z_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\	
+	\frac{2 z_O}{V_P \, r_i} \\	
 \frac{\partial d_i}{\partial V_P} &= 
-	-\frac{2}{V_P^2} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{\frac{1}{2}}\\	
+	-\frac{2 \, r_i}{V_P^2} \\	
 \frac{\partial d_i}{\partial \tau} &= 1\\	
 \end{align*}
 
@@ -88,7 +99,7 @@ $(x_{O_{\text{best}}},y_{O_{\text{best}}},z_{O_{\text{best}}})$. For each pertur
 \begin{equation}
 \nu = N_f - \text{tr}(\mathbf{F}\mathbf{F}_{\text{inv}})
 \end{equation}
-where $N_f$ is the length of vector $\mathbf{f}$ and $\text{tr}()$ denotes the trace. Using the F-test, we can evaluate the statistical probability of the true OBS location departing from our best-fitting location by a given value. 
+where $\mathbf{F}_{\text{inv}}= \left[ \mathbf{F}^{\text{T}} \mathbf{F} + \epsilon\mathbf{I} \right]^{-1} \mathbf{F}^{\text{T}}$, $N_f$ is the length of vector $\mathbf{f}$, and $\text{tr}()$ denotes the trace. Using the F-test, we can evaluate the statistical probability of the true OBS location departing from our best-fitting location by a given value. 
 
 Some care is required in implementing this grid search. Since $z_O$ covaries with $V_P$, varying $z_O$ quickly leads to large errors in data prediction as $|z_O^{\prime}-z_{O_{\text{best}}}|$ increases if one holds $V_P$ fixed. As a result, it appears as if the gradient in the error surface is very sharp in the $z$ direction, implying this parameter is very well resolved; in fact, the opposite is true. We find the empirical covariance of $z_O$, $V_P$, and $\tau$ by performing principal component analysis on the bootstrap model solutions. We then use the largest eigenvector to project perturbations in $z_O$ within the grid search onto the other two parameters, adjusting them appropriately as we progress through the grid search. 
 

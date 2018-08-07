@@ -93,12 +93,12 @@ for ifil = 1:Nfils
     
     plot(ax3,ifil,misfit_TAT(ifil)*1000,symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
     set(ax3,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[]);
-    ylabel(ax3,'{$\delta$\boldmath$\tau$ (\textbf{m})}','fontsize',18,'Interpreter','latex')
+    ylabel(ax3,'{$\delta$\boldmath$\tau$ (\textbf{ms})}','fontsize',18,'Interpreter','latex')
     xlim(ax3,[0 Nfils+1]);
     ylim(ax3,[2.9 3.3]);
 
     plot(ax4,ifil,misfit_Vw(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
-    set(ax4,'yscale','log','linewidth',1.5,'fontsize',16);
+    set(ax4,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[]);
     ylabel(ax4,'$\mathbf{\delta V_{P} \, (m/s)}$','fontsize',18,'Interpreter','latex')
     xlim(ax4,[0 Nfils+1]);
     ylim(ax4,[1 max(misfit_Vw)+10^(floor(log10(max(misfit_Vw))))]);

@@ -9,11 +9,11 @@ ifsave = 1;
 data_dirs = {
     '2_OUT_wcorr_xrec';
     '1_OUT_nocorr';
+    '7_OUT_nocorr_noellipsoid';
     '3_OUT_nocorr_TAT';
     '4_OUT_nocorr_Vp';
     '5_OUT_nocorr_Z';
     '6_OUT_nocorr_TAT_Vp_Z';
-    '7_OUT_nocorr_noellipsoid';
     '8_SIO_compare_nobads';
     '9_SIO_compare_wbads';
     };
@@ -21,25 +21,25 @@ data_dirs = {
 synth_dirs = {
     '2_OUT_wcorr_xrec';
     '1_OUT_nocorr';
+    '7_OUT_wcorr_xrec_noellipsoid';
     '3_OUT_wcorr_xrec_TAT';
     '4_OUT_wcorr_xrec_Vp';
     '5_OUT_wcorr_xrec_Z';
     '6_OUT_wcorr_xrec_TAT_Vp_Z';
-    '7_OUT_wcorr_xrec_noellipsoid';
     '8_SIO_compare_nobads';
     '9_SIO_compare_wbads';
     };
 
 xlabels = {
-    'Doppler Corr';
-    'No Doppler Corr';
-    'No TAT';
-    'No $V_p$';
-    'No Z';
-    'No TAT, $V_p$, Z';
-    'Spherical';
+    'OBSrange';
+    'No Doppler';
+    'No Ellipsoid';
+    'X, Y, Z, $V_p$';
+    'X, Y, Z, $\tau$';
+    'X, Y, $\tau$, $V_p$';
+    'X, Y';
     'SIO';
-    'SIO + bad';
+    'SIO (+ bads)';
     };
 
 data_path = '../figdata/PacificORCA_EC03/OUT_OBSrange';
@@ -75,8 +75,14 @@ for ifil = 1:length(synth_dirs)
     misfit_xsta_bs(:,ifil) = synth.datamat.x_sta_bs - trudata.obs_location_xyz(1)*1000;
     misfit_ysta_bs(:,ifil) = synth.datamat.y_sta_bs - trudata.obs_location_xyz(2)*1000;
     misfit_zsta_bs(:,ifil) = synth.datamat.z_sta_bs - (-trudata.obs_location_xyz(3)*1000);
-%     misfit_TAT_bs(:,ifil) = synth.datamat.TAT_bs - trudata.tat;
-%     misfit_Vp_bs(:,ifil) = synth.datamat.V_w_bs - trudata.vp_actual;
+    misfit_zsta(:,ifil) = rms(misfit_zsta_bs(:,ifil));
+    RMS_data(ifil) = mean(synth.datamat.E_rms);
+    if ifil ~= 8 && ifil ~= 9
+        misfit_TAT_bs(:,ifil) = synth.datamat.TAT_bs - trudata.tat;
+        misfit_TAT(:,ifil) = rms(misfit_TAT_bs(:,ifil));
+        misfit_Vp_bs(:,ifil) = synth.datamat.V_w_bs - trudata.vp_actual*1000;
+        misfit_Vp(:,ifil) = rms(misfit_Vp_bs(:,ifil));
+    end
     misfit_r_xy_bs(:,ifil) = sqrt( misfit_xsta_bs(:,ifil).^2 + misfit_ysta_bs(:,ifil).^2 );
 %     misfit_r_xy_bs(:,ifil) = sqrt( (misfit_xsta_bs(:,ifil)./trudata.obs_location_xyz(1)*1000).^2 +...
 %                                    (misfit_ysta_bs(:,ifil)./trudata.obs_location_xyz(2)*1000).^2 +...
@@ -94,13 +100,19 @@ r_xy_95(:,9) = [nan nan]';
 
 %% Plot comparisons
 f905 = figure(905); clf;
-set(f905,'position',[159   165   552   540]);
-ax1 = subplot(2,1,1); hold(ax1,'on'); box on;
-ax2 = subplot(2,1,2); hold(ax2,'on'); box on;
-dy = 1.1;
+set(f905,'position',[159     1   450   704]);
+ax1 = subplot(5,1,1); hold(ax1,'on'); box on;
+ax2 = subplot(5,1,2); hold(ax2,'on'); box on;
+ax3 = subplot(5,1,3); hold(ax3,'on'); box on;
+ax4 = subplot(5,1,4); hold(ax4,'on'); box on;
+ax5 = subplot(5,1,5); hold(ax5,'on'); box on;
+dy = 1.25;
 dy_space = 1.6;
 ax1.Position = [ax1.Position(1), ax1.Position(2), ax1.Position(3), ax1.Position(4)*dy];
-ax2.Position = [ax2.Position(1), ax2.Position(2)*dy_space, ax2.Position(3), ax2.Position(4)*dy];
+ax2.Position = [ax2.Position(1), ax2.Position(2), ax2.Position(3), ax2.Position(4)*dy];
+ax3.Position = [ax3.Position(1), ax3.Position(2), ax3.Position(3), ax3.Position(4)*dy];
+ax4.Position = [ax4.Position(1), ax4.Position(2), ax4.Position(3), ax4.Position(4)*dy];
+ax5.Position = [ax5.Position(1), ax5.Position(2), ax5.Position(3), ax5.Position(4)*dy];
 
 markersize = 14;
 %clr = parula(Nfils);
@@ -112,7 +124,7 @@ for ifil = 1:length(data_dirs)
 %     errorbar(ax1,ifil,RMS_data(ifil)*1000,RMS_95(1,ifil)*1000,RMS_95(2,ifil)*1000,'.k','markerfacecolor',[0.5 0.5 0.5],'markersize',markersize,'linewidth',1.5,'CapSize',13); hold on;
     set(ax1,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[]);
     xticks(ax1,[1:9]);
-    ylabel(ax1,'$\mathbf{RMS\, (ms)}$','fontsize',18,'Interpreter','latex')
+    ylabel(ax1,'$\mathbf{\delta TWT\, (ms)}$','fontsize',18,'Interpreter','latex')
     xlim(ax1,[0 length(data_dirs)+1]);   
     ylim(ax1,[1 max(RMS_data*1000)+10^(floor(log10(max(RMS_data*1000))))]);
 end
@@ -125,15 +137,62 @@ for ifil = 1:length(synth_dirs)
     ylabel(ax2,'$\mathbf{\delta r_{xy}\, (m)}$','fontsize',18,'Interpreter','latex')
     yticks(ax2,[0.1 1 10 100]);
     xticks(ax2,[1:9]);
-    htxt = text(ax2,ifil,0.8,xlabels(ifil),'HorizontalAlignment','right','Interpreter','latex','FontSize',16);
+    xlim(ax2,[0 length(synth_dirs)+1]);   
+    ylim(ax2,[1 max(misfit_r_xy)+10^(floor(log10(max(misfit_r_xy))))]);
+    
+    plot(ax3,[ifil ifil],[0.1 misfit_zsta(ifil)],'-k','linewidth',1.5)
+    h(ifil) = plot(ax3,ifil,misfit_zsta(ifil),'ok','markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
+%     errorbar(ax3,ifil,misfit_r_xy(ifil),r_xy_95(1,ifil),r_xy_95(2,ifil),'.k','markerfacecolor',[0.5 0.5 0.5],'markersize',markersize,'linewidth',1.5,'CapSize',13); hold on;
+    set(ax3,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[]);
+    ylabel(ax3,'$\mathbf{\delta Z\, (m)}$','fontsize',18,'Interpreter','latex')
+    yticks(ax3,[0.1 1 10 100]);
+    xticks(ax3,[1:9]);
+    xlim(ax3,[0 length(synth_dirs)+1]);   
+    ylim(ax3,[10 max(misfit_zsta)+10^(floor(log10(max(misfit_zsta))))]);
+    
+    if ifil ~= 8 && ifil ~= 9
+        plot(ax4,[ifil ifil],[0 misfit_TAT(ifil)*1000],'-k','linewidth',1.5)
+        h(ifil) = plot(ax4,ifil,misfit_TAT(ifil)*1000,'ok','markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
+    %     errorbar(ax2,ifil,misfit_r_xy(ifil),r_xy_95(1,ifil),r_xy_95(2,ifil),'.k','markerfacecolor',[0.5 0.5 0.5],'markersize',markersize,'linewidth',1.5,'CapSize',13); hold on;
+        set(ax4,'yscale','linear','linewidth',1.5,'fontsize',16,'XTickLabel',[]);
+        ylabel(ax4,'{$\delta$\boldmath$\tau$ (\textbf{ms})}','fontsize',18,'Interpreter','latex')
+%         yticks(ax4,[0.1 1 10 100]);
+        xticks(ax4,[1:9]);
+        xlim(ax4,[0 length(synth_dirs)+1]);   
+%         ylim(ax4,[1 max(misfit_TAT*1000)+10^(floor(log10(max(misfit_TAT*1000))))]);
+        ylim(ax4,[0 1.2]);
+
+        plot(ax5,[ifil ifil],[0.1 misfit_Vp(ifil)],'-k','linewidth',1.5)
+        h(ifil) = plot(ax5,ifil,misfit_Vp(ifil),'ok','markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
+    %     errorbar(ax5,ifil,misfit_r_xy(ifil),r_xy_95(1,ifil),r_xy_95(2,ifil),'.k','markerfacecolor',[0.5 0.5 0.5],'markersize',markersize,'linewidth',1.5,'CapSize',13); hold on;
+        set(ax5,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[]);
+        ylabel(ax5,'$\mathbf{\delta V_{P} \, (m/s)}$','fontsize',18,'Interpreter','latex')
+%         yticks(ax5,[0.1 1 10 100]);
+        xticks(ax5,[1:9]);
+        xlim(ax5,[0 length(synth_dirs)+1]);   
+        ylim(ax5,[1 max(misfit_Vp)+10^(floor(log10(max(misfit_Vp))))]);
+    end
+    htxt = text(ax5,ifil,0.8,xlabels(ifil),'HorizontalAlignment','right','Interpreter','latex','FontSize',16);
     set(htxt,'Rotation',45);
 %     xticklabels(ax2,xlabels);
 %     xtickangle(ax2,45);
-    xlim(ax2,[0 length(synth_dirs)+1]);   
-    ylim(ax2,[1 max(misfit_r_xy)+10^(floor(log10(max(misfit_r_xy))))]);
 end
 
 % l = legend(h,lgd,'position',[0.8 0.05 0.1852 0.95],'interpreter','none','fontsize',14,'box','off');
+
+%% Figure numbers
+x = 0.015;
+y = 0.82;
+text(ax1,x,y,...
+'\textbf{a)}','color',[0 0 0],'interpreter','latex','fontsize',20,'Units','normalized');
+text(ax2,x,y,...
+'\textbf{b)}','color',[0 0 0],'interpreter','latex','fontsize',20,'Units','normalized');
+text(ax3,x,y,...
+'\textbf{c)}','color',[0 0 0],'interpreter','latex','fontsize',20,'Units','normalized');
+text(ax4,x,y,...
+'\textbf{d)}','color',[0 0 0],'interpreter','latex','fontsize',20,'Units','normalized');
+text(ax5,x,y,...
+'\textbf{e)}','color',[0 0 0],'interpreter','latex','fontsize',20,'Units','normalized');
 
 %% Plot histograms
 figure(1);
