@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  6 AUG 2018 20:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  7 AUG 2018 17:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -221,27 +221,30 @@ Package: natbib 2010/09/13 8.31b (PWD, AO)
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count103
 )
+(/usr/local/texlive/2015/texmf-dist/tex/latex/multirow/multirow.sty
+\bigstrutjot=\dimen124
+)
 (./OBS_locate_paper.aux)
 \openout1 = `OBS_locate_paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Try loading font information for U+msa on input line 18.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Try loading font information for U+msa on input line 19.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 18.
+LaTeX Font Info:    Try loading font information for U+msb on input line 19.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -283,13 +286,13 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 (/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count104
-\scratchdimen=\dimen124
+\scratchdimen=\dimen125
 \scratchbox=\box29
 \nofMPsegments=\count105
 \nofMParguments=\count106
 \everyMPshowfont=\toks27
 \MPscratchCnt=\count107
-\MPscratchDim=\dimen125
+\MPscratchDim=\dimen126
 \MPnumerator=\count108
 \makeMPintoPDFobject=\count109
 \everyMPtoPDFconversion=\toks28
@@ -304,6 +307,9 @@ Package natbib Warning: Citation `Menke:1984vh' on page 2 undefined on input li
 ne 36.
 
 [2]
+Underfull \vbox (badness 3428) has occurred while \output is active []
+
+
 Overfull \hbox (27.33388pt too wide) has occurred while \output is active
  \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
 OTTOM SEISMOMETERS []
@@ -322,12 +328,12 @@ OTTOM SEISMOMETERS []
 
 LaTeX Warning: Reference `fig:meso_eddy' on page 6 undefined on input line 21.
 
-
+[6]
 Underfull \hbox (badness 10000) in paragraph at lines 26--27
 
  []
 
-[6]
+
 Underfull \hbox (badness 10000) in paragraph at lines 27--28
 
  []
@@ -348,15 +354,15 @@ Overfull \hbox (27.33388pt too wide) has occurred while \output is active
 OTTOM SEISMOMETERS []
  []
 
-[7] (./sections/figures.tex
-<./figs/Figure01.pdf, id=39, 1212.53pt x 799.98875pt>
+[7] [8] (./sections/figures.tex
+<./figs/Figure01.pdf, id=42, 1212.53pt x 799.98875pt>
 File: ./figs/Figure01.pdf Graphic file (type pdf)
 
 <use ./figs/Figure01.pdf>
 Package pdftex.def Info: ./figs/Figure01.pdf used on input line 3.
 (pdftex.def)             Requested size: 430.00462pt x 283.69893pt.
 
-<./figs/Figure02.pdf, id=41, 1112.155pt x 799.98875pt>
+<./figs/Figure02.pdf, id=44, 1112.155pt x 799.98875pt>
 File: ./figs/Figure02.pdf Graphic file (type pdf)
 
 <use ./figs/Figure02.pdf>
@@ -366,7 +372,7 @@ Package pdftex.def Info: ./figs/Figure02.pdf used on input line 10.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./figs/Figure03.pdf, id=43, 1212.53pt x 699.61375pt>
+<./figs/Figure03.pdf, id=46, 1212.53pt x 699.61375pt>
 File: ./figs/Figure03.pdf Graphic file (type pdf)
 
 <use ./figs/Figure03.pdf>
@@ -376,7 +382,7 @@ Package pdftex.def Info: ./figs/Figure03.pdf used on input line 17.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./figs/Figure04.pdf, id=45, 1212.53pt x 397.485pt>
+<./figs/Figure04.pdf, id=48, 1212.53pt x 397.485pt>
 File: ./figs/Figure04.pdf Graphic file (type pdf)
  <use ./figs/Figure04.pdf>
 Package pdftex.def Info: ./figs/Figure04.pdf used on input line 24.
@@ -385,7 +391,7 @@ Package pdftex.def Info: ./figs/Figure04.pdf used on input line 24.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./figs/Figure05.pdf, id=47, 894.34125pt x 706.64pt>
+<./figs/Figure05.pdf, id=50, 894.34125pt x 706.64pt>
 File: ./figs/Figure05.pdf Graphic file (type pdf)
  <use ./figs/Figure05.pdf>
 Package pdftex.def Info: ./figs/Figure05.pdf used on input line 39.
@@ -394,7 +400,7 @@ Package pdftex.def Info: ./figs/Figure05.pdf used on input line 39.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./figs/Figure06.pdf, id=49, 921.4425pt x 699.61375pt>
+<./figs/Figure06.pdf, id=52, 921.4425pt x 699.61375pt>
 File: ./figs/Figure06.pdf Graphic file (type pdf)
 
 <use ./figs/Figure06.pdf>
@@ -405,58 +411,69 @@ Package pdftex.def Info: ./figs/Figure06.pdf used on input line 46.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 )
+Overfull \hbox (27.33388pt too wide) has occurred while \output is active
+ \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
+OTTOM SEISMOMETERS []
+ []
+
+[9 <./figs/Figure01.pdf>] (./sections/tables.tex (./figs/Table01.tex
+
+LaTeX Warning: Float too large for page by 45.20422pt on input line 57.
+
+))
 
 Package natbib Warning: There were undefined citations.
 
-[8 <./figs/Figure01.pdf>]
+[10 <./figs/Figure02.pdf>]
 Overfull \hbox (27.33388pt too wide) has occurred while \output is active
  \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
 OTTOM SEISMOMETERS []
  []
 
-[9 <./figs/Figure02.pdf>] [10 <./figs/Figure03.pdf>]
+[11 <./figs/Figure03.pdf>] [12 <./figs/Figure04.pdf>]
 Overfull \hbox (27.33388pt too wide) has occurred while \output is active
  \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
 OTTOM SEISMOMETERS []
  []
 
-[11 <./figs/Figure04.pdf>] [12 <./figs/Figure05.pdf>]
+[13 <./figs/Figure05.pdf>] [14 <./figs/Figure06.pdf>]
 Overfull \hbox (27.33388pt too wide) has occurred while \output is active
  \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
 OTTOM SEISMOMETERS []
  []
 
-[13 <./figs/Figure06.pdf>] (./OBS_locate_paper.aux)
+[15] (./OBS_locate_paper.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 3725 strings out of 493089
- 48911 string characters out of 6134842
- 121651 words of memory out of 5000000
- 6978 multiletter control sequences out of 15000+600000
+ 3746 strings out of 493089
+ 49318 string characters out of 6134842
+ 157387 words of memory out of 5000000
+ 6988 multiletter control sequences out of 15000+600000
  12413 words of font info for 47 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 42i,11n,31p,1343b,246s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,12n,31p,1343b,224s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
-></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pf
-b></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pf
-b></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
-></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></
-usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></us
-r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/
-local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/loc
-al/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/
-texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/tex
-live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texl
-ive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texliv
-e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on OBS_locate_paper.pdf (13 pages, 1061657 bytes).
+></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><
+/usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb>
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb>
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
+/usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
+usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></us
+r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/
+local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lo
+cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local
+/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/te
+xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texli
+ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texliv
+e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/
+2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on OBS_locate_paper.pdf (15 pages, 1125748 bytes).
 PDF statistics:
- 270 PDF objects out of 1000 (max. 8388607)
- 216 compressed objects within 3 object streams
+ 352 PDF objects out of 1000 (max. 8388607)
+ 295 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
  67 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -20,6 +20,9 @@ addpath('~/Work/OBSrange/OBSrange_v1_MATLAB/functions/');
 trudata = load(['../figdata/trudata_',systa,'.mat']);
 load(['../figdata/',systa,'_data.mat']);
 
+% % Data from Figure 5
+% trudata = load(['../figdata/PacificORCA_synthtest4/trudata_syn12.mat']);
+% load(['../figdata/PacificORCA_synthtest4/OUT_OBSrange/2_OUT_wcorr_xrec/mats/syn12_data.mat']);
 
 %% ---------------------   PLOTTING   ---------------------   
 %% set up figure

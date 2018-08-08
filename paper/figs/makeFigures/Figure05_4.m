@@ -38,8 +38,8 @@ xlabels = {
     'X, Y, Z, $\tau$';
     'X, Y, $\tau$, $V_p$';
     'X, Y';
-    'SIO';
-    'SIO (+ bads)';
+    'SIOgs';
+    'SIOgs no QC';
     };
 
 symbols = {
@@ -186,7 +186,7 @@ clr = [repmat([0.7 0.7 0.7],7,1); [0.8 0 0]; [0.8 0 0] ];
 for ifil = 1:length(synth_dirs)
     markersize = sizes(ifil);
     
-    %%%%%%% RMS %%%%%%%
+    %%%%%%% TWT %%%%%%%
     plot(ax1,[ifil ifil],[0.1 RMS_data(ifil)*1000],'-k','linewidth',1.5)
     if issolve(ifil,1)
         h(ifil) = plot(ax1,ifil,RMS_data(ifil)*1000,symbols{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
@@ -197,7 +197,7 @@ for ifil = 1:length(synth_dirs)
     set(ax1,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[]);
     xticks(ax1,[1:9]);
     ylabel(ax1,'$\delta$TWT (ms)','fontsize',18,'Interpreter','latex')
-    title(ax1,'$\textbf{RMS Residuals}$','fontsize',18,'Interpreter','latex');
+    title(ax1,'$\textbf{RMS Misfit}$','fontsize',18,'Interpreter','latex');
     xlim(ax1,[0 length(synth_dirs)+1]);   
     ylim(ax1,[1 max(RMS_data*1000)+10^(floor(log10(max(RMS_data*1000))))*2]);
     
@@ -304,7 +304,7 @@ ang = [0:0.1:2*pi];
 % contourf(ax6,Xgrd(:,:,Iz_max)-x_mid,Ygrd(:,:,Iz_max)-y_mid,P(:,:,Iz_max),'linestyle','none');
 % shading(ax1,'flat');
 contour(ax6,Xgrd(:,:,Iz_max)-x_mid,Ygrd(:,:,Iz_max)-y_mid,P(:,:,Iz_max),[[0.05 0.05],[0.32 0.32]],'-k','linewidth',3); hold on;
-plot(ax6,Xgrd(Ix_max,Iy_max,Iz_max)-x_mid,Ygrd(Ix_max,Iy_max,Iz_max)-y_mid,'pk','markerfacecolor',clr(1,:),'markersize',21,'linewidth',1)
+h6(1) = plot(ax6,Xgrd(Ix_max,Iy_max,Iz_max)-x_mid,Ygrd(Ix_max,Iy_max,Iz_max)-y_mid,'pk','markerfacecolor',clr(1,:),'markersize',21,'linewidth',1)
 set(ax6,'fontsize',16,'linewidth',1.5,'box','on','layer','top',...
     'xlim',xlim1,'ylim',ylim1,'xtick',[xlim1(1):dx1:xlim1(2)],'ytick',[ylim1(1):dy1:ylim1(2)],'TickDir','out');
 xlabel(ax6,'$\delta$X (m)','fontsize',18,'interpreter','latex');
@@ -319,11 +319,11 @@ hty1 = text(ax6,xlim1(1)+0.04*diff(axlim(ax1,1:2)),ylim1(1)+0.01*diff(axlim(ax1,
 
 % Add on the true location for comparison
 % plot the true location on the F-test plot in each dimension
-plot(ax6,trudata.obs_location_xyz(1)*1e3 - x_mid,trudata.obs_location_xyz(2)*1e3 - y_mid,'p',...
-    'markerfacecolor',trucol,'markeredgecolor','k','linewidth',1,'markersize',20)
+h6(3) = plot(ax6,trudata.obs_location_xyz(1)*1e3 - x_mid,trudata.obs_location_xyz(2)*1e3 - y_mid,'p',...
+    'markerfacecolor',trucol,'markeredgecolor','k','linewidth',1,'markersize',20);
 
 % Plot SIO result
-plot(ax6,x_sta(8) - x_mid,y_sta(8) - y_mid,'pk','MarkerFaceColor',clr(8,:),'markersize',21,'linewidth',1);
+h6(2) = plot(ax6,x_sta(8) - x_mid,y_sta(8) - y_mid,'pk','MarkerFaceColor',clr(8,:),'markersize',21,'linewidth',1);
 
 % expand bounds and ticks if needed to include SIO station
     set(ax6,'xlim',[min([x_grid,x_sta(8)-5]),max([x_grid,x_sta(8)+5])],...
@@ -356,6 +356,8 @@ plot(ax6,x_sta(8) - x_mid,y_sta(8) - y_mid,'pk','MarkerFaceColor',clr(8,:),'mark
         'fontsize',14,'color',[0.4 0.4 0.4],'fontweight','bold',...
         'rotation',atand(vertexag(ax6)*diff(y12)/diff(x12)),...
         'horizontalalignment','center','verticalalignment','top')
+    
+    legend(ax6,h6,{xlabels{1},xlabels{8},'True'},'fontsize',15,'location','southwest','box','off');
 
 %% RESIDUALS
 plot(ax7,[0 360],[0 0],'--k','linewidth',1.5);
@@ -366,7 +368,7 @@ ylim(ax7,[-50 20]);
 xlabel(ax7,'Ship azimuth ($^\circ$)','fontsize',18,'interpreter','latex');
 ylabel(ax7,'$\delta$TWT (ms)','fontsize',18,'interpreter','latex');
 set(ax7,'fontsize',16,'box','on','linewidth',1.5)
-legend(ax7,h1,{xlabels{1},xlabels{8}},'fontsize',16,'location','southeast','box','off');
+legend(ax7,h1,{xlabels{1},xlabels{8}},'fontsize',15,'location','southeast','box','off');
 
 
 % l = legend(h,lgd,'position',[0.8 0.05 0.1852 0.95],'interpreter','none','fontsize',14,'box','off');

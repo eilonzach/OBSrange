@@ -7,6 +7,11 @@ clear
 one_sta_syn = 'syn10';
 truedat = load(['../figs/figdata/trudata_',one_sta_syn,'.mat']);
 load(['../figs/figdata/',one_sta_syn,'_data.mat']);
+
+% % Data from Figure 5
+% truedat = load(['../figs/figdata/PacificORCA_synthtest4/trudata_syn12.mat']);
+% load(['../figs/figdata/PacificORCA_synthtest4/OUT_OBSrange/2_OUT_wcorr_xrec/mats/syn12_data.mat']);
+
 % misfit in location
 dr = norm(truedat.obs_location_xyz(1:2) - datamat.loc_xyz(1:2)/1e3);
 fprintf('Station %s is mis-located by %.2f m\n',one_sta_syn,1e3*dr)

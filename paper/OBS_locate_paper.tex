@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{epstopdf}
 \usepackage[round,sort,comma]{natbib}
+\usepackage{multirow}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \graphicspath{{./figs/}}
@@ -49,6 +50,9 @@
 \newpage
 \section{Figures and Tables }
 \input{sections/figures.tex}
+
+\newpage
+\input{sections/tables.tex}
 
 
 \end{document}  
