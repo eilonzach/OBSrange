@@ -30,14 +30,26 @@ synth_dirs = {
     '9_SIO_compare_wbads';
     };
 
+% xlabels = {
+%     'OBSrange';
+%     'No Doppler';
+%     'No Ellipsoid';
+%     'XYZ$V_p$';
+%     'XYZ$\tau$';
+%     'XY$\tau V_p$';
+%     'XY';
+%     'SIOgs';
+%     'SIOgs no QC';
+%     };
+
 xlabels = {
     'OBSrange';
     'No Doppler';
     'No Ellipsoid';
-    'XYZ$V_p$';
-    'XYZ$\tau$';
-    'XY$\tau V_p$';
-    'XY';
+    'Fix-$\tau$';
+    'Fix-$V_p$';
+    'Fix-Z';
+    'XY-only';
     'SIOgs';
     'SIOgs no QC';
     };
@@ -229,7 +241,7 @@ for ifil = 1:length(synth_dirs)
     yticks(ax3,[0.1 1 10 100]);
     xticks(ax3,[1:9]);
     xlim(ax3,[0 length(synth_dirs)+1]);   
-    ylim(ax3,[10 max(misfit_zsta)+10^(floor(log10(max(misfit_zsta))))*2]);
+    ylim(ax3,[10 max(misfit_zsta)+10^(floor(log10(max(misfit_zsta))))*5]);
     
     %%%%%%% TAT %%%%%%%
     plot(ax4,[ifil ifil],[0 misfit_TAT(ifil)*1000],'-k','linewidth',1.5)

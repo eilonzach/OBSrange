@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  8 AUG 2018 20:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  9 AUG 2018 11:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -401,7 +401,7 @@ OTTOM SEISMOMETERS []
 
 [9 <./figs/Figure01.pdf>] (./sections/tables.tex (./figs/Table01.tex
 
-LaTeX Warning: Float too large for page by 45.20422pt on input line 57.
+LaTeX Warning: Float too large for page by 54.25449pt on input line 57.
 
 ))
 
@@ -431,13 +431,13 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 3746 strings out of 493089
- 49348 string characters out of 6134842
- 157472 words of memory out of 5000000
- 6988 multiletter control sequences out of 15000+600000
- 12413 words of font info for 47 fonts, out of 8000000 for 9000
+ 3762 strings out of 493089
+ 49516 string characters out of 6134842
+ 158768 words of memory out of 5000000
+ 6996 multiletter control sequences out of 15000+600000
+ 14955 words of font info for 55 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 42i,12n,31p,1343b,222s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,16n,31p,1478b,256s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><
 /usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb>
@@ -446,6 +446,7 @@ Here is how much of TeX's memory you used:
 /usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
 usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></us
 r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/
+local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/
 local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lo
 cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local
 /texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/te
@@ -453,10 +454,10 @@ xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texli
 ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texliv
 e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/
 2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on OBS_locate_paper.pdf (15 pages, 1134634 bytes).
+Output written on OBS_locate_paper.pdf (15 pages, 1146465 bytes).
 PDF statistics:
- 352 PDF objects out of 1000 (max. 8388607)
- 295 compressed objects within 3 object streams
+ 356 PDF objects out of 1000 (max. 8388607)
+ 298 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
  67 words of extra memory for PDF output out of 10000 (max. 10000000)
 

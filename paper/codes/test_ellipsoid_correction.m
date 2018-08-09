@@ -50,5 +50,5 @@ ylabel('Ellipsoid \delta TWT (ms)','FontWeight','bold','fontsize',18);
 dTWT_p2p = (max(dTWT_ellipsoid)-min(dTWT_ellipsoid))*1000;
 
 %%
-disp(['Max dr of ship due to ellipsoid correction: ',num2str(max(dr_ellipsoid)),' m'])
+disp(['Max/Min dr of ship due to ellipsoid correction: ',num2str(max(dr_ellipsoid)),'/',num2str(min(dr_ellipsoid)),' m'])
 disp(['TWT residual peak-to-peak: ',num2str(dTWT_p2p),' ms'])

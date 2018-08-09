@@ -4,7 +4,7 @@ function Table01
 ofile = '../Table01';
 ifsave = 0;
 
-caption = 'Details of the synthetic tests in Figure 5. Final model parameters for OBSrange inversions are the average of 1000 bootstrap iterations and are omitted if held fixed during the inversion. Parameters $x$ and $y$ are displayed as distance from the drop location.';
+caption = 'Details of the synthetic tests in Figure 5. Final model parameters for OBSrange inversions are the average of 1000 bootstrap iterations. Parameters that are held fixed during the inversion are denoted in italics and their final values omitted. Parameters $x$ and $y$ are displayed as distance from the drop location.';
 
 %% load 
 data_dirs = {
@@ -31,14 +31,26 @@ synth_dirs = {
     '9_SIO_compare_wbads';
     };
 
+% xlabels = {
+%     'OBSrange';
+%     'No Doppler';
+%     'No Ellipsoid';
+%     'XYZ$\mathbf{V_p}$';
+%     'XYZ$\mathbf{\tau}$';
+%     'XY$\mathbf{\tau V_p}$';
+%     'XY';
+%     'SIOgs';
+%     'SIOgs no QC';
+%     };
+
 xlabels = {
     'OBSrange';
     'No Doppler';
     'No Ellipsoid';
-    'XYZ$\mathbf{V_p}$';
-    'XYZ$\mathbf{\tau}$';
-    'XY$\mathbf{\tau V_p}$';
-    'XY';
+    'Fix-$\boldsymbol{\tau}$';
+    'Fix-$\mathbf{V_p}$';
+    'Fix-Z';
+    'XY-only';
     'SIOgs';
     'SIOgs no QC';
     };
@@ -129,7 +141,7 @@ for ifil = 1:length(synth_dirs)
         initial.TAT{ifil} = num2str(synth.datamat.par.TAT_start*1000,fmt2);
         initial.Vp{ifil} = num2str(synth.datamat.par.vp_w,fmt);
     else
-        initial.TAT{ifil} = num2str(0.013,fmt2);
+        initial.TAT{ifil} = num2str(0.013*1000,fmt2);
         initial.Vp{ifil} = num2str(1500,fmt);
     end
     
@@ -138,16 +150,19 @@ for ifil = 1:length(synth_dirs)
     final.y_sta{ifil} = num2str(median(synth.datamat.y_sta_bs),fmt);
     if ~issolve(ifil,3)
         final.z_sta{ifil} = '-';
+        initial.z_sta{ifil} = ['$\mathit{',initial.z_sta{ifil},'}$'];
     else
         final.z_sta{ifil} = num2str(median(synth.datamat.z_sta_bs),fmt);
     end
     if ~issolve(ifil,4)
         final.TAT{ifil} = '-';
+        initial.TAT{ifil} = ['$\mathit{',initial.TAT{ifil},'}$'];
     else
         final.TAT{ifil} = num2str(median(synth.datamat.TAT_bs*1000),fmt2);
     end
     if ~issolve(ifil,5)
         final.Vp{ifil} = '-';
+        initial.Vp{ifil} = ['$\mathit{',initial.Vp{ifil},'}$'];
     else
         final.Vp{ifil} = num2str(median(synth.datamat.V_w_bs),fmt);
     end
@@ -192,7 +207,7 @@ fprintf(fid,'\\caption{%s}\n',caption);
 fprintf(fid,'\\centering\n');
 fprintf(fid,'\\resizebox{\\textwidth}{!}{\n'); % shrink to page width
 fprintf(fid,'\\begin{tabular}{c || l c | l c c c c c}\n');
-fprintf(fid,'\\textbf{Model Name} &  &  &  & $\\mathbf{x}$ \\textbf{(m)} & $\\mathbf{y}$ \\textbf{(m)} & $\\mathbf{z}$ \\textbf{(m)} & $\\mathbf{\\tau}$ \\textbf{(ms)} & $\\mathbf{V_p}$ \\textbf{(m/s)} \\\\ \n');
+fprintf(fid,'\\textbf{Model Name} &  &  &  & $\\mathbf{x}$ \\textbf{(m)} & $\\mathbf{y}$ \\textbf{(m)} & $\\mathbf{z}$ \\textbf{(m)} & $\\boldsymbol{\\tau}$ \\textbf{(ms)} & $\\mathbf{V_p}$ \\textbf{(m/s)} \\\\ \n');
 fprintf(fid,'\\hline\n');
 
 % Write data
