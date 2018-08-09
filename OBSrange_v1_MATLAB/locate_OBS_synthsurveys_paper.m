@@ -20,7 +20,7 @@ clear; close all;
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % Josh
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys/'; % Josh PAPER
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtestboot/'; % Josh PAPER
 % projpath = '~/Work/OBSrange/synthetics/'; 
 
 % path to survey data from the project directory
@@ -37,7 +37,7 @@ outdir = './OUT_OBSrange_synthsurveys/';
 
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
-onesurvey = ''; %'SynthBoot_PACMAN_rad1.00';
+onesurvey = 'SynthBoot_PACMAN_rad1.00';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?

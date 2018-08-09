@@ -1,9 +1,9 @@
 %% Function to produce Figure 05 
 %  Figure 05 compares our algorithm to SIO
-function Figure05
+function figure05
 
-ofile = '../Figure05';
-ifsave = 1;
+% ofile = '../Figure05';
+ifsave = 0;
 
 %% load 
 data_dirs = {
@@ -14,8 +14,8 @@ data_dirs = {
     '4_OUT_nocorr_Vp';
     '5_OUT_nocorr_Z';
     '6_OUT_nocorr_TAT_Vp_Z';
-    '8_SIO_compare_nobads';
-    '9_SIO_compare_wbads';
+%     '8_SIO_compare_nobads';
+%     '9_SIO_compare_wbads';
     };
 
 synth_dirs = {
@@ -26,20 +26,20 @@ synth_dirs = {
     '4_OUT_wcorr_xrec_Vp';
     '5_OUT_wcorr_xrec_Z';
     '6_OUT_wcorr_xrec_TAT_Vp_Z';
-    '8_SIO_compare_nobads';
-    '9_SIO_compare_wbads';
+%     '8_SIO_compare_nobads';
+%     '9_SIO_compare_wbads';
     };
 
 xlabels = {
     'OBSrange';
     'No Doppler';
     'No Ellipsoid';
-    'XYZ$V_p$';
-    'XYZ$\tau$';
-    'XY$\tau V_p$';
-    'XY';
-    'SIOgs';
-    'SIOgs no QC';
+    'X, Y, Z, $V_p$';
+    'X, Y, Z, $\tau$';
+    'X, Y, $\tau$, $V_p$';
+    'X, Y';
+%     'SIOgs';
+%     'SIOgs no QC';
     };
 
 symbols = {
@@ -50,8 +50,8 @@ symbols = {
     'ok';
     'ok';
     'ok';
-    'pk';
-    'ok';
+%     'pk';
+%     'ok';
     };
 
 sizes = [
@@ -62,8 +62,9 @@ sizes = [
     14;
     14;
     14;
-    20;
-    14 ];
+%     20;
+%     14 
+    ];
 
 %           X Y Z TAT Vp
 issolve = [ 1 1 1  1  1;
@@ -73,74 +74,27 @@ issolve = [ 1 1 1  1  1;
             1 1 1  1  0;
             1 1 0  1  1;
             1 1 0  0  0;
-            1 1 0  0  0;
-            1 1 0  0  0 ];
+%             1 1 0  0  0;
+%             1 1 0  0  0 
+            ];
 
-data_path = '../figdata/PacificORCA_EC03/OUT_OBSrange';
-synth_path = '../figdata/PacificORCA_synthtest4/OUT_OBSrange';
-% Load synthetic
-trudata = load('../figdata/PacificORCA_synthtest4/trudata_syn12.mat');
-
-% Load data
-for ifil = 1:length(data_dirs)
-    data_mat = dir(fullfile(data_path,data_dirs{ifil},'mats/*.mat'));
-    data = load(fullfile(data_path,data_dirs{ifil},'mats',data_mat.name));
-    if ~isempty(data.datamat.E_rms)
-        RMS_data(ifil) = median(data.datamat.E_rms);
-        RMS_95(:,ifil) = abs(median(data.datamat.E_rms) - prctile(data.datamat.E_rms,[2.5 97.5]));
-    else
-        RMS_data(ifil) = rms(data.datamat.dtwt_bs);
-        RMS_95(:,ifil) = [nan nan];
-    end
-end
+synth_path = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtestboot/OUT_OBSrange/';
 
 for ifil = 1:length(synth_dirs)
     synth_mat = dir(fullfile(synth_path,synth_dirs{ifil},'mats/*.mat'));
     synth = load(fullfile(synth_path,synth_dirs{ifil},'mats',synth_mat.name));
-    misfit_xsta(ifil) = median(synth.datamat.x_sta_bs) - trudata.obs_location_xyz(1)*1000;
-    misfit_ysta(ifil) = median(synth.datamat.y_sta_bs) - trudata.obs_location_xyz(2)*1000;
-    misfit_zsta(ifil) = median(synth.datamat.z_sta_bs) - (-trudata.obs_location_xyz(3)*1000);
-%     if ~isempty(data.datamat.E_rms)
-%         misfit_r_xy(ifil) = median(synth.datamat.E_rms);
-%     else
-%         misfit_r_xy(ifil) = rms(synth.datamat.dtwt_bs);
-%     end
-
-    misfit_xsta_bs(:,ifil) = synth.datamat.x_sta_bs - trudata.obs_location_xyz(1)*1000;
-    misfit_ysta_bs(:,ifil) = synth.datamat.y_sta_bs - trudata.obs_location_xyz(2)*1000;
-    misfit_zsta_bs(:,ifil) = synth.datamat.z_sta_bs - (-trudata.obs_location_xyz(3)*1000);
-    misfit_zsta(:,ifil) = rms(misfit_zsta_bs(:,ifil));
-    RMS_data(ifil) = mean(synth.datamat.E_rms);
-    dtwt(:,ifil) = synth.datamat.dtwt_bs;
-    lon(ifil) = synth.datamat.loc_lolaz(1);
-    lat(ifil) = synth.datamat.loc_lolaz(2);
-    x_sta(ifil) = synth.datamat.loc_xyz(1);
-    y_sta(ifil) = synth.datamat.loc_xyz(2);
+    
+    misfit_r_xy(ifil) = rms(synth.data(1).misfit_r_xy);
+    misfit_zsta(:,ifil) = rms(synth.data(1).misfit_zsta);
+    RMS_data(ifil) = synth.data(1).E_rms;
     if ~(ifil == 8 || ifil == 9)
-        misfit_TAT_bs(:,ifil) = synth.datamat.TAT_bs - trudata.tat;
-        misfit_TAT(:,ifil) = rms(misfit_TAT_bs(:,ifil));
-        misfit_Vp_bs(:,ifil) = synth.datamat.V_w_bs - trudata.vp_actual*1000;
-        misfit_Vp(:,ifil) = rms(misfit_Vp_bs(:,ifil));
+        misfit_TAT(:,ifil) = rms(synth.data(1).misfit_TAT);
+        misfit_Vp(:,ifil) = rms(synth.data(1).misfit_Vw);
     else
         misfit_TAT(:,ifil) = rms(0.013 - trudata.tat);
         misfit_Vp(:,ifil) = rms(1500 - trudata.vp_actual*1000);
-    end
-    misfit_r_xy_bs(:,ifil) = sqrt( misfit_xsta_bs(:,ifil).^2 + misfit_ysta_bs(:,ifil).^2 );
-%     misfit_r_xy_bs(:,ifil) = sqrt( (misfit_xsta_bs(:,ifil)./trudata.obs_location_xyz(1)*1000).^2 +...
-%                                    (misfit_ysta_bs(:,ifil)./trudata.obs_location_xyz(2)*1000).^2 +...
-%                                    (misfit_zsta_bs(:,ifil)./(-trudata.obs_location_xyz(3)*1000)).^2 +...
-%                                    (misfit_TAT_bs(:,ifil)./trudata.tat).^2 +...
-%                                    (misfit_Vp_bs(:,ifil)./trudata.vp_actual).^2);
-    misfit_r_xy(ifil) = rms(misfit_r_xy_bs(:,ifil));    
-    r_xy_95(:,ifil) = abs(median(misfit_r_xy_bs(:,ifil)) - prctile(misfit_r_xy_bs(:,ifil),[2.5 97.5]));
-    
-    if ifil == 1
-        Ftest_res = synth.datamat.Ftest_res;
-    end
+    end 
 end
-r_xy_95(:,8) = [nan nan]';
-r_xy_95(:,9) = [nan nan]';
-
 
 %% ---------------------   PLOTTING   ---------------------   
 
@@ -267,114 +221,114 @@ for ifil = 1:length(synth_dirs)
 %     xtickangle(ax2,45);
 end
 
-%% F-test plots
-trucol = [0.2 0.9 0.6];
-col = colormap(parula); % colormap for f test plots
-x_grid = Ftest_res.x_grid;
-y_grid = Ftest_res.y_grid;
-z_grid = Ftest_res.z_grid;
-P = Ftest_res.Pstat;
-[Xgrd,Ygrd,Zgrd] = meshgrid(x_grid,y_grid,z_grid);
-[Pz_max, Iz_max] = max(max(max(P)));
-[Py_max, Iy_max] = max(max(P(:,:,Iz_max)));
-[Px_max, Ix_max] = max(P(:,Iy_max,Iz_max));
-
-
-% bounds and ticks (zoom in within test space to fill plot)
-x_bds = [min(x_grid),max(x_grid)] + [25 -25];
-y_bds = [min(y_grid),max(y_grid)] + [25 -25];
-z_bds = [min(z_grid),max(z_grid)];
-
-% centre points:
-x_mid = 0; %median(x_grid);
-y_mid = 0; %median(y_grid);
-z_mid = 0; %median(z_grid);
-
-% bounds and ticks
-xlim1 = [-20 20]; dx1 = 4;
-ylim1 = [-20 20]; dy1 = 4;
-xlim2 = [-40 40]; dx2 = 8;
-ylim2 = [-40 40]; dy2 = 8;
-zlim = [-40 40];  dz = 8;
-
-% shade in background
-% fill(ax6,[-2000,2000,2000,-2000,-2000],[-2000,-2000,2000,2000,-2000],col(1,:))
-ang = [0:0.1:2*pi];
-%X-Y
-% contourf(ax6,Xgrd(:,:,Iz_max)-x_mid,Ygrd(:,:,Iz_max)-y_mid,P(:,:,Iz_max),'linestyle','none');
-% shading(ax1,'flat');
-contour(ax6,Xgrd(:,:,Iz_max)-x_mid,Ygrd(:,:,Iz_max)-y_mid,P(:,:,Iz_max),[[0.05 0.05],[0.32 0.32]],'-k','linewidth',3); hold on;
-h6(1) = plot(ax6,Xgrd(Ix_max,Iy_max,Iz_max)-x_mid,Ygrd(Ix_max,Iy_max,Iz_max)-y_mid,'pk','markerfacecolor',clr(1,:),'markersize',21,'linewidth',1)
-set(ax6,'fontsize',16,'linewidth',1.5,'box','on','layer','top',...
-    'xlim',xlim1,'ylim',ylim1,'xtick',[xlim1(1):dx1:xlim1(2)],'ytick',[ylim1(1):dy1:ylim1(2)],'TickDir','out');
-xlabel(ax6,'$\delta$X (m)','fontsize',18,'interpreter','latex');
-ylabel(ax6,'$\delta$Y (m)','fontsize',18,'interpreter','latex');
-% title(ax6,'\textbf{X-Y}','fontsize',18,'interpreter','latex');
-% average values
-htx1 = text(ax6,xlim1(1)+0.04*diff(axlim(ax1,1:2)),ylim1(1)+0.02*diff(axlim(ax1,3:4)),...
-    sprintf('$\\mathbf{\\bar{x}}$\\textbf{ = %.1f m}',x_mid),'color','white','interpreter','latex','fontsize',17);
-hty1 = text(ax6,xlim1(1)+0.04*diff(axlim(ax1,1:2)),ylim1(1)+0.01*diff(axlim(ax1,3:4)),...
-    sprintf('$\\mathbf{\\bar{y}}$\\textbf{ = %.1f m}',y_mid),'color','white','interpreter','latex','fontsize',17);
-% axis equal;
-
-% Add on the true location for comparison
-% plot the true location on the F-test plot in each dimension
-h6(3) = plot(ax6,trudata.obs_location_xyz(1)*1e3 - x_mid,trudata.obs_location_xyz(2)*1e3 - y_mid,'p',...
-    'markerfacecolor',trucol,'markeredgecolor','k','linewidth',1,'markersize',20);
-
-% Plot SIO result
-h6(2) = plot(ax6,x_sta(8) - x_mid,y_sta(8) - y_mid,'pk','MarkerFaceColor',clr(8,:),'markersize',21,'linewidth',1);
-
-% expand bounds and ticks if needed to include SIO station
-    set(ax6,'xlim',[min([x_grid,x_sta(8)-5]),max([x_grid,x_sta(8)+5])],...
-            'ylim',[min([y_grid,y_sta(8)-5]),max([y_grid,y_sta(8)+5])])
-    xlim(ax6,[160 220]);
-    ylim(ax6,[-420 -360]);
-    dtick = [1,2,4,5,10,20,40,50,100];
-    dtickx = dtick(mindex(abs((axlim(ax6,2)-axlim(ax6,1))/7 - dtick)));
-    dticky = dtick(mindex(abs((axlim(ax6,4)-axlim(ax6,3))/7 - dtick)));
-    set(ax6,'xtick',[-1000:dtickx:1000],'xticklabel',[-1000:dtickx:1000],...
-            'ytick',[-1000:dticky:1000],'yticklabel',[-1000:dticky:1000]);
-    % kill text
-    delete([htx1,hty1])
-    % plot range
-    x12 = [x_sta(8),trudata.obs_location_xyz(1)*1e3];
-    y12 = [y_sta(8),trudata.obs_location_xyz(2)*1e3];
-    %dxy
-    plot(ax6,x12,y12,'-','Color',clr(8,:),'linewidth',2);
-    text(ax6,mean(x12),mean(y12),num2str(sqrt(diff(x12).^2 + diff(y12).^2),'%.1f m'),...
-        'fontsize',14,'color',clr(8,:),'fontweight','bold',...
-        'rotation',atand(vertexag(ax6)*diff(y12)/diff(x12)),...
-        'horizontalalignment','center','verticalalignment','top')
-    
-    % plot range
-    x12 = [x_sta(1),trudata.obs_location_xyz(1)*1e3];
-    y12 = [y_sta(1),trudata.obs_location_xyz(2)*1e3];
-    %dxy
-    plot(ax6,x12,y12,'-','Color',clr(1,:),'linewidth',2);
-    text(ax6,mean(x12-2),mean(y12-2),num2str(sqrt(diff(x12).^2 + diff(y12).^2),'%.1f m'),...
-        'fontsize',14,'color',[0.4 0.4 0.4],'fontweight','bold',...
-        'rotation',atand(vertexag(ax6)*diff(y12)/diff(x12)),...
-        'horizontalalignment','center','verticalalignment','top')
-    
-    legend(ax6,h6,{xlabels{1},xlabels{8},'True'},'fontsize',15,'location','southwest','box','off');
-
-%% RESIDUALS
-plot(ax7,[0 360],[0 0],'--k','linewidth',1.5);
-h1(1) = plot(ax7,trudata.survaz(~isnan(trudata.data.tot_dt)),dtwt(:,1)*1000,'ok','markersize',10,'MarkerFaceColor',clr(1,:),'linewidth',1); hold on;
-h1(2) = plot(ax7,trudata.survaz(~isnan(trudata.data.tot_dt)),dtwt(:,8)*1000,'ok','markersize',10,'MarkerFaceColor',clr(8,:),'linewidth',1); hold on;
-% plot(ax7,trudata.survaz(~isnan(trudata.data.tot_dt)),dtwt(:,1)*1000-dtwt(:,3)*1000,'ok','markersize',10,'MarkerFaceColor',[0 0 1],'linewidth',1); hold on;
-% rms(dtwt(:,1)*1000-dtwt(:,3)*1000)
-% max(dtwt(:,1)*1000-dtwt(:,3)*1000)-min(dtwt(:,1)*1000-dtwt(:,3)*1000)
-xlim(ax7,[0 360]);
-ylim(ax7,[-50 20]);
-xlabel(ax7,'Ship azimuth ($^\circ$)','fontsize',18,'interpreter','latex');
-ylabel(ax7,'$\delta$TWT (ms)','fontsize',18,'interpreter','latex');
-set(ax7,'fontsize',16,'box','on','linewidth',1.5)
-legend(ax7,h1,{xlabels{1},xlabels{8}},'fontsize',15,'location','southeast','box','off');
-
-
-% l = legend(h,lgd,'position',[0.8 0.05 0.1852 0.95],'interpreter','none','fontsize',14,'box','off');
+% %% F-test plots
+% trucol = [0.2 0.9 0.6];
+% col = colormap(parula); % colormap for f test plots
+% x_grid = Ftest_res.x_grid;
+% y_grid = Ftest_res.y_grid;
+% z_grid = Ftest_res.z_grid;
+% P = Ftest_res.Pstat;
+% [Xgrd,Ygrd,Zgrd] = meshgrid(x_grid,y_grid,z_grid);
+% [Pz_max, Iz_max] = max(max(max(P)));
+% [Py_max, Iy_max] = max(max(P(:,:,Iz_max)));
+% [Px_max, Ix_max] = max(P(:,Iy_max,Iz_max));
+% 
+% 
+% % bounds and ticks (zoom in within test space to fill plot)
+% x_bds = [min(x_grid),max(x_grid)] + [25 -25];
+% y_bds = [min(y_grid),max(y_grid)] + [25 -25];
+% z_bds = [min(z_grid),max(z_grid)];
+% 
+% % centre points:
+% x_mid = 0; %median(x_grid);
+% y_mid = 0; %median(y_grid);
+% z_mid = 0; %median(z_grid);
+% 
+% % bounds and ticks
+% xlim1 = [-20 20]; dx1 = 4;
+% ylim1 = [-20 20]; dy1 = 4;
+% xlim2 = [-40 40]; dx2 = 8;
+% ylim2 = [-40 40]; dy2 = 8;
+% zlim = [-40 40];  dz = 8;
+% 
+% % shade in background
+% % fill(ax6,[-2000,2000,2000,-2000,-2000],[-2000,-2000,2000,2000,-2000],col(1,:))
+% ang = [0:0.1:2*pi];
+% %X-Y
+% % contourf(ax6,Xgrd(:,:,Iz_max)-x_mid,Ygrd(:,:,Iz_max)-y_mid,P(:,:,Iz_max),'linestyle','none');
+% % shading(ax1,'flat');
+% contour(ax6,Xgrd(:,:,Iz_max)-x_mid,Ygrd(:,:,Iz_max)-y_mid,P(:,:,Iz_max),[[0.05 0.05],[0.32 0.32]],'-k','linewidth',3); hold on;
+% h6(1) = plot(ax6,Xgrd(Ix_max,Iy_max,Iz_max)-x_mid,Ygrd(Ix_max,Iy_max,Iz_max)-y_mid,'pk','markerfacecolor',clr(1,:),'markersize',21,'linewidth',1)
+% set(ax6,'fontsize',16,'linewidth',1.5,'box','on','layer','top',...
+%     'xlim',xlim1,'ylim',ylim1,'xtick',[xlim1(1):dx1:xlim1(2)],'ytick',[ylim1(1):dy1:ylim1(2)],'TickDir','out');
+% xlabel(ax6,'$\delta$X (m)','fontsize',18,'interpreter','latex');
+% ylabel(ax6,'$\delta$Y (m)','fontsize',18,'interpreter','latex');
+% % title(ax6,'\textbf{X-Y}','fontsize',18,'interpreter','latex');
+% % average values
+% htx1 = text(ax6,xlim1(1)+0.04*diff(axlim(ax1,1:2)),ylim1(1)+0.02*diff(axlim(ax1,3:4)),...
+%     sprintf('$\\mathbf{\\bar{x}}$\\textbf{ = %.1f m}',x_mid),'color','white','interpreter','latex','fontsize',17);
+% hty1 = text(ax6,xlim1(1)+0.04*diff(axlim(ax1,1:2)),ylim1(1)+0.01*diff(axlim(ax1,3:4)),...
+%     sprintf('$\\mathbf{\\bar{y}}$\\textbf{ = %.1f m}',y_mid),'color','white','interpreter','latex','fontsize',17);
+% % axis equal;
+% 
+% % Add on the true location for comparison
+% % plot the true location on the F-test plot in each dimension
+% h6(3) = plot(ax6,trudata.obs_location_xyz(1)*1e3 - x_mid,trudata.obs_location_xyz(2)*1e3 - y_mid,'p',...
+%     'markerfacecolor',trucol,'markeredgecolor','k','linewidth',1,'markersize',20);
+% 
+% % Plot SIO result
+% h6(2) = plot(ax6,x_sta(8) - x_mid,y_sta(8) - y_mid,'pk','MarkerFaceColor',clr(8,:),'markersize',21,'linewidth',1);
+% 
+% % expand bounds and ticks if needed to include SIO station
+%     set(ax6,'xlim',[min([x_grid,x_sta(8)-5]),max([x_grid,x_sta(8)+5])],...
+%             'ylim',[min([y_grid,y_sta(8)-5]),max([y_grid,y_sta(8)+5])])
+%     xlim(ax6,[160 220]);
+%     ylim(ax6,[-420 -360]);
+%     dtick = [1,2,4,5,10,20,40,50,100];
+%     dtickx = dtick(mindex(abs((axlim(ax6,2)-axlim(ax6,1))/7 - dtick)));
+%     dticky = dtick(mindex(abs((axlim(ax6,4)-axlim(ax6,3))/7 - dtick)));
+%     set(ax6,'xtick',[-1000:dtickx:1000],'xticklabel',[-1000:dtickx:1000],...
+%             'ytick',[-1000:dticky:1000],'yticklabel',[-1000:dticky:1000]);
+%     % kill text
+%     delete([htx1,hty1])
+%     % plot range
+%     x12 = [x_sta(8),trudata.obs_location_xyz(1)*1e3];
+%     y12 = [y_sta(8),trudata.obs_location_xyz(2)*1e3];
+%     %dxy
+%     plot(ax6,x12,y12,'-','Color',clr(8,:),'linewidth',2);
+%     text(ax6,mean(x12),mean(y12),num2str(sqrt(diff(x12).^2 + diff(y12).^2),'%.1f m'),...
+%         'fontsize',14,'color',clr(8,:),'fontweight','bold',...
+%         'rotation',atand(vertexag(ax6)*diff(y12)/diff(x12)),...
+%         'horizontalalignment','center','verticalalignment','top')
+%     
+%     % plot range
+%     x12 = [x_sta(1),trudata.obs_location_xyz(1)*1e3];
+%     y12 = [y_sta(1),trudata.obs_location_xyz(2)*1e3];
+%     %dxy
+%     plot(ax6,x12,y12,'-','Color',clr(1,:),'linewidth',2);
+%     text(ax6,mean(x12-2),mean(y12-2),num2str(sqrt(diff(x12).^2 + diff(y12).^2),'%.1f m'),...
+%         'fontsize',14,'color',[0.4 0.4 0.4],'fontweight','bold',...
+%         'rotation',atand(vertexag(ax6)*diff(y12)/diff(x12)),...
+%         'horizontalalignment','center','verticalalignment','top')
+%     
+%     legend(ax6,h6,{xlabels{1},xlabels{8},'True'},'fontsize',15,'location','southwest','box','off');
+% 
+% %% RESIDUALS
+% plot(ax7,[0 360],[0 0],'--k','linewidth',1.5);
+% h1(1) = plot(ax7,trudata.survaz(~isnan(trudata.data.tot_dt)),dtwt(:,1)*1000,'ok','markersize',10,'MarkerFaceColor',clr(1,:),'linewidth',1); hold on;
+% h1(2) = plot(ax7,trudata.survaz(~isnan(trudata.data.tot_dt)),dtwt(:,8)*1000,'ok','markersize',10,'MarkerFaceColor',clr(8,:),'linewidth',1); hold on;
+% % plot(ax7,trudata.survaz(~isnan(trudata.data.tot_dt)),dtwt(:,1)*1000-dtwt(:,3)*1000,'ok','markersize',10,'MarkerFaceColor',[0 0 1],'linewidth',1); hold on;
+% % rms(dtwt(:,1)*1000-dtwt(:,3)*1000)
+% % max(dtwt(:,1)*1000-dtwt(:,3)*1000)-min(dtwt(:,1)*1000-dtwt(:,3)*1000)
+% xlim(ax7,[0 360]);
+% ylim(ax7,[-50 20]);
+% xlabel(ax7,'Ship azimuth ($^\circ$)','fontsize',18,'interpreter','latex');
+% ylabel(ax7,'$\delta$TWT (ms)','fontsize',18,'interpreter','latex');
+% set(ax7,'fontsize',16,'box','on','linewidth',1.5)
+% legend(ax7,h1,{xlabels{1},xlabels{8}},'fontsize',15,'location','southeast','box','off');
+% 
+% 
+% % l = legend(h,lgd,'position',[0.8 0.05 0.1852 0.95],'interpreter','none','fontsize',14,'box','off');
 
 %% Figure numbers
 x = 0.015;
@@ -410,3 +364,5 @@ if ifsave
 end
 
 end
+
+

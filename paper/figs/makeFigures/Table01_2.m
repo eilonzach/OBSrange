@@ -4,7 +4,7 @@ function Table01
 ofile = '../Table01';
 ifsave = 0;
 
-caption = 'Details of the synthetic tests from Figure 5. Final model parameters are the median of 1000 bootstrap iterations and are omitted if held fixed during the inversion. Parameters $x$ and $y$ are displayed as distance from the drop location.';
+caption = 'Details of the synthetic tests in Figure 5. Final model parameters for OBSrange inversions are the average of 1000 bootstrap iterations and are omitted if held fixed during the inversion. Parameters $x$ and $y$ are displayed as distance from the drop location.';
 
 %% load 
 data_dirs = {
@@ -35,10 +35,10 @@ xlabels = {
     'OBSrange';
     'No Doppler';
     'No Ellipsoid';
-    'X, Y, Z, $\mathbf{V_p}$';
-    'X, Y, Z, $\mathbf{\tau}$';
-    'X, Y, $\mathbf{\tau}$, $\mathbf{V_p}$';
-    'X, Y';
+    'XYZ$\mathbf{V_p}$';
+    'XYZ$\mathbf{\tau}$';
+    'XY$\mathbf{\tau V_p}$';
+    'XY';
     'SIOgs';
     'SIOgs no QC';
     };
@@ -100,13 +100,13 @@ for ii = 1:size(info,1)
 end
         
 method = {
-    'Newton''s';
-    'Newton''s';
-    'Newton''s';
-    'Newton''s';
-    'Newton''s';
-    'Newton''s';
-    'Newton''s';
+    'OBSrange';
+    'OBSrange';
+    'OBSrange';
+    'OBSrange';
+    'OBSrange';
+    'OBSrange';
+    'OBSrange';
     'Grid Search';
     'Grid Search';
     };
@@ -208,7 +208,7 @@ end
 fprintf(fid,'\\hline\n');
 fprintf(fid,'\\end{tabular}\n');
 fprintf(fid,'}\n'); % shrink to page width
-fprintf(fid,'\\label{table:Table01}\n');
+fprintf(fid,'\\label{table:compare_tool}\n');
 fprintf(fid,'\\end{table}\n');
 
 fclose(fid);

@@ -37,14 +37,14 @@
 %% Comparison to previous tools
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure05.pdf}
-\caption{ Synthetic test of OBSrange performance (gray symbols) compared with the SIO tool (red symbols) for a \textit{PACMAN} survey of radius 1 Nm. a) Map view comparing the OBSrange and SIO inverted instrument locations with the true location in green. Black contours show the 68\% and 95\% confidence from the F-test. b) Two-way time (TWT) residuals for both methods as a function of ship azimuth from the true station location. c) TWT and d--g) model parameter RMS misfits for 9 inversions, where closed symbols represent parameters that are solved for in the inversion and open symbols are parameters that remain fixed throughout the inversion. The mislocation in $x$--$y$ is given by $\delta r_{xy} = \sqrt{\delta x_{O}^2 + \delta y_{O}^2} $. Stars in c--g mark the inversions shown in a) and b). See table 1 for details of the 9 inversions.}
+\caption{ Synthetic test of OBSrange performance (gray symbols) compared with the SIO tool (red symbols) for a \textit{PACMAN} survey of radius 1 Nm. a) Map view comparing the OBSrange and SIO inverted instrument locations with the true location in green. Black contours show the 68\% and 95\% confidence from the F-test. b) Two-way travel time (TWT) residuals for both methods as a function of ship azimuth from the true station location. c) TWT and d--g) model parameter RMS misfits for 9 inversions, where closed symbols represent parameters that are solved for in the inversion and open symbols are parameters that remain fixed throughout the inversion. The horizontal instrument location misfit given by $\delta r_{xy} = \sqrt{\delta x_{O}^2 + \delta y_{O}^2} $. Stars in c--g mark the inversions shown in a) and b). See table~\ref{table:compare_tool} for details of each inversion.}
 \label{fig:compare_tool}
 \end{figure}
 
 %% Exploring survey geometries
 \begin{figure}[h]
-\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure06.pdf}
-\caption{ Model parameter RMS misfits for 6 synthetic survey geometries of varying radii: \textit{PACMAN}, circle, cross, diamond, line, and triangle. Each survey geometry is shown to the left of its respective legend entry. Panels show the RMS misfit for each model parameter and survey type for 10,000 synthetic survey realizations, where the mislocation in $x$--$y$ is given by $\delta r_{xy} = \sqrt{\delta x_{O}^2 + \delta y_{O}^2} $. We find that model parameters are most accurately recovered using the \textit{PACMAN} survey pattern with radius $\geq$1 Nm, and the line surveys perform worst. }
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure06_mean.pdf}
+\caption{ Model parameter RMS misfits for 6 synthetic survey geometries of varying radii: \textit{PACMAN}, circle, cross, diamond, line, and triangle. Each survey geometry is shown to the left of its respective legend entry. The left column shows the mean misfit and right column show the RMS misfit for each model parameter for 10,000 synthetic survey realizations for each survey type, where horizontal instrument location misfit is given by $\delta r_{xy} = \sqrt{\delta x_{O}^2 + \delta y_{O}^2} $. We find that model parameters are most accurately recovered using the \textit{PACMAN} survey pattern with radius $\geq$1 Nm, and the line surveys perform worst. }
 \label{fig:survey_geom_explore}
 \end{figure}
 
