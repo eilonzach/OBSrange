@@ -5,6 +5,13 @@ function Figure06
 ofile = '../Figure06';
 ifsave = 1;
 
+x_rms = 100;
+y_rms = 100;
+rxy_rms = sqrt(x_rms^2+y_rms^2);
+z_rms = 50;
+TAT_rms = 3; % ms
+Vp_rms = 10;
+
 %% Load *.mat files
 files = dir('../figdata/mats_SynthBoot_summary/*.mat');
 
@@ -24,18 +31,24 @@ for ifil = 1:Nfils
     
     misfit_xsta(ifil,1) = data_summary.misfit_xsta;
     misfit_xsta_std(ifil,1) = data_summary.misfit_xsta_std;
+    misfit_xsta_mean(ifil,1) = abs(data_summary.misfit_xsta_mean);
     misfit_ysta(ifil,1) = data_summary.misfit_ysta;
     misfit_ysta_std(ifil,1) = data_summary.misfit_ysta_std;
+    misfit_ysta_mean(ifil,1) = abs(data_summary.misfit_ysta_mean);
     misfit_zsta(ifil,1) = data_summary.misfit_zsta;
     misfit_zsta_std(ifil,1) = data_summary.misfit_zsta_std;
+    misfit_zsta_mean(ifil,1) = abs(data_summary.misfit_zsta_mean);
     misfit_r_xy(ifil,1) = data_summary.misfit_r_xy;
     misfit_r_xy_std(ifil,1) = data_summary.misfit_r_xy_std;
+    misfit_r_xy_mean(ifil,1) = abs(data_summary.misfit_r_xy_mean);
     misfit_r_xyz(ifil,1) = data_summary.misfit_r_xyz;
     misfit_r_xyz_std(ifil,1) = data_summary.misfit_r_xyz_std;
     misfit_TAT(ifil,1) = data_summary.misfit_TAT;
     misfit_TAT_std(ifil,1) = data_summary.misfit_TAT_std;
+    misfit_TAT_mean(ifil,1) = abs(data_summary.misfit_TAT_mean);
     misfit_Vw(ifil,1) = data_summary.misfit_Vw;
     misfit_Vw_std(ifil,1) = data_summary.misfit_Vw_std;
+    misfit_Vw_mean(ifil,1) = abs(data_summary.misfit_Vw_mean);
     E_rms(ifil,1) = data_summary.E_rms;
     E_rms_std(ifil,1) = data_summary.E_rms_std;
     misfit_v_ship_all(1:2,ifil) = data_summary.misfit_v_ship_all;
@@ -77,33 +90,59 @@ ax4.Position = [ax4.Position(1), ax4.Position(2), ax4.Position(3), ax4.Position(
 
 markersize = 14;
 %clr = parula(Nfils);
-clr = [brewermap(7,'Blues'); brewermap(3,'Greys'); brewermap(2,'Greens'); brewermap(1,'Reds'); brewermap(2,'Purples'); brewermap(2,'RdPu')];
+
+purp = brewermap(3,'Purples');
+Nlines = 2;
+purp2 = brewermap(4,'Purples');
+clr = [brewermap(7,'Blues'); brewermap(3,'Greys'); brewermap(2,'Greens'); brewermap(1,'Reds'); purp(end-1:end,:); brewermap(2,'RdPu')];
+iline = 0;
 for ifil = 1:Nfils
+    if ifil==1
+        plot(ax1,[0 Nfils+1],[rxy_rms rxy_rms],'-','color',[0.7 0 0],'linewidth',1.5); hold on;
+    end
     h(ifil) = plot(ax1,ifil,misfit_r_xy(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
-    set(ax1,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[]);
-    ylabel(ax1,'$\mathbf{\delta r_{xy}\, (m)}$','fontsize',18,'Interpreter','latex')
+    if any(regexp(lgd{ifil},'line'))
+        iline = iline+1
+        plot(ax1,ifil,misfit_xsta(ifil),symbol{ifil},'markeredgecolor',purp2(end-(Nlines-iline),:),'markersize',markersize,'linewidth',2); hold on;
+    end
+    set(ax1,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[],'xtick',[],'TickLength',[0.01, 0.001]*3);
+%     ylabel(ax5,'$\mathbf{\delta r_{xy}\, (m)}$','fontsize',18,'Interpreter','latex')
     xlim(ax1,[0 Nfils+1]);   
     ylim(ax1,[1 max(misfit_r_xy)+10^(floor(log10(max(misfit_r_xy))))*10]);
-
-    plot(ax2,ifil,misfit_zsta(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
-    set(ax2,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[]);
-    ylabel(ax2,'$\mathbf{\delta Z\, (m)}$','fontsize',18,'Interpreter','latex')
-    xlim(ax2,[0 Nfils+1]);
-    ylim(ax2,[1 max(misfit_zsta)+10^(floor(log10(max(misfit_zsta))))*10]);
+    title(ax1,'\textbf{RMS}','interpreter','latex','fontsize',18);
+    yticks(ax1,[0.001 0.01 0.1 1 10 100 1000]);
     
+    if ifil==1
+        plot(ax2,[0 Nfils+1],[z_rms z_rms],'-','color',[0.7 0 0],'linewidth',1.5); hold on;
+    end
+    plot(ax2,ifil,misfit_zsta(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
+    set(ax2,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[],'xtick',[],'TickLength',[0.01, 0.001]*3);
+%     ylabel(ax6,'$\mathbf{\delta Z\, (m)}$','fontsize',18,'Interpreter','latex')
+    xlim(ax2,[0 Nfils+1]);
+    ylim(ax2,[4 max(misfit_zsta)+10^(floor(log10(max(misfit_zsta))))*2]);
+    yticks(ax2,[0.001 0.01 0.1 1 10 100 1000]);
+    
+    if ifil==1
+        plot(ax3,[0 Nfils+1],[TAT_rms TAT_rms],'-','color',[0.7 0 0],'linewidth',1.5); hold on;
+    end
     plot(ax3,ifil,misfit_TAT(ifil)*1000,symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
-    set(ax3,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[]);
-    ylabel(ax3,'{$\delta$\boldmath$\tau$ (\textbf{ms})}','fontsize',18,'Interpreter','latex')
+    set(ax3,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[],'xtick',[],'TickLength',[0.01, 0.001]*3);
+%     ylabel(ax7,'{$\delta$\boldmath$\tau$ (\textbf{ms})}','fontsize',18,'Interpreter','latex')
     xlim(ax3,[0 Nfils+1]);
-    ylim(ax3,[2.9 3.3]);
-
+    ylim(ax3,[2.9 3.25]);
+%     yticks(ax7,[0.001 0.01 0.1 1 10 100]);
+    
+    if ifil==1
+        plot(ax4,[0 Nfils+1],[Vp_rms Vp_rms],'-','color',[0.7 0 0],'linewidth',1.5); hold on;
+    end
     plot(ax4,ifil,misfit_Vw(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
-    set(ax4,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[]);
-    ylabel(ax4,'$\mathbf{\delta V_{P} \, (m/s)}$','fontsize',18,'Interpreter','latex')
+    set(ax4,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[],'xtick',[],'TickLength',[0.01, 0.001]*3);
+%     ylabel(ax8,'$\mathbf{\delta V_{P} \, (m/s)}$','fontsize',18,'Interpreter','latex')
     xlim(ax4,[0 Nfils+1]);
     ylim(ax4,[1 max(misfit_Vw)+10^(floor(log10(max(misfit_Vw))))]);
+    yticks(ax4,[0.001 0.01 0.1 1 10 100]);
     
-    % Make shape legend
+    %% Make shape legend
     dy = 0.958/(Nfils+0.25);
     ax(ifil) = axes('pos',[0.75 1-dy*ifil 0.05 0.05]);
     plot(ax(ifil),data_all(ifil).survx,data_all(ifil).survy,'-k','linewidth',1.5); hold on;

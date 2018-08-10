@@ -40,31 +40,46 @@ for ifil = 1:Nfils
     data_summary.survy = data(1).survy;
     data_summary.survey = data(1).survey;
     data_summary.radius = data(1).radius;
-    
-    data_summary.TAT = data(1).TAT
-    
+        
     
     data_summary.misfit_xsta = rms(data(1).misfit_xsta);
     data_summary.misfit_xsta_std = std(data(1).misfit_xsta);
     data_summary.misfit_xsta_mean = mean(data(1).misfit_xsta);
+    data_summary.misfit_xsta_absmean = mean(abs(data(1).misfit_xsta));
+    data_summary.misfit_xsta_absmed = median(abs(data(1).misfit_xsta));
+    data_summary.misfit_xsta_med = median(data(1).misfit_xsta);
     data_summary.misfit_ysta = rms(data(1).misfit_ysta);
     data_summary.misfit_ysta_std = std(data(1).misfit_ysta);
     data_summary.misfit_ysta_mean = mean(data(1).misfit_ysta);
+    data_summary.misfit_ysta_med = median(data(1).misfit_ysta);
+    data_summary.misfit_ysta_absmean = mean(abs(data(1).misfit_ysta));
+    data_summary.misfit_ysta_absmed = median(abs(data(1).misfit_ysta));
     data_summary.misfit_zsta = rms(data(1).misfit_zsta);
     data_summary.misfit_zsta_std = std(data(1).misfit_zsta);
     data_summary.misfit_zsta_mean = mean(data(1).misfit_zsta);
+    data_summary.misfit_zsta_absmean = mean(abs(data(1).misfit_zsta));
+    data_summary.misfit_zsta_absmed = median(abs(data(1).misfit_zsta));
+    data_summary.misfit_zsta_med = median(data(1).misfit_zsta);
     data_summary.misfit_r_xy = rms(data(1).misfit_r_xy);
     data_summary.misfit_r_xy_std = std(data(1).misfit_r_xy);
     data_summary.misfit_r_xy_mean = mean(data(1).misfit_r_xy);
+    data_summary.misfit_r_xy_med = median(data(1).misfit_r_xy);
     data_summary.misfit_r_xyz = rms(data(1).misfit_r_xyz);
     data_summary.misfit_r_xyz_std = std(data(1).misfit_r_xyz);
     data_summary.misfit_r_xyz_mean = mean(data(1).misfit_r_xyz);
+    data_summary.misfit_r_xyz_med = median(data(1).misfit_r_xyz);
     data_summary.misfit_TAT = rms(data(1).misfit_TAT);
     data_summary.misfit_TAT_std = std(data(1).misfit_TAT);
     data_summary.misfit_TAT_mean = mean(data(1).misfit_TAT);
+    data_summary.misfit_TAT_absmean = mean(abs(data(1).misfit_TAT));
+    data_summary.misfit_TAT_absmed = median(abs(data(1).misfit_TAT));
+    data_summary.misfit_TAT_med = median(data(1).misfit_TAT);
     data_summary.misfit_Vw = rms(data(1).misfit_Vw);
     data_summary.misfit_Vw_std = std(data(1).misfit_Vw);
     data_summary.misfit_Vw_mean = mean(data(1).misfit_Vw);
+    data_summary.misfit_Vw_absmean = mean(abs(data(1).misfit_Vw));
+    data_summary.misfit_Vw_absmed = median(abs(data(1).misfit_Vw));
+    data_summary.misfit_Vw_med = median(data(1).misfit_Vw);
     data_summary.E_rms = mean(data(1).E_rms);
     data_summary.E_rms_std = std(data(1).E_rms);
     data_summary.misfit_v_ship_all = mean(data(1).misfit_v_ship_all,2);
@@ -73,8 +88,13 @@ for ifil = 1:Nfils
     data_summary.misfit_dtwtcorr_all_std = std(data(1).misfit_dtwtcorr_all);
     data_summary.dtwt_all = rms(data(1).dtwt_all);
     data_summary.dtwt_all_std = std(data(1).dtwt_all);
-    data_summary.R_mat = data(1).R_mat;
-    data_summary.Cm_mat = data(1).Cm_mat;
+    
+    for ii = 1:length(data)
+        R_mats(:,:,ii) = data(ii).R_mat;
+        Cm_mats(:,:,ii) = data(ii).Cm_mat;
+    end % loop on synth stations
+    data_summary.R_mat = mean(R_mats,3);
+    data_summary.Cm_mat = mean(Cm_mats,3);
     
     %% Save summary mat files
     if ~exist([outdir,'/mats_SynthBoot_summary/'])

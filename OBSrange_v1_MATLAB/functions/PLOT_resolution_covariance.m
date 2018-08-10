@@ -2,6 +2,8 @@
     f103 = figure(103); clf;
     set(gcf,'position',[91   260   829   438]);
     cmap = cmocean('balance');
+    cmap_R = flip(gray);
+    [ExpSigma,C_mat] = cov2corr(Cm_mat(:,:,1));
     
     ax1 = subplot(1,2,1);
     ax1Pos = ax1.Position;
@@ -18,13 +20,13 @@
         'YTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','{\boldmath$\tau$}','$\mathbf{V_{P}}$'});
     title(ax1,'\textbf{Model Resolution}','fontsize',18,'Interpreter','latex');
     cb1 = colorbar(ax1);
-    colormap(cmap)
+    colormap(ax1,cmap_R)
 %     caxis([-max(max(abs(mean(RR,3)))) max(max(abs(mean(RR,3))))]);
-    caxis([-1 1]);
+    caxis([0 1]);
     
     ax2 = subplot(1,2,2);
     ax2Pos = ax2.Position;
-    imagesc(ax2,sign(Cm_mat(:,:,1)).*log10(abs(Cm_mat(:,:,1)))); hold on;
+    imagesc(ax2,C_mat(:,:,1)); hold on;
     for i = 1:5
         plot([.5,5.5],[i-.5,i-.5],'k-','linewidth',2);
         plot([i-.5,i-.5],[.5,5.5],'k-','linewidth',2);
@@ -36,9 +38,8 @@
         'YTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','{\boldmath$\tau$}','$\mathbf{V_{P}}$'});
     title(ax2,'\textbf{Model Covariance}','fontsize',18,'Interpreter','latex');
     cb2 = colorbar(ax2);
-    ylabel(cb2,'$\log_{10}(C_m)$','fontsize',16,'Interpreter','latex');
-    colormap(cmap)
-    caxis([-max(max(log10(abs(Cm_mat(:,:,1))))) max(max(log10(abs(Cm_mat(:,:,1)))))])
+    colormap(ax2,cmap)
+    caxis([-1 1])
     
 %     tk = logspace(0,8,20);
 %     cmap = parula(19);
