@@ -103,6 +103,23 @@ where $\mathbf{F}_{\text{inv}}= \left[ \mathbf{F}^{\text{T}} \mathbf{F} + \epsil
 
 Some care is required in implementing this grid search. Since $z_O$ covaries with $V_P$, varying $z_O$ quickly leads to large errors in data prediction as $|z_O^{\prime}-z_{O_{\text{best}}}|$ increases if one holds $V_P$ fixed. As a result, it appears as if the gradient in the error surface is very sharp in the $z$ direction, implying this parameter is very well resolved; in fact, the opposite is true. We find the empirical covariance of $z_O$, $V_P$, and $\tau$ by performing principal component analysis on the bootstrap model solutions. We then use the largest eigenvector to project perturbations in $z_O$ within the grid search onto the other two parameters, adjusting them appropriately as we progress through the grid search. 
 
+\subsection{Model resolution and trade-offs}
+In order to quantitatively compare various survey configurations and assess their ability to recover the true model parameters, we calculate the model resolution, $\mathbf{R}$, and correlation, $\mathbf{C}$, matrices. Given the augmented data kernel, $\mathbf{F}$, the $M \times M$ model resolution matrix is given by:
+\begin{equation}
+\mathbf{R} = \mathbf{F}_{\text{inv}} \mathbf{F} \,.
+\end{equation}
+The resolution matrix depends only on the data kernel and therefore, is independent of the data themselves but reflects strongly the chosen survey geometry. Each model parameter is independently resolved when $\mathbf{R}=\mathbf{I}$. Since perfect resolution occurs when $\mathbf{R}$ is equal to the identity matrix, off-diagonal elements (or "spread") indicate poor model resolution and trade-offs between the respective parameters. The spread of the model resolution matrix is defined as the squared $L_2$ norm of the difference between $\mathbf{R}$ and the identity matrix \citep{William:2012vh}:
+\begin{equation}
+\text{spread}(\mathbf{R}) = \sum_{i=1}^M\sum_{j=1}^M \left[ R_{ij}-\delta_{ij}\right]^2 \,,
+\end{equation}
+where $\delta_{ij}$ is the Dirac delta function. Therefore, model resolution is perfect when $\text{spread}(\mathbf{R})=0$.
+
+The model correlation matrix (or unit covariance matrix), $\mathbf{C}$, describes the mapping of error between model parameters. Given the covariance matrix $\mathbf{\Sigma}_{\text{m}} = \mathbf{F}_{\text{inv}} \mathbf{F}_{\text{inv}}^{\text{T}}$, the correlation matrix is defined as:
+\begin{equation}
+\mathbf{C} = \mathbf{D}^{-1}\mathbf{\Sigma}_{\text{m}}\mathbf{D}^{-1} \,,
+\end{equation}
+where $\mathbf{D} = \text{diag}(\mathbf{\Sigma}_{\text{m}})^{1/2}$ is the diagonal matrix of model parameter standard deviations.
+
 
 
 

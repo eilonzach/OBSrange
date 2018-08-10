@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  9 AUG 2018 11:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  9 AUG 2018 20:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -315,37 +315,53 @@ Overfull \hbox (27.33388pt too wide) has occurred while \output is active
 OTTOM SEISMOMETERS []
  []
 
-[3]) (./sections/results.tex [4]
+[3] [4]
+
+Package natbib Warning: Citation `William:2012vh' on page 5 undefined on input 
+line 111.
+
+
+Overfull \hbox (9.36215pt too wide) in paragraph at lines 114--116
+\OT1/cmr/m/n/10.95 where $\OML/cmm/m/it/10.95 ^^N[]$ \OT1/cmr/m/n/10.95 is the 
+Dirac delta func-tion. There-fore, model res-o-lu-tion is per-fect when $[](\OT
+1/cmr/bx/n/10.95 R\OT1/cmr/m/n/10.95 ) =
+ []
+
+) (./sections/results.tex
+Overfull \hbox (27.33388pt too wide) has occurred while \output is active
+ \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
+OTTOM SEISMOMETERS []
+ []
+
+[5] [6]
+
+LaTeX Warning: Reference `fig:meso_eddy' on page 7 undefined on input line 21.
+
+
+Overfull \hbox (27.33388pt too wide) has occurred while \output is active
+ \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
+OTTOM SEISMOMETERS []
+ []
+
+[7]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
+ [8])
+(./sections/discussion.tex) (./sections/conclusion.tex)
 Overfull \hbox (27.33388pt too wide) has occurred while \output is active
  \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
 OTTOM SEISMOMETERS []
  []
 
-[5]
-
-LaTeX Warning: Reference `fig:meso_eddy' on page 6 undefined on input line 21.
-
-[6]
-Underfull \vbox (badness 1052) has occurred while \output is active []
-
-
-Overfull \hbox (27.33388pt too wide) has occurred while \output is active
- \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
-OTTOM SEISMOMETERS []
- []
-
-[7]) (./sections/discussion.tex) (./sections/conclusion.tex) [8]
-(./sections/figures.tex <./figs/Figure01.pdf, id=42, 1212.53pt x 799.98875pt>
+[9] (./sections/figures.tex
+<./figs/Figure01.pdf, id=45, 1212.53pt x 799.98875pt>
 File: ./figs/Figure01.pdf Graphic file (type pdf)
 
 <use ./figs/Figure01.pdf>
 Package pdftex.def Info: ./figs/Figure01.pdf used on input line 3.
 (pdftex.def)             Requested size: 430.00462pt x 283.69893pt.
 
-<./figs/Figure02.pdf, id=44, 1112.155pt x 799.98875pt>
+<./figs/Figure02.pdf, id=47, 1112.155pt x 799.98875pt>
 File: ./figs/Figure02.pdf Graphic file (type pdf)
 
 <use ./figs/Figure02.pdf>
@@ -355,7 +371,7 @@ Package pdftex.def Info: ./figs/Figure02.pdf used on input line 10.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./figs/Figure03.pdf, id=46, 1212.53pt x 699.61375pt>
+<./figs/Figure03.pdf, id=49, 1212.53pt x 699.61375pt>
 File: ./figs/Figure03.pdf Graphic file (type pdf)
 
 <use ./figs/Figure03.pdf>
@@ -365,7 +381,7 @@ Package pdftex.def Info: ./figs/Figure03.pdf used on input line 17.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./figs/Figure04.pdf, id=48, 1212.53pt x 397.485pt>
+<./figs/Figure04.pdf, id=51, 1212.53pt x 397.485pt>
 File: ./figs/Figure04.pdf Graphic file (type pdf)
  <use ./figs/Figure04.pdf>
 Package pdftex.def Info: ./figs/Figure04.pdf used on input line 24.
@@ -374,7 +390,7 @@ Package pdftex.def Info: ./figs/Figure04.pdf used on input line 24.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./figs/Figure05.pdf, id=50, 894.34125pt x 706.64pt>
+<./figs/Figure05.pdf, id=53, 894.34125pt x 706.64pt>
 File: ./figs/Figure05.pdf Graphic file (type pdf)
  <use ./figs/Figure05.pdf>
 Package pdftex.def Info: ./figs/Figure05.pdf used on input line 39.
@@ -383,7 +399,7 @@ Package pdftex.def Info: ./figs/Figure05.pdf used on input line 39.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./figs/Figure06_mean.pdf, id=52, 921.4425pt x 699.61375pt>
+<./figs/Figure06_mean.pdf, id=55, 921.4425pt x 699.61375pt>
 File: ./figs/Figure06_mean.pdf Graphic file (type pdf)
 
 <use ./figs/Figure06_mean.pdf>
@@ -393,13 +409,17 @@ Package pdftex.def Info: ./figs/Figure06_mean.pdf used on input line 46.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-)
-Overfull \hbox (27.33388pt too wide) has occurred while \output is active
- \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
-OTTOM SEISMOMETERS []
- []
+<./figs/Figure07.pdf, id=57, 713.66624pt x 427.5975pt>
+File: ./figs/Figure07.pdf Graphic file (type pdf)
 
-[9 <./figs/Figure01.pdf>] (./sections/tables.tex (./figs/Table01.tex
+<use ./figs/Figure07.pdf>
+Package pdftex.def Info: ./figs/Figure07.pdf used on input line 53.
+(pdftex.def)             Requested size: 430.00462pt x 257.63704pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) [10 <./figs/Figure01.pdf>] (./sections/tables.tex (./figs/Table01.tex
 
 LaTeX Warning: Float too large for page by 54.25449pt on input line 57.
 
@@ -407,34 +427,40 @@ LaTeX Warning: Float too large for page by 54.25449pt on input line 57.
 
 Package natbib Warning: There were undefined citations.
 
-[10 <./figs/Figure02.pdf>]
+
 Overfull \hbox (27.33388pt too wide) has occurred while \output is active
  \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
 OTTOM SEISMOMETERS []
  []
 
-[11 <./figs/Figure03.pdf>] [12 <./figs/Figure04.pdf>]
+[11 <./figs/Figure02.pdf>] [12 <./figs/Figure03.pdf>]
 Overfull \hbox (27.33388pt too wide) has occurred while \output is active
  \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
 OTTOM SEISMOMETERS []
  []
 
-[13 <./figs/Figure05.pdf>] [14 <./figs/Figure06_mean.pdf>]
+[13 <./figs/Figure04.pdf>] [14 <./figs/Figure05.pdf>]
 Overfull \hbox (27.33388pt too wide) has occurred while \output is active
  \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
 OTTOM SEISMOMETERS []
  []
 
-[15] (./OBS_locate_paper.aux)
+[15 <./figs/Figure06_mean.pdf>] [16 <./figs/Figure07.pdf>]
+Overfull \hbox (27.33388pt too wide) has occurred while \output is active
+ \OT1/cmr/m/n/8 OBSRANGE: A NEW TOOL FOR THE PRECISE REMOTE LOCATION OF OCEAN B
+OTTOM SEISMOMETERS []
+ []
+
+[17] (./OBS_locate_paper.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 3762 strings out of 493089
- 49516 string characters out of 6134842
- 158768 words of memory out of 5000000
- 6996 multiletter control sequences out of 15000+600000
+ 3769 strings out of 493089
+ 49684 string characters out of 6134842
+ 159467 words of memory out of 5000000
+ 7002 multiletter control sequences out of 15000+600000
  14955 words of font info for 55 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  42i,16n,31p,1478b,256s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -454,10 +480,10 @@ xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texli
 ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texliv
 e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/
 2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on OBS_locate_paper.pdf (15 pages, 1146465 bytes).
+Output written on OBS_locate_paper.pdf (17 pages, 1322184 bytes).
 PDF statistics:
- 356 PDF objects out of 1000 (max. 8388607)
- 298 compressed objects within 3 object streams
+ 389 PDF objects out of 1000 (max. 8388607)
+ 316 compressed objects within 4 object streams
  0 named destinations out of 1000 (max. 500000)
- 67 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 78 words of extra memory for PDF output out of 10000 (max. 10000000)
 

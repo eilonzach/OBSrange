@@ -41,6 +41,8 @@ for ifil = 1:Nfils
     data_summary.survey = data(1).survey;
     data_summary.radius = data(1).radius;
     
+    data_summary.TAT = data(1).TAT
+    
     
     data_summary.misfit_xsta = rms(data(1).misfit_xsta);
     data_summary.misfit_xsta_std = std(data(1).misfit_xsta);

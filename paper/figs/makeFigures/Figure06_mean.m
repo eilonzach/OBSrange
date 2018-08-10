@@ -5,6 +5,13 @@ function Figure06
 ofile = '../Figure06_mean';
 ifsave = 1;
 
+x_rms = 100;
+y_rms = 100;
+rxy_rms = sqrt(x_rms^2+y_rms^2);
+z_rms = 50;
+TAT_rms = 3; % ms
+Vp_rms = 10;
+
 %% Load *.mat files
 files = dir('../figdata/mats_SynthBoot_summary/*.mat');
 
@@ -24,8 +31,10 @@ for ifil = 1:Nfils
     
     misfit_xsta(ifil,1) = data_summary.misfit_xsta;
     misfit_xsta_std(ifil,1) = data_summary.misfit_xsta_std;
+    misfit_xsta_mean(ifil,1) = abs(data_summary.misfit_xsta_mean);
     misfit_ysta(ifil,1) = data_summary.misfit_ysta;
     misfit_ysta_std(ifil,1) = data_summary.misfit_ysta_std;
+    misfit_ysta_mean(ifil,1) = abs(data_summary.misfit_ysta_mean);
     misfit_zsta(ifil,1) = data_summary.misfit_zsta;
     misfit_zsta_std(ifil,1) = data_summary.misfit_zsta_std;
     misfit_zsta_mean(ifil,1) = abs(data_summary.misfit_zsta_mean);
@@ -129,6 +138,9 @@ for ifil = 1:Nfils
     yticks(ax4,[0.001 0.01 0.1 1 10 100]);
 
     %% RMS
+    if ifil==1
+        plot(ax5,[0 Nfils+1],[x_rms x_rms],'-','color',[0.7 0 0],'linewidth',1.5); hold on;
+    end
     h(ifil) = plot(ax5,ifil,misfit_r_xy(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
     set(ax5,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[],'xtick',[],'TickLength',[0.01, 0.001]*3);
 %     ylabel(ax5,'$\mathbf{\delta r_{xy}\, (m)}$','fontsize',18,'Interpreter','latex')
@@ -136,7 +148,10 @@ for ifil = 1:Nfils
     ylim(ax5,[1 max(misfit_r_xy)+10^(floor(log10(max(misfit_r_xy))))*10]);
     title(ax5,'\textbf{RMS}','interpreter','latex','fontsize',18);
     yticks(ax5,[0.001 0.01 0.1 1 10 100 1000]);
-
+    
+    if ifil==1
+        plot(ax6,[0 Nfils+1],[z_rms z_rms],'-','color',[0.7 0 0],'linewidth',1.5); hold on;
+    end
     plot(ax6,ifil,misfit_zsta(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
     set(ax6,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[],'xtick',[],'TickLength',[0.01, 0.001]*3);
 %     ylabel(ax6,'$\mathbf{\delta Z\, (m)}$','fontsize',18,'Interpreter','latex')
@@ -144,13 +159,19 @@ for ifil = 1:Nfils
     ylim(ax6,[4 max(misfit_zsta)+10^(floor(log10(max(misfit_zsta))))*2]);
     yticks(ax6,[0.001 0.01 0.1 1 10 100 1000]);
     
+    if ifil==1
+        plot(ax7,[0 Nfils+1],[TAT_rms TAT_rms],'-','color',[0.7 0 0],'linewidth',1.5); hold on;
+    end
     plot(ax7,ifil,misfit_TAT(ifil)*1000,symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
     set(ax7,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[],'xtick',[],'TickLength',[0.01, 0.001]*3);
 %     ylabel(ax7,'{$\delta$\boldmath$\tau$ (\textbf{ms})}','fontsize',18,'Interpreter','latex')
     xlim(ax7,[0 Nfils+1]);
     ylim(ax7,[2.9 3.25]);
 %     yticks(ax7,[0.001 0.01 0.1 1 10 100]);
-
+    
+    if ifil==1
+        plot(ax8,[0 Nfils+1],[Vp_rms Vp_rms],'-','color',[0.7 0 0],'linewidth',1.5); hold on;
+    end
     plot(ax8,ifil,misfit_Vw(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
     set(ax8,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[],'xtick',[],'TickLength',[0.01, 0.001]*3);
 %     ylabel(ax8,'$\mathbf{\delta V_{P} \, (m/s)}$','fontsize',18,'Interpreter','latex')
