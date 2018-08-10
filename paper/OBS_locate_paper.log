@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  10 AUG 2018 12:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  10 AUG 2018 18:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -459,7 +459,7 @@ LaTeX Warning: There were undefined references.
 Here is how much of TeX's memory you used:
  3769 strings out of 493089
  49684 string characters out of 6134842
- 159689 words of memory out of 5000000
+ 159708 words of memory out of 5000000
  7002 multiletter control sequences out of 15000+600000
  14955 words of font info for 55 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
@@ -480,7 +480,7 @@ xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texli
 ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texliv
 e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/
 2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on OBS_locate_paper.pdf (17 pages, 1321105 bytes).
+Output written on OBS_locate_paper.pdf (17 pages, 1316149 bytes).
 PDF statistics:
  389 PDF objects out of 1000 (max. 8388607)
  316 compressed objects within 4 object streams

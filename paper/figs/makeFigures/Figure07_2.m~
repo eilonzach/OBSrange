@@ -5,10 +5,11 @@ function Figure07
 ofile = '../Figure07';
 ifsave = 1;
 
+projname = 'mats_SynthBoot_summary';
+
 files = {
         'SynthBoot_PACMAN_rad1.00_OUT.mat';
-        'SynthBoot_PACMAN_rad1.50_OUT.mat';
-        'SynthBoot_circle_rad1.00_OUT.mat';
+        'SynthBoot_tri_center_rad1.00_OUT.mat';
         'SynthBoot_line_rad1.00_OUT.mat';
          };
      
@@ -23,7 +24,7 @@ titles = {
 
 Nfils = length(files);
 for ifil = 1:Nfils
-    load(['../figdata/mats_SynthBoot_summary/',files{ifil}]);
+    load(['../figdata/',projname,'/',files{ifil}]);
     
     data_all(ifil).x_ship = data_summary.x_ship;
     data_all(ifil).y_ship = data_summary.y_ship;
@@ -60,7 +61,7 @@ for ifil = 1:Nfils
     R_mat{ifil} = data_summary.R_mat;
     Cm_mat{ifil} = data_summary.Cm_mat;
     
-    [ExpSigma,Cm_mat{ifil}] = cov2corr(Cm_mat{ifil});
+    [ExpSigma,C_mat{ifil}] = cov2corr(Cm_mat{ifil});
     
 end
 
@@ -108,7 +109,7 @@ for ifil = 1:length(files)
     ax(ifil*2) = subplot(2,length(files),ifil+length(files));
     ax2Pos = ax(ifil*2).Position;
 %     imagesc(ax2,sign(Cm_mat{ifil}(:,:,1)).*log10(abs(Cm_mat{ifil}(:,:,1)))); hold on;
-    imagesc(ax(ifil*2),Cm_mat{ifil}(:,:,1)); hold on;
+    imagesc(ax(ifil*2),C_mat{ifil}(:,:,1)); hold on;
     for i = 1:5
         plot([.5,5.5],[i-.5,i-.5],'k-','linewidth',1.5);
         plot([i-.5,i-.5],[.5,5.5],'k-','linewidth',1.5);
