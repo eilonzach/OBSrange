@@ -46,10 +46,27 @@ The "Doppler" corrections ($\delta T$ in equation~(\ref{eq:forward})) applied to
 
 In order to evaluate which survey patterns are optimal for accurately locating instruments on the seafloor, we conducted 17 synthetic surveys of varying geometry and size. For these tests, we attempted to mimic real-world experimental uncertainty as closely as possible. Each parameter ($x$, $y$, $z$, $\tau$, $V_p$) was treated as a Gaussian random variable with a predetermined mean and standard deviation (see Section~\ref{Demonstration on synthetic data}). For each survey configuration, we applied our algorithm to 10,000 realizations drawn from these distributions in order to fully probe the limits of each survey type. Synthetic data were calculated in the same way as previous sections with $\sim$20\% of the data points randomly removed.
 
-The resulting mean and RMS misfits for each model parameter and survey are shown in Figure~\ref{fig:survey_geom_explore}. In general, the \textit{PACMAN} configuration performed better than the other survey geometries. Even at a small radius of 0.5~Nm, the instrument is recovered to within $\sim$6~m on average.
+The resulting mean and RMS misfits for each model parameter and survey are shown in Figure~\ref{fig:survey_geom_explore}. In general, the \textit{PACMAN} configuration performed better than the other survey geometries. Even at a relatively small radius of 0.5~Nm, the instrument was recovered to within $\sim$6~m on average.
 
-%All survey types do an equally poor job of recovering the turn-around time, as indicated by an RMS of $\sim$3~ms, equal to the standard deviation $\tau$ distribution.
-%
+% - Mean signed error (MSE): Tells us about bias in the inversion; Zero means there's no bias. They are ~0 for for all surveys except PACMAN0.1, PACMAN0.5, Circle, and Line (Actually circle 0.5 Nm isn't too bad for some reason). Largest tradeoffs are for depth (~100 m) and water velocity (~25 m/s) for circle arrays with opposite signs indicating tradeoffs (see Figure~7). Also significant biases in the mean for line surveys in y (100-200 m) and z (~60 m), but they don't appear to trade off.
+
+% - RMS increases with the increasing variance of frequency distribution of error magnitudes. 
+% - MAE increases with the increasing variance of error.
+% MAE = RMS for uniformly distributed errors (all errors are the same), otherwise RMS > MAE
+% RMS/MAE > 1 signifies outliers. The larger the ratio, the more outliers (think about using this ratio?)
+
+% For resolving horizontal location, all surveys do well except for line tests. Line geometries are completely insensitive to the direction orthogonal to the line but recover the true location quite well in the direction parallel to the strike of the line (x-direction in these tests). PACMAN with radius >= 1 Nm does the best job at recovering the true horizontal position with lowest RMS [#Value].
+
+% Depth is best resolved by PACMAN > 1 Nm. However it is poorly resolved by PACMAN < 0.25 Nm and by all circle and line tests. The radial line in the PACMAN survey helps reduce the Vp and Z trade-off. On the other hand, Z and Vp trade of perfectly for the Circle geometry (Figure 7).
+
+% Velocity is recovered best by PACMAN > 1 Nm. It is recovered poorly by PACMAN < 0.5 Nm and by the Circle arrays, both of which exhibit a velocity-depth tradeoff.
+
+% The Cross, Diamond, and Triangle tests do approximately equally well at recovering x, y, z, and Vp. Diamond correlation matrix looks very similar to that of PACMAN. The triangle edge survey displays a strong correlation between X, Z, and Vp. The triangle center 
+
+%All survey types do poorly at recovering the turn-around time, as indicated by an RMS of $\sim$3~ms, equal to the standard deviation of the $\tau$ distribution.
+
+% Line implications for active-source surveys: Line cannot resolve station location along the direction orthogonal to the line. Alternatives are the Cross and Triangle-center geometries which provides a model correlation structure similar to the line but have spread(R)~0.
+
 %Figure~\ref{fig:survey_geom_explore}
 %
 %Figure~\ref{fig:resolution_correlation}

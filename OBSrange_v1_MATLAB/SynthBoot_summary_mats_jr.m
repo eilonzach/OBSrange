@@ -6,7 +6,7 @@ clear; close all;
 
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys/'; 
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_strtmodel/'; 
 % path to survey data from the project directory
 datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; 
 % path to output directory from project directory (actually input for this script)
