@@ -2,54 +2,55 @@
 \caption{Details of the synthetic tests in Figure 5. Final model parameters for OBSrange inversions are the average of 1000 bootstrap iterations. Parameters that are held fixed during the inversion are denoted in italics and their final values omitted. Parameters $x$ and $y$ are displayed as distance from the drop location.}
 \centering
 \resizebox{\textwidth}{!}{
-\begin{tabular}{c || l c | l c c c c c}
-\textbf{Model Name} &  &  &  & $\mathbf{x}$ \textbf{(m)} & $\mathbf{y}$ \textbf{(m)} & $\mathbf{z}$ \textbf{(m)} & $\boldsymbol{\tau}$ \textbf{(ms)} & $\mathbf{V_p}$ \textbf{(m/s)} \\ 
+\begin{tabular}{c | c c c c | l c c c c c}
+                     &                  &                       & \textbf{ellipsoid} & \textbf{remove} & & $\mathbf{x}$ & $\mathbf{y}$ & $\mathbf{z}$ & $\boldsymbol{\tau}$ & $\mathbf{V_p}$ \\ 
+\textbf{Model Name} & \textbf{method} & $\mathbf{\delta T}$ & \textbf{correction} & \textbf{bad data} & & \textbf{(m)} & \textbf{(m)} & \textbf{(m)} & \textbf{(ms)} & \textbf{(m/s)} \\ 
 \hline
 \hline
-\multirow{4}{*}{\textbf{OBSrange}} & \textbf{method} & OBSrange & \textbf{initial} & 0 & 0 & -5000 & 13.0 & 1500 \\ 
-\multirow{4}{*}{} & $\mathbf{\delta T}$ \textbf{correction} & Yes & \textbf{final}& 199 & -399 & -5055 & 13.8 & 1521 \\ 
-\multirow{4}{*}{} & \textbf{ellipsoid correction} & Yes & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
-\multirow{4}{*}{} & \textbf{remove bad data} & Yes & \textbf{RMS} & 3.0 & 2.4 & 13.8 & 0.4 & 3.8 \\ 
+\multirow{4}{*}{\textbf{OBSrange}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes}  & \textbf{initial} & 0 & 0 & -5000 & 13.0 & 1500 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 199 & -399 & -5055 & 13.8 & 1521 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 3.0 & 2.4 & 13.8 & 0.4 & 3.8 \\ 
 \hline
-\multirow{4}{*}{\textbf{No Doppler}} & \textbf{method} & OBSrange & \textbf{initial} & 0 & 0 & -5000 & 13.0 & 1500 \\ 
-\multirow{4}{*}{} & $\mathbf{\delta T}$ \textbf{correction} & No & \textbf{final}& 201 & -395 & -5050 & 13.4 & 1520 \\ 
-\multirow{4}{*}{} & \textbf{ellipsoid correction} & Yes & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
-\multirow{4}{*}{} & \textbf{remove bad data} & Yes & \textbf{RMS} & 3.2 & 5.5 & 14.4 & 0.8 & 3.9 \\ 
+\multirow{4}{*}{\textbf{No Doppler}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{No} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes}  & \textbf{initial} & 0 & 0 & -5000 & 13.0 & 1500 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 201 & -395 & -5050 & 13.4 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 3.2 & 5.5 & 14.4 & 0.8 & 3.9 \\ 
 \hline
-\multirow{4}{*}{\textbf{No Ellipsoid}} & \textbf{method} & OBSrange & \textbf{initial} & 0 & 0 & -5000 & 13.0 & 1500 \\ 
-\multirow{4}{*}{} & $\mathbf{\delta T}$ \textbf{correction} & Yes & \textbf{final}& 200 & -398 & -5063 & 14.0 & 1524 \\ 
-\multirow{4}{*}{} & \textbf{ellipsoid correction} & No & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
-\multirow{4}{*}{} & \textbf{remove bad data} & Yes & \textbf{RMS} & 2.9 & 2.8 & 18.5 & 0.4 & 5.4 \\ 
+\multirow{4}{*}{\textbf{No Ellipsoid}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{No} & \multirow{4}{*}{Yes}  & \textbf{initial} & 0 & 0 & -5000 & 13.0 & 1500 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 200 & -398 & -5063 & 14.0 & 1524 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 2.9 & 2.8 & 18.5 & 0.4 & 5.4 \\ 
 \hline
-\multirow{4}{*}{\textbf{Fix-$\boldsymbol{\tau}$}} & \textbf{method} & OBSrange & \textbf{initial} & 0 & 0 & -5000 & $\mathit{13.0}$ & 1500 \\ 
-\multirow{4}{*}{} & $\mathbf{\delta T}$ \textbf{correction} & Yes & \textbf{final}& 199 & -399 & -5057 & - & 1522 \\ 
-\multirow{4}{*}{} & \textbf{ellipsoid correction} & Yes & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
-\multirow{4}{*}{} & \textbf{remove bad data} & Yes & \textbf{RMS} & 2.9 & 2.4 & 14.2 & 1.0 & 3.8 \\ 
+\multirow{4}{*}{\textbf{Fix-$\boldsymbol{\tau}$}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes}  & \textbf{initial} & 0 & 0 & -5000 & $\mathit{13.0}$ & 1500 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 199 & -399 & -5057 & - & 1522 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 2.9 & 2.4 & 14.2 & 1.0 & 3.8 \\ 
 \hline
-\multirow{4}{*}{\textbf{Fix-$\mathbf{V_p}$}} & \textbf{method} & OBSrange & \textbf{initial} & 0 & 0 & -5000 & 13.0 & $\mathit{1500}$ \\ 
-\multirow{4}{*}{} & $\mathbf{\delta T}$ \textbf{correction} & Yes & \textbf{final}& 192 & -391 & -4977 & 12.8 & - \\ 
-\multirow{4}{*}{} & \textbf{ellipsoid correction} & Yes & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
-\multirow{4}{*}{} & \textbf{remove bad data} & Yes & \textbf{RMS} & 8.7 & 8.9 & 72.9 & 1.2 & 20.0 \\ 
+\multirow{4}{*}{\textbf{Fix-$\mathbf{V_p}$}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes}  & \textbf{initial} & 0 & 0 & -5000 & 13.0 & $\mathit{1500}$ \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 192 & -391 & -4977 & 12.8 & - \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 8.7 & 8.9 & 72.9 & 1.2 & 20.0 \\ 
 \hline
-\multirow{4}{*}{\textbf{Fix-Z}} & \textbf{method} & OBSrange & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & 13.0 & 1500 \\ 
-\multirow{4}{*}{} & $\mathbf{\delta T}$ \textbf{correction} & Yes & \textbf{final}& 194 & -394 & - & 13.1 & 1506 \\ 
-\multirow{4}{*}{} & \textbf{ellipsoid correction} & Yes & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
-\multirow{4}{*}{} & \textbf{remove bad data} & Yes & \textbf{RMS} & 6.6 & 6.6 & 50.0 & 0.9 & 13.7 \\ 
+\multirow{4}{*}{\textbf{Fix-Z}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes}  & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & 13.0 & 1500 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 194 & -394 & - & 13.1 & 1506 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 6.6 & 6.6 & 50.0 & 0.9 & 13.7 \\ 
 \hline
-\multirow{4}{*}{\textbf{XY-only}} & \textbf{method} & OBSrange & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & $\mathit{13.0}$ & $\mathit{1500}$ \\ 
-\multirow{4}{*}{} & $\mathbf{\delta T}$ \textbf{correction} & Yes & \textbf{final}& 173 & -371 & - & - & - \\ 
-\multirow{4}{*}{} & \textbf{ellipsoid correction} & Yes & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
-\multirow{4}{*}{} & \textbf{remove bad data} & Yes & \textbf{RMS} & 29.0 & 30.8 & 50.0 & 1.0 & 20.0 \\ 
+\multirow{4}{*}{\textbf{XY-only}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes}  & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & $\mathit{13.0}$ & $\mathit{1500}$ \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 173 & -371 & - & - & - \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 29.0 & 30.8 & 50.0 & 1.0 & 20.0 \\ 
 \hline
-\multirow{4}{*}{\textbf{SIOgs}} & \textbf{method} & Grid Search & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & $\mathit{13.0}$ & $\mathit{1500}$ \\ 
-\multirow{4}{*}{} & $\mathbf{\delta T}$ \textbf{correction} & No & \textbf{final}& 177 & -365 & - & - & - \\ 
-\multirow{4}{*}{} & \textbf{ellipsoid correction} & No & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
-\multirow{4}{*}{} & \textbf{remove bad data} & Yes & \textbf{RMS} & 23.4 & 35.0 & 50.0 & 1.0 & 20.0 \\ 
+\multirow{4}{*}{\textbf{SIOgs}} & \multirow{4}{*}{Grid Search} & \multirow{4}{*}{No} & \multirow{4}{*}{No} & \multirow{4}{*}{Yes}  & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & $\mathit{13.0}$ & $\mathit{1500}$ \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 177 & -365 & - & - & - \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 23.4 & 35.0 & 50.0 & 1.0 & 20.0 \\ 
 \hline
-\multirow{4}{*}{\textbf{SIOgs no QC}} & \textbf{method} & Grid Search & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & $\mathit{13.0}$ & $\mathit{1500}$ \\ 
-\multirow{4}{*}{} & $\mathbf{\delta T}$ \textbf{correction} & No & \textbf{final}& 320 & -453 & - & - & - \\ 
-\multirow{4}{*}{} & \textbf{ellipsoid correction} & No & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
-\multirow{4}{*}{} & \textbf{remove bad data} & No & \textbf{RMS} & 120.1 & 53.4 & 50.0 & 1.0 & 20.0 \\ 
+\multirow{4}{*}{\textbf{SIOgs no QC}} & \multirow{4}{*}{Grid Search} & \multirow{4}{*}{No} & \multirow{4}{*}{No} & \multirow{4}{*}{No}  & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & $\mathit{13.0}$ & $\mathit{1500}$ \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 320 & -453 & - & - & - \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 14.0 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 120.1 & 53.4 & 50.0 & 1.0 & 20.0 \\ 
 \hline
 \end{tabular}
 }

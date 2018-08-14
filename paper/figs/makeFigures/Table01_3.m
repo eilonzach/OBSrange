@@ -4,7 +4,7 @@ function Table01
 ofile = '../Table01';
 ifsave = 0;
 
-caption = 'Details of the synthetic tests in Figure 5. Final model parameters for OBSrange inversions are the average of 1000 bootstrap iterations. Initial parameters that are held fixed during the inversion are in . Parameters $x$ and $y$ are displayed as distance from the drop location.';
+caption = 'Details of the synthetic tests in Figure 5. Final model parameters for OBSrange inversions are the average of 1000 bootstrap iterations. Parameters that are held fixed during the inversion are denoted in italics and their final values omitted. Parameters $x$ and $y$ are displayed as distance from the drop location.';
 
 %% load 
 data_dirs = {
@@ -206,17 +206,18 @@ fprintf(fid,'\\begin{table}\n');
 fprintf(fid,'\\caption{%s}\n',caption);
 fprintf(fid,'\\centering\n');
 fprintf(fid,'\\resizebox{\\textwidth}{!}{\n'); % shrink to page width
-fprintf(fid,'\\begin{tabular}{c || l c | l c c c c c}\n');
-fprintf(fid,'\\textbf{Model Name} &  &  &  & $\\mathbf{x}$ \\textbf{(m)} & $\\mathbf{y}$ \\textbf{(m)} & $\\mathbf{z}$ \\textbf{(m)} & $\\boldsymbol{\\tau}$ \\textbf{(ms)} & $\\mathbf{V_p}$ \\textbf{(m/s)} \\\\ \n');
+fprintf(fid,'\\begin{tabular}{c | c c c c | l c c c c c}\n');
+fprintf(fid,'                     &                  &                       & \\textbf{ellipsoid} & \\textbf{remove} & & $\\mathbf{x}$ & $\\mathbf{y}$ & $\\mathbf{z}$ & $\\boldsymbol{\\tau}$ & $\\mathbf{V_p}$ \\\\ \n');
+fprintf(fid,'\\textbf{Model Name} & \\textbf{method} & $\\mathbf{\\delta T}$ & \\textbf{correction} & \\textbf{bad data} & & \\textbf{(m)} & \\textbf{(m)} & \\textbf{(m)} & \\textbf{(ms)} & \\textbf{(m/s)} \\\\ \n');
 fprintf(fid,'\\hline\n');
 
 % Write data
 for ifil = 1:length(synth_dirs)
     fprintf(fid,'\\hline\n');
-    fprintf(fid,'\\multirow{4}{*}{\\textbf{%s}} & \\textbf{method} & %s & \\textbf{initial} & %s & %s & %s & %s & %s \\\\ \n',xlabels{ifil},method{ifil},initial.x_sta{ifil},initial.y_sta{ifil},initial.z_sta{ifil},initial.TAT{ifil},initial.Vp{ifil});
-    fprintf(fid,'\\multirow{4}{*}{} & $\\mathbf{\\delta T}$ \\textbf{correction} & %s & \\textbf{final}& %s & %s & %s & %s & %s \\\\ \n',info{ifil,1},final.x_sta{ifil},final.y_sta{ifil},final.z_sta{ifil},final.TAT{ifil},final.Vp{ifil});
-    fprintf(fid,'\\multirow{4}{*}{} & \\textbf{ellipsoid correction} & %s & \\textbf{true}& %s & %s & %s & %s & %s \\\\ \n',info{ifil,2},true.x_sta{ifil},true.y_sta{ifil},true.z_sta{ifil},true.TAT{ifil},true.Vp{ifil});
-    fprintf(fid,'\\multirow{4}{*}{} & \\textbf{remove bad data} & %s & \\textbf{RMS} & %s & %s & %s & %s & %s \\\\ \n',info{ifil,3},misfit.x_sta{ifil},misfit.y_sta{ifil},misfit.z_sta{ifil},misfit.TAT{ifil},misfit.Vp{ifil});
+    fprintf(fid,'\\multirow{4}{*}{\\textbf{%s}} & \\multirow{4}{*}{%s} & \\multirow{4}{*}{%s} & \\multirow{4}{*}{%s} & \\multirow{4}{*}{%s}  & \\textbf{initial} & %s & %s & %s & %s & %s \\\\ \n',xlabels{ifil},method{ifil},info{ifil,1}, info{ifil,2}, info{ifil,3},initial.x_sta{ifil},initial.y_sta{ifil},initial.z_sta{ifil},initial.TAT{ifil},initial.Vp{ifil});
+    fprintf(fid,'\\multirow{4}{*}{} & \\multirow{4}{*}{} & \\multirow{4}{*}{} & \\multirow{4}{*}{} & \\multirow{4}{*}{} & \\textbf{final}& %s & %s & %s & %s & %s \\\\ \n',final.x_sta{ifil},final.y_sta{ifil},final.z_sta{ifil},final.TAT{ifil},final.Vp{ifil});
+    fprintf(fid,'\\multirow{4}{*}{} & \\multirow{4}{*}{} & \\multirow{4}{*}{} & \\multirow{4}{*}{} & \\multirow{4}{*}{} & \\textbf{true}& %s & %s & %s & %s & %s \\\\ \n',true.x_sta{ifil},true.y_sta{ifil},true.z_sta{ifil},true.TAT{ifil},true.Vp{ifil});
+    fprintf(fid,'\\multirow{4}{*}{} & \\multirow{4}{*}{} & \\multirow{4}{*}{} & \\multirow{4}{*}{} & \\multirow{4}{*}{} & \\textbf{RMS} & %s & %s & %s & %s & %s \\\\ \n',misfit.x_sta{ifil},misfit.y_sta{ifil},misfit.z_sta{ifil},misfit.TAT{ifil},misfit.Vp{ifil});
 end
 
 % Write footer
