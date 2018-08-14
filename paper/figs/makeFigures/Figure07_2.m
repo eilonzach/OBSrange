@@ -61,8 +61,7 @@ for ifil = 1:Nfils
     R_mat{ifil} = data_summary.R_mat;
     Cm_mat{ifil} = data_summary.Cm_mat;
     
-    [ExpSigma,C_mat{ifil}] = cov2corr(Cm_mat{ifil});
-    
+    C_mat{ifil} = cov2cor(Cm_mat{ifil});
 end
 
 %% Model resolution and Covariance

@@ -3,7 +3,7 @@
     set(gcf,'position',[91   260   829   438]);
     cmap = cmocean('balance');
     cmap_R = flip(gray);
-    [ExpSigma,C_mat] = cov2corr(Cm_mat(:,:,1));
+    C_mat = cov2cor(Cm_mat(:,:,1));
     
     ax1 = subplot(1,2,1);
     ax1Pos = ax1.Position;
