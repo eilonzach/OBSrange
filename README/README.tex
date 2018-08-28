@@ -61,12 +61,13 @@
   \end{figure} 
   
   \subsection{Coordinate System}
+  During the sensor survey, whenever a ping is successfully received, the ship coordinates are logged as geodetic coordinates (latitude and longitude) using the ship's GPS. Such coordinates can be seen in Figure \ref{fig:surveyfle}. However \textit{\textbf{OBSrange}} (notably the inversion within) works with locally approximated Cartesian coordinates. The geodetic coordinates are converted in \textit{\textbf{OBSrange}} to a local Cartesian system (\textit{X},\textit{Y}) using the World Geodetic System 1984 (WGS84) reference ellipsoid. After the transformation is applied, the Cartesian origin ($X=0$, $Y=0$) of each individual survey pattern refers the corresponding instrument's drop location. 
   
   \subsection{Setting Parameters}
   \label{section:params}
   Slight design differences exist between the MATLAB and PYTHON versions of the code, but the main usage remains the same between the two. In both cases parameters are set in a single main script which will run and execute every other aspect of the code. Ideally, the only edits users ever need make are in editing the parameters of these main scripts. In the case of the MATLAB version, this script is called \textit{OBSrange.m} and these parameters are set in the top lines of that script. In the case of the PYTHON version, the main script is similarly called \textit{OBSrange.py}, and parameters are set in that script. The parameters to be set by users are described and compared in Table \ref{table:params} (sorted alphabetically by MATLAB parameter names).  Again, in both the MATLAB and PYTHON versions, once these parameters have been set, these scripts may be run and will produce results. 
 
-  \begin{table}[h!]
+  \begin{table}[!htb]
    \centering
    \caption{\textbf{\textit{OBSrange}} Parameter Descriptions.}
    \label{table:params}
@@ -100,7 +101,7 @@
 
   \subsection{Structure}
    
-   \begin{figure}[h]
+   \begin{figure}[!htb]
     \includegraphics[width=\linewidth]{OBSrange_structure.png}
     \caption{\textbf{\textit{OBSrange}} structure.}
     \label{fig:struct}
@@ -118,7 +119,7 @@
   \subsection{The \textit{.txt} Files}
   The \textit{.txt} files created by the MATLAB and PYTHON versions are formatted slightly differently, but the results are the same. In Figure \ref{fig:ex} we show the first 40 lines of \textit{WC03\_location.txt} created by the PYTHON example and describe the general features of this file.\\
 
-  \begin{figure}[h]
+  \begin{figure}[!htb]
    \includegraphics[width=\linewidth]{example_txt_fle.png}
    \caption{\textit{.txt} file output of \textit{OBSrange\_example.py}.}
    \label{fig:ex}
@@ -129,7 +130,7 @@
   \subsection{The \textit{.pkl} and \textit{.mat} Files}
   In this example PYTHON will also create a \textit{.pkl} file called \textit{WC03\_out.pkl} and MATLAB will create a \textit{.mat} file called \textit{WC03\_out.mat}. In essence, both of these files are simply containers which hold various results of the bootstrap inversion. The \textit{.pkl} file contains a PYTHON \textit{dictionary} object of various results and values and the \textit{.mat} file contains a 1x1 \textit{struct} object called \textit{datamat}. Both data structures contain many of the same fields, all of which are listed in Table \ref{table:dict} (sorted alphabetically by MATLAB parameter names):
 
-  \begin{table}[h!]
+  \begin{table}[!htb]
    \centering
    \caption{Data fields contained in the \textit{.mat} and \textit{.pkl} files}
    \label{table:dict}
@@ -161,6 +162,7 @@
     \end{tabularx}
    \end{table}
   
+  \newpage
 
   \subsection{Figures}
   In conclusion we show the figures produced after running \textit{\textbf{OBSrange.py}}.
