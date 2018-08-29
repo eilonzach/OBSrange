@@ -433,19 +433,20 @@ def resolution_covariance(R, M):
   # Parameters
   resol = R.resol[:,:,0]
   cov = R.cov[:,:,0]
-  model_cov = np.multiply( np.sign(cov), np.log10(np.abs(cov)))
-  a = -np.max(np.max(np.log10(np.abs(cov))))
-  b =  np.max(np.max(np.log10(np.abs(cov))))
+
+  # Convert covariance to correlation
+  A = np.diag(np.sqrt(np.diag(cov)))
+  model_cov = np.linalg.solve(A.T, np.linalg.solve(A,cov).T)
 
   # Model Resolution
-  m1 = ax1.imshow(resol, cmap='RdBu_r', vmin=-1, vmax=1, aspect='equal')
+  m1 = ax1.imshow(resol, cmap='Greys', vmin=0, vmax=1, aspect='equal')
   
   ax1.set_title('Model Resolution')
   #xlabels = ax1.get_xticks()
   #xlabels = [str(int(label) + 1) for label in xlabels]
   #ylabels = ax1.get_yticks()
   #ylabels = [str(int(label) + 1) for label in ylabels]
-  xlabels = ['', 'X', 'Y', 'Z', 'twt', 'vpw']
+  xlabels = ['', '$X$', '$Y$', '$Z$', r'$\tau$', '$V_{P}$']
   ax1.set_xticklabels(xlabels)
   ax1.set_yticklabels(xlabels)
   plt.colorbar(m1, fraction=0.046, pad=0.04, ax=ax1)
@@ -456,14 +457,14 @@ def resolution_covariance(R, M):
     ax1.axhline(y=y+0.5, xmin=0, xmax=1, color='k', lw=2.0)
 
   # Model Covariance
-  m2 = ax2.imshow(model_cov, cmap='RdBu_r', vmin=a, vmax=b, aspect='equal')
+  m2 = ax2.imshow(model_cov, cmap='RdBu_r', vmin=-1, vmax=1, aspect='equal')
   
   ax2.set_title('Model Covariance')
   #xlabels = ax2.get_xticks()
   #xlabels = [str(int(label) + 1) for label in xlabels]
   #ylabels = ax2.get_yticks()
   #ylabels = [str(int(label) + 1) for label in ylabels]
-  xlabels = ['', 'X', 'Y', 'Z', 'twt', 'vpw']
+  xlabels = ['', '$X$', '$Y$', '$Z$', r'$\tau$', '$V_{P}$']
   ax2.set_xticklabels(xlabels)
   ax2.set_yticklabels([])
   plt.colorbar(m2, fraction=0.046, pad=0.04, ax=ax2)

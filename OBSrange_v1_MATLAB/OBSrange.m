@@ -18,7 +18,7 @@ clear; close all;
 % path to project
 
 % JOSH
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % DATA
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % DATA
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03 only
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTHETIC
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest4/'; % SYNTHETIC 3
@@ -28,7 +28,7 @@ projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/Pacifi
 % projpath = '~/Work/OBSrange/synthetics/synth_recovery_1sta/';
 
 % STEVE
-% projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
+projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
 
 % TESTING
 % projpath = '../Tests';
@@ -39,7 +39,7 @@ datapath = './';
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = ''; %'EC03';
+onesta = 'EC03'; %'EC03';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
