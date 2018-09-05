@@ -26,14 +26,6 @@
 \label{fig:one_sta_real_ftests}
 \end{figure}
 
-
-%% All stations meso eddy
-\begin{figure}[h]
-\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure08.pdf}
-\caption{Pacific ORCA deployment, showing drift directions and magnitudes of each OBS instrument relative to their drop points, as well as the water velocity each location. Note that drift arrows are not to geographic scale. The systematic pattern of drift within the water column seems to be related to a meso-scale ocean eddy moving through this region during the deployment. Station symbol sizes are inversely scaled to acoustic travel time data misfit (see inset).}
-\label{fig:meso_eddy}
-\end{figure}
-
 %% Comparison to previous tools
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure05.pdf}
@@ -44,7 +36,7 @@
 %% Exploring survey geometries
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=12cm]{Figure06.pdf}
-\caption{ Model parameter misfits for 6 synthetic survey geometries of varying radii: \textit{PACMAN}, circle, cross, diamond, line, and triangle. Each survey geometry is shown to the left of its respective legend entry. The left column shows the mean absolute error (MAE) and right column shows the RMS misfit for 10,000 synthetic survey realizations for each survey type, where horizontal instrument location misfit is given by $\delta r_{xy} = \sqrt{\delta x_{O}^2 + \delta y_{O}^2} $. Open stars denote misfit in the direction running parallel to the line ($x$-direction for these tests). Red lines indicate the true RMS for each model parameter. We find that model parameters are most accurately recovered by the \textit{PACMAN} survey pattern with radius $\geq$1 Nm. }
+\caption{ RMS model parameter misfits for 10,000 synthetic survey realizations of various survey geometries with varying radii: \textit{PACMAN}, \textit{Circle}, \textit{Cross}, \textit{Diamond}, \textit{Line}, and \textit{Triangle}. Each survey geometry is shown to the left of its respective legend entry. Horizontal instrument location misfit is given by $\delta r_{xy} = \sqrt{\delta x_{O}^2 + \delta y_{O}^2} $. Open stars for the line tests denote misfit in the direction running parallel to the line ($x$-direction for these tests). Horizontal red lines indicate the true RMS for each model parameter. We find that model parameters are most accurately recovered by the \textit{PACMAN} survey pattern with radius $\geq$1 Nm. }
 \label{fig:survey_geom_explore}
 \end{figure}
 
@@ -55,3 +47,9 @@
 \label{fig:resolution_correlation}
 \end{figure}
 
+%% All stations meso eddy
+\begin{figure}[h]
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure08.pdf}
+\caption{Pacific ORCA deployment, showing drift directions and magnitudes of each OBS instrument relative to their drop points, as well as the water velocity each location. Note that drift arrows are not to geographic scale. The systematic pattern of drift within the water column seems to be related to a meso-scale ocean eddy moving through this region during the deployment. Station symbol sizes are inversely scaled to acoustic travel time data misfit (see inset).}
+\label{fig:meso_eddy}
+\end{figure}

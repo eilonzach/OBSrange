@@ -1,7 +1,7 @@
 %% Function to produce Figure 06 
 %  Figure 06 compare survey pattern geometries
 function Figure06
-
+addpath('/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/OBSrange_v1_MATLAB/functions/');
 ofile = '../Figure06_mean';
 ifsave = 1;
 
