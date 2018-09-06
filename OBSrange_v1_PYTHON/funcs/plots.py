@@ -256,9 +256,20 @@ def residuals(lats, lons, xs, ys, vs, res, N):
   labels = ['{: .2f}'.format(label) for label in labels]
   ax1.set_xticklabels(labels)
   ax1.locator_params(axis='x', nbins=3)
-  
+
+  # For fixing 0 as white in colorbars.
+  abs_bound = max(np.abs(corrs))
+
   # Travel-time corrections at each site.
-  s2 = ax2.scatter(lons, lats, s=60, c=corrs, edgecolors='k', cmap='RdBu_r')
+  s2 = ax2.scatter(lons,
+                   lats, 
+                   s=60, 
+                   c=corrs, 
+                   edgecolors='k', 
+                   cmap='RdBu_r',
+                   vmin = -abs_bound,
+                   vmax = abs_bound)
+
   ax2.scatter(fin_lon, fin_lat, s=250, marker='*', c='yellow', edgecolors='k')
   ax2.set_title('Travel-time corrections (ms)')
   ax2.set_xlabel('Longitude ($^\circ$)')
@@ -271,8 +282,19 @@ def residuals(lats, lons, xs, ys, vs, res, N):
   ax2.set_xticklabels(labels)
   ax2.locator_params(axis='x', nbins=3)
   
+  # For fixing 0 as white in colorbars.
+  abs_bound = max(np.abs(resids))
+
   # Travel-time residuals at each site.
-  s3 = ax3.scatter(lons, lats, s=60, c=resids, edgecolors='k', cmap='RdBu_r')
+  s3 = ax3.scatter(lons,
+                   lats, 
+                   s=60, 
+                   c=resids, 
+                   edgecolors='k', 
+                   cmap='RdBu_r',
+                   vmin=-abs_bound,
+                   vmax=abs_bound)
+
   ax3.scatter(fin_lon, fin_lat, s=250, marker='*', c='yellow', edgecolors='k')
   ax3.set_title('Travel-time residuals (ms)')
   ax3.set_xlabel('Longitude ($^\circ$)')
@@ -285,8 +307,19 @@ def residuals(lats, lons, xs, ys, vs, res, N):
   ax3.set_xticklabels(labels)
   ax3.locator_params(axis='x', nbins=3)
 
+  # For fixing 0 as white in colorbars.
+  abs_bound = max(np.abs(corrs))
+
   # Travel-time corrections by azimuth.
-  s4 = ax4.scatter(azs, resids, s=60, c=corrs, edgecolors='k', cmap='RdBu_r')
+  s4 = ax4.scatter(azs,
+                   resids, 
+                   s=60, 
+                   c=corrs, 
+                   edgecolors='k', 
+                   cmap='RdBu_r',
+                   vmin=-abs_bound,
+                   vmax=abs_bound)
+  
   ax4.set_xlabel('Ship Azimuth ($^\circ$)')
   ax4.set_ylabel('Travel-time residuals (ms)')
   plt.colorbar(s4, ax=ax4, label='Travel-time corrections (ms)')
