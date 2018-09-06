@@ -233,7 +233,7 @@ for ifil = 1:Nfils
     xlim(ax8,[0 Nfils+1]);
 %     ylim(ax8,[1 10]);
 %     ylim(ax8,ax3.YLim);
-    ylim(ax8,[2.9 3.1]);
+    ylim(ax8,[2.9 3.3]);
 %     yticks(ax8,[0.001 0.01 0.1 1 10 100]);
     ylabel(ax8,'{$\delta$\boldmath$\tau$ (\textbf{ms})}','fontsize',18,'Interpreter','latex')
 
