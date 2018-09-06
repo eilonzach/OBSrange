@@ -10,7 +10,7 @@ lonlim = [-136.3 -129.9];
 latlim = [-9 -3];
 
 %% load 
-load('../../data/yORCA_locations.mat');
+load('../figdata/yORCA_locations.mat');
 
 %% process into nicer structures
 Nstas = length(allstas);
@@ -91,6 +91,7 @@ ylabel('\textbf{Latitude}','interpreter','latex','fontsize',18);
 axis equal
 set(gca,'fontsize',15,'linewidth',2,'box','on','xlim',lonlim,'ylim',latlim);
 
+disp(['Mean Vp = ',num2str(mean(Vp))]);
 
 
 %% SAVE
