@@ -1,4 +1,4 @@
-% MAIN script to run location inversion for an OBS deployment
+% EXAMPLE script to run location inversion for an OBS deployment
 % 
 % Requires: 
 %   Acoustic survey files in some directory 
@@ -14,32 +14,17 @@
 
 clear; close all;
 
-%% INPUTS
+%% INPUTS - MAKE SURE THESE ARE 
 % path to project
 
-% JOSH
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % DATA
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03 only
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTHETIC
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest4/'; % SYNTHETIC 3
-
-% ZACH
-% projpath = '~/Work/OBSrange/projects/PacificORCA/';
-% projpath = '~/Work/OBSrange/synthetics/synth_recovery_1sta/';
-
-% STEVE
-% projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
-
-% TESTING
-% projpath = '../Tests';
-
-% path to survey data from the project directory
-datapath = './'; 
-% path to output directory from project directory(will be created if it does not yet exist)
-outdir = './OUT_OBSrange/'; 
+% EXAMPLE
+% path to example survey data
+datapath = './example/'; 
+% path to output directory(will be created if it does not yet exist)
+outdir = './example/OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = ''; %'EC03';
+onesta = '';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -47,12 +32,11 @@ ifplot = 1; % Plot results?
 
 par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
-par.N_bs = 1000; % Number of bootstrap iterations
+par.N_bs = 500; % Number of bootstrap iterations
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
-% ==>  +1 if location is RECEIVE, -1 if location is SEND, 0 if no correction
-par.if_twtcorr = 0; % Apply a traveltime correction to account for ship velocity?
+par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
 par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
@@ -60,16 +44,16 @@ ifQC_ping = 1; % Do quality control on pings?
 res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnitude
 
 % TAT - Define turnaround time to damp towards in the inversion
-par.TAT_start = 0.014; % (s)
-par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT (lower bound should never be < 0)
+par.TAT_start = 0.013; % (s)
+par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT
 
 % Norm damping for each model parameter (damping towards starting model)
 % Larger values imply more damping towards the starting model.
 par.dampx = 0;
 par.dampy = 0;
-par.dampz = 0; %1e3; %0
-par.dampTAT = 2e-1; %1e5; %2e-1
-par.dampdvp = 5e-8; %1e3; %5e-8
+par.dampz = 0; %0
+par.dampTAT = 2e-1; %2e-1
+par.dampdvp = 5e-8; %5e-8
 
 % Global norm damping for stabilization
 par.epsilon = 1e-10;
@@ -85,7 +69,6 @@ addpath(functionspath);
 
 %% Load 2-way Travel Time Data
 wd = pwd;
-cd(projpath);
 files = dir([datapath,'/*.txt']);
 stas = unique(strtok({files.name},{'_','.txt'}));
 Nstas = length(stas);
@@ -118,7 +101,6 @@ lats_ship = data.lats;
 lons_ship = data.lons;
 t_ship = data.t_ship;
 twt = data.twt;
-
 % Set origin of coordinate system to be lat/lon of drop point
 olon = lon_drop;
 olat = lat_drop;
@@ -229,10 +211,70 @@ PLOT_histograms_all
 end
 
 %% F-test for uncertainty using grid search
+% Set grid size
+ngridpts = 40;
+D = max([ std(x_sta) std(y_sta) std(z_sta) ]*4);
+Dx = D;
+Dy = D; 
+Dz = D;
+dx = 2*Dx/ngridpts;
+dy = 2*Dy/ngridpts;
+dz = 2*Dz/ngridpts;
+x_grid = [mean(x_sta)-Dx:dx:mean(x_sta)+Dx];
+y_grid = [mean(y_sta)-Dy:dy:mean(y_sta)+Dy];
+z_grid = [mean(z_sta)-Dz:dz:mean(z_sta)+Dz];
+[lon_grid, lat_grid] = xy2lonlat_nomap(olon, olat, x_grid, y_grid);
+Nx = length(x_grid);
+Ny = length(y_grid);
+Nz = length(z_grid);
 
-Ftest_res = f_test_gridsearch(par,x_ship,y_ship,x_sta,y_sta,z_sta,V_w,TAT,v_eff,twtcorr_bs,ifplot);        
+% Bootstrap residual
+twt_pre_bs = calcTWT(mean(x_sta), mean(y_sta), mean(z_sta), mean(dvp), mean(TAT), x_ship, y_ship, z_ship, par.vp_w);
+resid_bs = twtcorr_bs-twt_pre_bs;
 
-%% Print some results
+% Determine the eigenvectors for z_sta, V_w, and TAT
+X = [z_sta, V_w, TAT];
+[V, ~] = eig(X'*X);
+eigvec1 = V(:,1); % Closest to TAT axis
+eigvec2 = V(:,2); % Closest to V_w axis
+eigvec3 = V(:,3); % Closest to z_sta axis
+eig3_z = eigvec3(1);
+eig3_vw = eigvec3(2);
+eig3_TAT = eigvec3(3);
+
+% Grid search
+P = zeros(Nx,Ny,Nz);
+E_gs = zeros(Nx,Ny,Nz);
+[Xgrd,Ygrd,Zgrd] = meshgrid(x_grid,y_grid,z_grid);
+[LONgrd,LATgrd,~] = meshgrid(lon_grid,lat_grid,z_grid);
+Npara = length(m_final);
+for ix = 1:Nx
+	for iy = 1:Ny
+		for iz = 1:Nz
+			% Apply scaling to vp_w and TAT to account for tradeoffs with Z
+			dz = Zgrd(ix,iy,iz) - mean(z_sta);
+			dvw = (eig3_vw/eig3_z)*dz; % perturbation to water velocity to account for dz
+			dTAT = (eig3_TAT/eig3_z)*dz; % perturbation to TAT to account for dz
+
+			% Grid search residual;
+			twt_pre_gs = calcTWT(Xgrd(ix,iy,iz), Ygrd(ix,iy,iz), Zgrd(ix,iy,iz), mean(dvp)+dvw, mean(TAT)+dTAT, x_ship, y_ship, z_ship, par.vp_w);
+			resid_gs = twtcorr_bs-twt_pre_gs;
+
+			% Calculate P statistic
+			P(ix,iy,iz) = ftest_dof( resid_gs,mean(v_eff),resid_bs,mean(v_eff) );
+
+			E_gs(ix,iy,iz) = sqrt(resid_gs'*resid_gs/length(resid_gs));
+		end
+	end
+end
+
+[Pz_max, Iz_max] = max(max(max(P)));
+[Py_max, Iy_max] = max(max(P(:,:,Iz_max)));
+[Px_max, Ix_max] = max(P(:,Iy_max,Iz_max));
+
+Ftest_res = struct('x_grid',x_grid,'y_grid',y_grid,'z_grid',z_grid,...
+                  'Pstat',P,'Erms',E_gs);
+
 fprintf('\nStation: %s',data.sta);
 fprintf('\nlat:   %.5f deg (%f) \nlon:   %.5f deg (%f) \nx:     %f m (%f) \ny:    %f m (%f) \ndepth: %f m (%f) \nTAT:   %f ms (%f) \nv_H20: %f m/s (%f)',mean(lat_sta),std(lat_sta)*2,mean(lon_sta),std(lon_sta)*2,mean(x_sta),std(x_sta)*2,mean(y_sta),std(y_sta)*2,mean(z_sta),std(z_sta)*2,mean(TAT)*1000,std(TAT)*1000*2,mean(V_w),std(V_w)*2);
 fprintf('\nDrift Lon: %f m (%f) \nDrift Lat: %f m (%f) \nDrift:    %f m (%f) \nDrift Azi: %f deg (%f)\ndz: %f m (%f)\n',mean(dx_drift),std(dx_drift)*2,mean(dy_drift),std(dx_drift)*2,mean(drift),std(drift)*2,mean(azi),std(azi)*2,mean(dz_sta),std(dz_sta)*2);
@@ -240,6 +282,8 @@ fprintf('\nRMS:  %f ms (%f)\n',mean(E_rms)*1000,std(E_rms)*2*1000);
 
 %% PLOTTING
 if ifplot
+	%% F-plot plots
+	PLOT_Ftest_all
 	%% Plot Misfit
 	PLOT_misfit
 	%% Geographic PLOTTING
@@ -247,17 +291,14 @@ if ifplot
 	PLOT_twt_corr
     %% Model Resolution & Covariance
     PLOT_resolution_covariance
-    drawnow;
 end
-
+PLOT_resolution_covariance
 
 %% Save output
 % output directory
-if par.if_twtcorr == 1
-    modified_outdir = [outdir,'OUT_wcorr_xrec/'];
-elseif par.if_twtcorr == -1
-    modified_outdir = [outdir,'OUT_wcorr_xsend/'];
-elseif par.if_twtcorr == 0
+if par.if_twtcorr
+    modified_outdir = [outdir,'OUT_wcorr/'];
+elseif ~par.if_twtcorr
     modified_outdir = [outdir,'OUT_nocorr/'];
 end  
 if ~exist(modified_outdir)
@@ -288,12 +329,11 @@ save2pdf([modified_outdir,'/plots/',data.sta,'_1_OBSlocation.pdf'],f1,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_2_misfit.pdf'],f2,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_3_VelCorrs.pdf'],f3,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_4_bootstrap.pdf'],f100,500)
-save2pdf([modified_outdir,'/plots/',data.sta,'_5_Ftest.pdf'],101,500)
+save2pdf([modified_outdir,'/plots/',data.sta,'_5_Ftest.pdf'],f101,500)
 save2pdf([modified_outdir,'/plots/',data.sta,'_6_Resolution_Covariance.pdf'],f103,500)
 end
 
 if ifsave
-    datamat.par = par;
     datamat.sta = data.sta;
 	datamat.drop_lonlatz = [data.lon_drop,data.lat_drop,data.z_drop];
 	datamat.lons_ship = lons_ship;
@@ -302,7 +342,6 @@ if ifsave
 	datamat.y_ship = y_ship;
 	datamat.z_ship = z_ship;
 	datamat.v_ship = v_ship;
-	datamat.databad = data_bad;
 	datamat.dtwt_bs = dtwt_bs;
 	datamat.twtcorr_bs = twtcorr_bs;
 	datamat.dtwtcorr_bs = dtwtcorr_bs;

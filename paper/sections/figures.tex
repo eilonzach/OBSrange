@@ -26,8 +26,6 @@
 \label{fig:one_sta_real_ftests}
 \end{figure}
 
-
-
 %% Comparison to previous tools
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure05.pdf}
@@ -37,15 +35,15 @@
 
 %% Exploring survey geometries
 \begin{figure}[h]
-\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure06_mean.pdf}
-\caption{ Model parameter misfits for 6 synthetic survey geometries of varying radii: \textit{PACMAN}, circle, cross, diamond, line, and triangle. Each survey geometry is shown to the left of its respective legend entry. The left column shows the mean absolute error (MAE) and right column shows the RMS misfit for 10,000 synthetic survey realizations for each survey type, where horizontal instrument location misfit is given by $\delta r_{xy} = \sqrt{\delta x_{O}^2 + \delta y_{O}^2} $. Open stars denote misfit in the direction running parallel to the line ($x$-direction for these tests). Red lines indicate the true RMS for each model parameter. We find that model parameters are most accurately recovered by the \textit{PACMAN} survey pattern with radius $\geq$1 Nm. }
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=12cm]{Figure06.pdf}
+\caption{ RMS model parameter misfits for 10,000 synthetic survey realizations of various survey geometries with varying radii: \textit{PACMAN}, \textit{Circle}, \textit{Cross}, \textit{Diamond}, \textit{Line}, and \textit{Triangle}. Each survey geometry is shown to the left of its respective legend entry. Horizontal instrument location misfit is given by $\delta r_{xy} = \sqrt{\delta x_{O}^2 + \delta y_{O}^2} $. Open stars for the line tests denote misfit in the direction running parallel to the line ($x$-direction for these tests). Horizontal red lines indicate the true RMS for each model parameter. We find that model parameters are most accurately recovered by the \textit{PACMAN} survey pattern with radius $\geq$1 Nm. }
 \label{fig:survey_geom_explore}
 \end{figure}
 
-%% Exploring survey geometries
+%% Resolution and correlation matrices
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure07.pdf}
-\caption{ Model resolution and correlation matrices for 3 survey configurations of radius 1 Nm: (left) \textit{PACMAN}, (center) \textit{Circle}, and (right) \textit{Line}. $\text{spread}(\mathbf{R})$ is listed at the top right of each resolution matrix. A spread of zero signifies good model resolution for all parameters. }
+\caption{ Model resolution and correlation matrices for 3 survey configurations of radius 1 Nm: (left) \textit{PACMAN}, (center) \textit{Circle}, and (right) \textit{Line}. The \textit{Line} survey is parallel to the x-direction. $\text{spread}(\mathbf{R})$ is listed at the top right of each resolution matrix. A spread of zero signifies good model resolution for all parameters. }
 \label{fig:resolution_correlation}
 \end{figure}
 
