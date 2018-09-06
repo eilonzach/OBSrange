@@ -18,7 +18,7 @@ clear; close all;
 % path to project
 
 % JOSH
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % DATA
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % DATA
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03 only
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTHETIC
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest4/'; % SYNTHETIC 3
@@ -28,7 +28,7 @@ clear; close all;
 % projpath = '~/Work/OBSrange/synthetics/synth_recovery_1sta/';
 
 % STEVE
-projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
+% projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
 
 % TESTING
 % projpath = '../Tests';
@@ -39,7 +39,7 @@ datapath = './';
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = 'EC03'; %'EC03';
+onesta = ''; %'EC03';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -52,7 +52,7 @@ par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Traveltime correction parameters
 % ==>  +1 if location is RECEIVE, -1 if location is SEND, 0 if no correction
-par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
+par.if_twtcorr = 0; % Apply a traveltime correction to account for ship velocity?
 par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
