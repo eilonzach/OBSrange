@@ -1,7 +1,7 @@
 %% Function to produce Figure 08
 %  Figure 08 shows the meso scale eddy
 function Figure08
-
+addpath('/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/OBSrange_v1_MATLAB/functions/');
 ofile = '../Figure08';
 ifsave = 1;
 

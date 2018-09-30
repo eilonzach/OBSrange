@@ -64,7 +64,7 @@ where $\mathbf{G}$ is a matrix of partial derivatives: $G_{ij} = \partial d_i/\p
 \frac{\partial d_i}{\partial \tau} &= 1\\	
 \end{align*}
 
-We use the drop coordinates and water depth (if available from multibeam) as a starting model, along with $V_P = 1500$ m/s and $\tau =$13 ms. If we consider the setup of the problem, there is some degree of trade off between the water depth and the water velocity. Simplistically, if all survey measurements are made at a constant distance from the station (\textit{e.g.}, if the survey is a circle centered on the station) then these parameters co-vary perfectly. As a result, the inverse problem is ill-posed and, like all mixed-determined problems, requires regularization. We use constraint equations to damp perturbations in $V_P$, which is not likely to vary substantially from 1500 m/s, and $\tau$, which should not vary substantially from $\sim$13 ms (Ernest Aaron, \textit{pers. comm.}):
+We use the drop coordinates and water depth (if available from multibeam) as a starting model, along with $V_P = 1500$ m/s and $\tau =$13 ms. If we consider the setup of the problem, there is some degree of trade off between the water depth and the water velocity. Simplistically, if all survey measurements are made at a constant distance from the station (\textit{e.g.}, if the survey is a circle centered on the station) then these parameters co-vary perfectly. As a result, the inverse problem is ill-posed and, like all mixed-determined problems, requires regularization. We damp perturbations in $V_P$, which is not likely to vary substantially from 1500 m/s, and $\tau$, which should not vary substantially from $\sim$13 ms (Ernest Aaron, \textit{pers. comm.}):
 
 \begin{equation}
 	\mathbf{F} = 
@@ -91,7 +91,7 @@ We have had success using $\gamma_{V_P} = 5\times10^{-8}$ and $\gamma_{\tau} = 0
 	\mathbf{m}_{k+1} = \mathbf{m}_k + \left[ \mathbf{F}^{\text{T}} \mathbf{F} + \epsilon\mathbf{I} \right]^{-1} \mathbf{F}^{\text{T}} \mathbf{f} \label{eq:inverse}
 \end{equation}
 
-This equation is solved iteratively, until the root-mean-squared (RMS) of the misfit $(T+\delta T-g(\mathbf{m}))$ decreases by less than 0.1 ms compared to the previous iteration. This criterion is usually reached after $\sim$4 iterations. 
+This equation is solved iteratively, until the root-mean-squared (RMS) of the misfit, $e$, (where $e = T+\delta T-g(\mathbf{m})$) decreases by less than 0.1 ms compared to the previous iteration. This criterion is usually reached after $\sim$4 iterations. 
 
 \subsection{Errors and uncertainty}
 In order to estimate the uncertainty in our model we bootstrap survey timing data with a balanced resampling approach. In each iteration the algorithm inverts a random sub-sample of the true data set, with the constraint that all data points are eventually sampled an equal number of times. This approach provides empirical probability distributions of possible model parameters, but does not straightforwardly offer quantitative estimates of model uncertainty because the goodness of data fit for each run in the bootstrap iteration is ignored (that is, within each iteration, a model is found that best fits the randomly sub-sampled dataset, but in the context of the full dataset, the fit and uncertainty of that particular model may be very poor). For more statistically robust uncertainty estimates, we perform a grid search over ($x_O,y_O,z_O$) within a region centred on the bootstrapped mean location, 
