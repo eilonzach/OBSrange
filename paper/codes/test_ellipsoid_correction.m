@@ -9,9 +9,9 @@ trudata = load('/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/paper/figs/
 % dlat = [7:95];
 dlat = 0; % add to latitude to see how it changes things...
 olon = trudata.drop_location(2); %-133.62; %0:360;
-olat = trudata.drop_location(1); %-7.54;
+olat = trudata.drop_location(1)+dlat; %-7.54;
 lon = trudata.survlon;
-lat = trudata.survlat;
+lat = trudata.survlat+dlat;
 TAT = trudata.tat;
 xOBS = trudata.obs_location_xyz(1);
 yOBS = trudata.obs_location_xyz(2);
@@ -19,8 +19,8 @@ zOBS = -trudata.obs_location_xyz(3)*1000;
 vp = trudata.vp_actual*1000;
 azi = trudata.survaz;
 
-[ x_elli, y_elli , z_elli] = lonlat2xy_nomap( olon, olat+dlat, lon, lat+dlat );
-[ x_sph, y_sph , z_sph] = lonlat2xy_nomap_sphere( olon, olat+dlat, lon, lat+dlat );
+[ x_elli, y_elli , z_elli] = lonlat2xy_nomap( olon, olat, lon, lat );
+[ x_sph, y_sph , z_sph] = lonlat2xy_nomap_sphere( olon, olat, lon, lat );
 
 %% Distance correction
 dr_ellipsoid = sqrt((y_sph-y_elli).^2+(x_sph-x_elli).^2);

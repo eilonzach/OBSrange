@@ -13,7 +13,7 @@
 % direction of the survey circle (vr0).
 %
 %
-%
+% JBR 9/30/18: test reformulation of F*Finv
 
 clear; close all;
 
@@ -21,7 +21,7 @@ clear; close all;
 % path to project
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % Josh
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtestboot/'; % Josh PAPER
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys2/'; % Josh PAPER
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT/'; % Josh PAPER
 % projpath = '~/Work/OBSrange/synthetics/'; 
 
 % path to survey data from the project directory
@@ -38,7 +38,7 @@ outdir = './OUT_OBSrange_synthsurveys/';
 
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
-onesurvey = 'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
+onesurvey = ''; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -71,8 +71,8 @@ par.dampTAT = 2e-1; %2e-1; %2e-1
 par.dampdvp = 5e-8; %5e-8
 
 % Global norm damping for stabilization
-par.epsilon = 1e-10;
-
+par.epsilon = 1e-10;%0;
+is_newF = 2; % 0 = old; 1 = new; 2 = new correct
 %% ===================================================================== %%
 %% ================ NOT ADVISED TO EDIT BELOW THIS LINE ================ %%
 %% ===================================================================== %%
@@ -112,7 +112,8 @@ fprintf('===========================\nWorking on %s\n\n',surv);
 rawdatfile = dir([datapath,surv,'*']);data = [];
 if exist([modified_outdir,'/mats/',surv,'_OUT.mat'],'file') == 2
     fprintf('\n%s already processed. Skipping...\n',files(is).name);
-    continue
+    load([rawdatfile.folder,'/',rawdatfile.name]); 
+%     continue
 else
     load([rawdatfile.folder,'/',rawdatfile.name]);    
 %     fprintf('\nWorking on: %s\n',surv);
@@ -153,8 +154,8 @@ dist = cell(par.N_bs,1);
 azi_locs = cell(par.N_bs,1);
 models = cell(par.N_bs,1);
 
-R_mats = zeros(5,5,length(data));
-Cm_mats = zeros(5,5,length(data));
+R_mats = zeros(4,4,length(data));
+Cm_mats = zeros(4,4,length(data));
 
 for ii = 1:length(data)
     if mod(ii,100)==0, fprintf('Iteration %u\n',ii); end
@@ -190,14 +191,14 @@ for ii = 1:length(data)
     m0_strt(1,1) = x_drop; %x0;
     m0_strt(2,1) = y_drop; %y0;
     m0_strt(3,1) = z_drop; %z0;
-    m0_strt(4,1) = par.TAT_start; %TAT;
-    m0_strt(5,1) = 0; %dvp;
+%     m0_strt(4,1) = par.TAT_start; %TAT;
+    m0_strt(4,1) = 0; %dvp;
 
     %% Do Bootstrap Inversion
     Nobs = length(twt);
     M = length(m0_strt);
     % damping matrix
-    H = eye(M, M) .* diag([par.dampx, par.dampy, par.dampz, par.dampTAT, par.dampdvp]);
+    H = eye(M, M) .* diag([par.dampx, par.dampy, par.dampz, par.dampdvp]);
 
     [xmat_ship_bs, ymat_ship_bs, zmat_ship_bs, vmat_ship_bs, twtmat_bs, indxs] = bootstrap(x_ship, y_ship, z_ship, v_ship, twt, par.N_bs-1);
     dtwt_mat = zeros(size(indxs));
@@ -213,7 +214,7 @@ for ii = 1:length(data)
         
         if ~par.if_perfectcorr
             [ m_final,models,v,N,R,Cm ] = ...
-                inv_newtons( par,m0_strt,twt_bs,...
+                inv_newtons_noTAT( par,m0_strt,twt_bs,...
                             x_ship_bs,y_ship_bs,z_ship_bs,...
                             v_ship_bs,H);
         elseif par.if_perfectcorr
@@ -226,8 +227,8 @@ for ii = 1:length(data)
         x_sta(ibs) = m_final(1);
         y_sta(ibs) = m_final(2);
         z_sta(ibs) = m_final(3);
-        TAT(ibs) = m_final(4);
-        dvp(ibs) = m_final(5);
+        TAT(ibs) = par.TAT_start; %m_final(4);
+        dvp(ibs) = m_final(4);
         V_w(ibs) = par.vp_w + dvp(ibs);
         E_rms(ibs) = models(end).E;
         v_eff(ibs) = v;

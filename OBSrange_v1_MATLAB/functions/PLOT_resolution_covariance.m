@@ -20,9 +20,9 @@
         'YTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','{\boldmath$\tau$}','$\mathbf{V_{P}}$'});
     title(ax1,'\textbf{Model Resolution}','fontsize',18,'Interpreter','latex');
     cb1 = colorbar(ax1);
-    colormap(ax1,cmap_R)
+    colormap(ax1,cmap)
 %     caxis([-max(max(abs(mean(RR,3)))) max(max(abs(mean(RR,3))))]);
-    caxis([0 1]);
+    caxis([-1 1]);
     
     ax2 = subplot(1,2,2);
     ax2Pos = ax2.Position;

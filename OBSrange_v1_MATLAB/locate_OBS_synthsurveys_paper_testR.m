@@ -13,7 +13,7 @@
 % direction of the survey circle (vr0).
 %
 %
-%
+% JBR 9/30/18: test reformulation of F*Finv
 
 clear; close all;
 
@@ -21,7 +21,7 @@ clear; close all;
 % path to project
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % Josh
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtestboot/'; % Josh PAPER
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys2/'; % Josh PAPER
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_testR/'; % Josh PAPER
 % projpath = '~/Work/OBSrange/synthetics/'; 
 
 % path to survey data from the project directory
@@ -38,7 +38,7 @@ outdir = './OUT_OBSrange_synthsurveys/';
 
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
-onesurvey = 'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
+onesurvey = 'SynthBoot_line_rad1.00'; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -71,8 +71,8 @@ par.dampTAT = 2e-1; %2e-1; %2e-1
 par.dampdvp = 5e-8; %5e-8
 
 % Global norm damping for stabilization
-par.epsilon = 1e-10;
-
+par.epsilon = 1e-10;%0;
+is_newF = 2; % 0 = old; 1 = new; 2 = new correct
 %% ===================================================================== %%
 %% ================ NOT ADVISED TO EDIT BELOW THIS LINE ================ %%
 %% ===================================================================== %%
@@ -112,7 +112,8 @@ fprintf('===========================\nWorking on %s\n\n',surv);
 rawdatfile = dir([datapath,surv,'*']);data = [];
 if exist([modified_outdir,'/mats/',surv,'_OUT.mat'],'file') == 2
     fprintf('\n%s already processed. Skipping...\n',files(is).name);
-    continue
+    load([rawdatfile.folder,'/',rawdatfile.name]); 
+%     continue
 else
     load([rawdatfile.folder,'/',rawdatfile.name]);    
 %     fprintf('\nWorking on: %s\n',surv);
@@ -212,10 +213,27 @@ for ii = 1:length(data)
         twt_bs = twtmat_bs(:,ibs);
         
         if ~par.if_perfectcorr
-            [ m_final,models,v,N,R,Cm ] = ...
-                inv_newtons( par,m0_strt,twt_bs,...
-                            x_ship_bs,y_ship_bs,z_ship_bs,...
-                            v_ship_bs,H);
+            if is_newF == 1
+                [ m_final,models,v,N,R,Cm ] = ...
+                    inv_newtons_Rtest( par,m0_strt,twt_bs,...
+                                x_ship_bs,y_ship_bs,z_ship_bs,...
+                                v_ship_bs,H);
+            elseif is_newF == 2
+                [ m_final,models,v,N,R,Cm ] = ...
+                    inv_newtons_Rtest2( par,m0_strt,twt_bs,...
+                                x_ship_bs,y_ship_bs,z_ship_bs,...
+                                v_ship_bs,H);
+            elseif is_newF == 0
+                [ m_final,models,v,N,R,Cm ] = ...
+                    inv_newtons( par,m0_strt,twt_bs,...
+                                x_ship_bs,y_ship_bs,z_ship_bs,...
+                                v_ship_bs,H);
+            end
+                        
+%             [ m_final2,models2,v2,N2,R2,Cm2 ] = ...
+%                 inv_newtons_Rtest( par,m0_strt,twt_bs,...
+%                             x_ship_bs,y_ship_bs,z_ship_bs,...
+%                             v_ship_bs,H);
         elseif par.if_perfectcorr
             [ m_final,models,v ] = ...
                 inv_newtons_perfectcorr( par,m0_strt,twt_bs,...
