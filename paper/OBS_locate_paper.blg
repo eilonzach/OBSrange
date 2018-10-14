@@ -1,47 +1,47 @@
 This is BibTeX, Version 0.99d (TeX Live 2015)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: OBS_locate_paper.aux
-I found no \bibdata command---while reading file OBS_locate_paper.aux
-I found no \bibstyle command---while reading file OBS_locate_paper.aux
-You've used 2 entries,
-            0 wiz_defined-function locations,
-            87 strings with 558 characters,
-and the built_in function-call counts, 0 in all, are:
-= -- 0
-> -- 0
-< -- 0
-+ -- 0
-- -- 0
-* -- 0
-:= -- 0
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
-chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 0
-format.name$ -- 0
-if$ -- 0
-int.to.chr$ -- 0
-int.to.str$ -- 0
-missing$ -- 0
-newline$ -- 0
-num.names$ -- 0
-pop$ -- 0
-preamble$ -- 0
-purify$ -- 0
+The style file: agufull08.bst.bst
+Database file #1: refs.bib.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+You've used 8 entries,
+            3076 wiz_defined-function locations,
+            1131 strings with 11366 characters,
+and the built_in function-call counts, 8099 in all, are:
+= -- 820
+> -- 368
+< -- 4
++ -- 143
+- -- 104
+* -- 552
+:= -- 826
+add.period$ -- 8
+call.type$ -- 8
+change.case$ -- 35
+chr.to.int$ -- 9
+cite$ -- 8
+duplicate$ -- 864
+empty$ -- 448
+format.name$ -- 131
+if$ -- 1599
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 100
+newline$ -- 31
+num.names$ -- 32
+pop$ -- 288
+preamble$ -- 1
+purify$ -- 27
 quote$ -- 0
-skip$ -- 0
+skip$ -- 451
 stack$ -- 0
-substring$ -- 0
-swap$ -- 0
+substring$ -- 307
+swap$ -- 720
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
+type$ -- 69
 warning$ -- 0
-while$ -- 0
+while$ -- 45
 width$ -- 0
-write$ -- 0
-(There were 2 error messages)
+write$ -- 99
