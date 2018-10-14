@@ -210,6 +210,7 @@ for ifil = 1:length(synth_dirs)
 %     errorbar(ax1,ifil,RMS_data(ifil)*1000,RMS_95(1,ifil)*1000,RMS_95(2,ifil)*1000,'.k','markerfacecolor',[0.5 0.5 0.5],'markersize',markersize,'linewidth',1.5,'CapSize',13); hold on;
     set(ax1,'yscale','log','linewidth',1.5,'fontsize',16,'XTickLabel',[]);
     xticks(ax1,[1:9]);
+    yticks(ax1,[0.1 1 10 100]);
     ylabel(ax1,'$\delta$TWT (ms)','fontsize',18,'Interpreter','latex')
     title(ax1,'$\textbf{RMS Misfit}$','fontsize',18,'Interpreter','latex');
     xlim(ax1,[0 length(synth_dirs)+1]);   

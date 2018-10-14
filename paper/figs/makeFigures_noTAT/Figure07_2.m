@@ -66,7 +66,7 @@ end
 
 %% Model resolution and Covariance
     f907 = figure(907); clf;
-    set(gcf,'position',[248   261   711   426]);
+    set(gcf,'position',[248   322   607   365]);
     cmap = cmocean('balance');
 %     cmap_R = cmocean('tempo');
     cmap_R = flip(gray);
@@ -90,13 +90,13 @@ for ifil = 1:length(files)
             'XTickLabel',[],'TickLabelInterpreter','latex', ...
             'YTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','$\mathbf{V_{P}}$'});
         
-        ylabel(ax(ifil*2-1),'\textbf{Resolution}','fontsize',18,'Interpreter','latex');
+        ylabel(ax(ifil*2-1),'\textbf{Resolution}','fontsize',16,'Interpreter','latex');
     else
         set(ax(ifil*2-1),'fontsize',16,'linewidth',3,'TickLength',[0 0], ...
             'XTickLabel',[],'TickLabelInterpreter','latex', ...
             'YTickLabel',[]);
     end
-    t = title(ax(ifil*2-1),sprintf('\\textbf{%s}',titles{ifil}),'fontsize',18,'Interpreter','latex');
+    t = title(ax(ifil*2-1),sprintf('\\textbf{%s}',titles{ifil}),'fontsize',16,'Interpreter','latex');
     if ifil == length(files)
         cb1 = colorbar(ax(ifil*2-1),'LineWidth',2);
 %         cb1.Position = [cb1.Position(1) cb1.Position(2)-0.3 cb1.Position(3) cb1.Position(4)];
@@ -121,7 +121,7 @@ for ifil = 1:length(files)
             'XTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','$\mathbf{V_{P}}$'},'TickLabelInterpreter','latex', ...
             'YTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','$\mathbf{V_{P}}$'});
         
-        ylabel(ax(ifil*2),'\textbf{Correlation}','fontsize',18,'Interpreter','latex');
+        ylabel(ax(ifil*2),'\textbf{Correlation}','fontsize',16,'Interpreter','latex');
     else
         set(ax(ifil*2),'fontsize',16,'linewidth',3,'TickLength',[0 0], ...
             'XTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','$\mathbf{V_{P}}$'},'TickLabelInterpreter','latex', ...
@@ -147,7 +147,7 @@ for ifil = 1:length(files)
     
     
     % Title positioning
-    t.Position = [t.Position(1) t.Position(2)-0.3 t.Position(3)];
+    t.Position = [t.Position(1) t.Position(2)-0.2 t.Position(3)];
     
     % Text for "spread"
     dx = 0.65;

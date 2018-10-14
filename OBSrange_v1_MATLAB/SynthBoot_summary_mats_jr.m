@@ -39,6 +39,7 @@ for ifil = 1:Nfils
     data_summary.vmag = sqrt(sum(data(1).v_surv_true.^2,2));
     data_summary.survx = data(1).survx;
     data_summary.survy = data(1).survy;
+    data_summary.survt = data(1).survt;
     data_summary.survey = data(1).survey;
     data_summary.radius = data(1).radius;
         

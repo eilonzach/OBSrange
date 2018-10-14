@@ -2,7 +2,7 @@
 %  Figure 06 compare survey pattern geometries
 function Figure06
 addpath('/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/OBSrange_v1_MATLAB/functions/');
-ofile = '../Figure06';
+ofile = '../Figure06_tradeoff';
 ifsave = 1;
 
 projname = 'mats_SynthBoot_summary_noTAT';
@@ -27,6 +27,7 @@ for ifil = 1:Nfils
     data_all(ifil).vmag = data_summary.vmag;
     data_all(ifil).survx = data_summary.survx;
     data_all(ifil).survy = data_summary.survy;
+    data_all(ifil).survt = data_summary.survt;
     data_all(ifil).survey = data_summary.survey;
     data_all(ifil).radius = data_summary.radius;
     
@@ -140,10 +141,12 @@ ax8.Position = [ax4.Position(1)+dxcol2+dxspace, ax4.Position(2), ax4.Position(3)
 
 markersize = 12;
 %clr = parula(Nfils);
+blues = brewermap(9,'Blues');
 purp = brewermap(3,'Purples');
 Nlines = 2;
 purp2 = brewermap(4,'Purples');
-clr = [brewermap(7,'Blues'); brewermap(3,'Greys'); brewermap(2,'Greens'); brewermap(1,'Reds'); purp(end-1:end,:); brewermap(2,'RdPu')];
+grays = brewermap(4,'Greys');
+clr = [blues(end-6:end,:); grays(end-2:end,:); brewermap(2,'Greens'); brewermap(1,'Reds'); purp(end-1:end,:); brewermap(2,'RdPu')];
 iline = 0;
 for ifil = 1:Nfils
     % MEAN
@@ -224,18 +227,18 @@ for ifil = 1:Nfils
     ylabel(ax6,'$\mathbf{\delta Z\, (m)}$','fontsize',18,'Interpreter','latex')
 
     
-    if ifil==1
-%         plot(ax8,[0 Nfils+1],[TAT_rms TAT_rms],'-','color',[0.7 0 0],'linewidth',3); hold on;
-    end
-    plot(ax8,ifil,misfit_TAT(ifil)*1000,symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
-    set(ax8,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[],'xtick',[],'TickLength',[0.01, 0.001]*3,'layer','top');
+%     if ifil==1
+% %         plot(ax8,[0 Nfils+1],[TAT_rms TAT_rms],'-','color',[0.7 0 0],'linewidth',3); hold on;
+%     end
+%     plot(ax8,ifil,misfit_TAT(ifil)*1000,symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
+%     set(ax8,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[],'xtick',[],'TickLength',[0.01, 0.001]*3,'layer','top');
+% %     ylabel(ax8,'{$\delta$\boldmath$\tau$ (\textbf{ms})}','fontsize',18,'Interpreter','latex')
+%     xlim(ax8,[0 Nfils+1]);
+% %     ylim(ax8,[1 10]);
+% %     ylim(ax8,ax3.YLim);
+%     ylim(ax8,[2.9 3.3]);
+% %     yticks(ax8,[0.001 0.01 0.1 1 10 100]);
 %     ylabel(ax8,'{$\delta$\boldmath$\tau$ (\textbf{ms})}','fontsize',18,'Interpreter','latex')
-    xlim(ax8,[0 Nfils+1]);
-%     ylim(ax8,[1 10]);
-%     ylim(ax8,ax3.YLim);
-    ylim(ax8,[2.9 3.3]);
-%     yticks(ax8,[0.001 0.01 0.1 1 10 100]);
-    ylabel(ax8,'{$\delta$\boldmath$\tau$ (\textbf{ms})}','fontsize',18,'Interpreter','latex')
 
     
     if ifil==1
@@ -250,7 +253,28 @@ for ifil = 1:Nfils
     yticks(ax7,[0.001 0.01 0.1 1 10 100]);
     ylabel(ax7,'$\mathbf{\delta V_{P} \, (m/s)}$','fontsize',18,'Interpreter','latex')
 
+    %% Calculate diminishing return parameter
+%     if any(regexp(lgd{ifil},'PACMAN'))
+    x = data_all(ifil).survx;
+    y = data_all(ifil).survy;
+    t = data_all(ifil).survt;
+    r = sqrt((x-mean(x)).^2+(y-mean(y)).^2)*1000;
+    dt(ifil) = max(t)/60/60;
+    lam(ifil) = dt(ifil) * misfit_r_xy(ifil);
     
+    plot(ax8,ifil,lam(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
+    if any(regexp(lgd{ifil},'line'))
+        lamx = dt(ifil) * misfit_xsta(ifil);
+        plot(ax8,ifil,lamx,symbol{ifil},'markeredgecolor',purp2(end-(Nlines-iline),:),'markersize',markersize,'linewidth',2); hold on;
+    end
+    set(ax8,'yscale','log','linewidth',1.5,'fontsize',16,'xticklabel',[],'xtick',[],'TickLength',[0.01, 0.001]*3,'layer','top');
+%     ylabel(ax8,'{$\delta$\boldmath$\lambda$ (\textbf{m^2})}','fontsize',18,'Interpreter','latex')
+    xlim(ax8,[0 Nfils+1]);
+%     ylim(ax8,[2.5 5]);
+    ylim(ax8,[0.4 max(lam)+10^(floor(log10(max(lam))))*5]);
+    yticks(ax8,[0.001 0.01 0.1 1 10 100 1e3 1e4 1e5 1e6 1e7]);
+    ylabel(ax8,'{\boldmath$\lambda$ (\textbf{m}$\cdot$\textbf{hr})}','fontsize',18,'Interpreter','latex')
+%     end
     %% Make shape legend
     dy = 0.958/(Nfils+0.25);
     ax(ifil) = axes('pos',[0.65 1-dy*ifil 0.05 0.05]);
@@ -263,19 +287,20 @@ for ifil = 1:Nfils
     axis equal;
     xlim([-4 4]);
     ax(ifil).Visible = 'off';
+    
 end
 l = legend(h,lgd,'position',[0.75 0.05 0.1852 0.95],'interpreter','none','fontsize',14,'box','off');
 
 %%
-delete(ax1); delete(ax2); delete(ax3); delete(ax4); delete(ax8);
+delete(ax1); delete(ax2); delete(ax3); delete(ax4); %delete(ax8);
 dx_shift = -0.3;
 dx = 1.6;
-dy_shift = -0.08;
-dy = 1.4;
-ax5.Position = [ax5.Position(1)+dx_shift, ax5.Position(2)+dy_shift, ax5.Position(3)*dx, ax5.Position(4)*dy];
+dy_shift = 0;%-0.08;
+dy = 1;%1.4;
+ax5.Position = [ax5.Position(1)+dx_shift, ax5.Position(2)+dy_shift,   ax5.Position(3)*dx, ax5.Position(4)*dy];
 ax6.Position = [ax6.Position(1)+dx_shift, ax6.Position(2)+dy_shift*2, ax6.Position(3)*dx, ax6.Position(4)*dy];
 ax7.Position = [ax7.Position(1)+dx_shift, ax7.Position(2)+dy_shift*3, ax7.Position(3)*dx, ax7.Position(4)*dy];
-% ax8.Position = [ax8.Position(1)+dx_shift, ax8.Position(2), ax8.Position(3)*dx, ax8.Position(4)];
+ax8.Position = [ax8.Position(1)+dx_shift, ax8.Position(2)+dy_shift*4, ax8.Position(3)*dx, ax8.Position(4)*dy];
 %%
 % Plot all surveys
 fig4 = figure(4); clf;
