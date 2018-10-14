@@ -5,12 +5,16 @@
 \label{fig:cartoon}
 \end{figure}
 
+\newpage
+
 %% Synthetic test (1-station) 
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure01.pdf}
 \caption{Test of location algorithm using synthetic data. A comparison of the true input values (green star and lines) with the inverted model parameters (red circle and red solid lines) demonstrates that the location, depth, and water velocity are extremely well recovered, and the estimated uncertainties on these parameters are consonant with the actual misfit. Top three plots show slices through the F-test surface, contoured by probability. Bottom two plots show histograms from a bootstrap analysis with 95th percentile values indicated by dashed red lines. Inset shows the direction of true (green dashed) and estimated (red) drift with respect to the starting location. }
 \label{fig:one_sta_synth}
 \end{figure}
+
+\newpage
 
 %% Example real station - survey pattern + residuals
 \begin{figure}[h]
@@ -19,12 +23,16 @@
 \label{fig:one_sta_real_survey}
 \end{figure}
 
+\newpage
+
 %% Example real station - bootstrap histogram
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure03.pdf}
 \caption{Histograms of model parameters from the bootstrap inversion of station EC03 in the 2018 Young Pacific ORCA deployment. Red solid line shows mean value, while dashed lines indicate 95th percentiles. Latitude and longitude are plotted in meters from the mean point, for ease of interpretation. The inset plot shows the mean drift azimuth from the drop location (grey square).}
 \label{fig:one_sta_real_histograms}
 \end{figure}
+
+\newpage
 
 %% Example real station - F-tests
 \begin{figure}[h]
@@ -33,12 +41,16 @@
 \label{fig:one_sta_real_ftests}
 \end{figure}
 
+\newpage
+
 %% All stations meso eddy
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure08.pdf}
 \caption{Pacific ORCA deployment, showing drift directions and magnitudes of each OBS instrument relative to their drop points, as well as the water velocity at each location. Note that drift arrows are not to geographic scale. The systematic clock-wise pattern of drift within the water column resembles a meso-scale cyclonic feature moving through this region approximately during the deployment (see Figure~S1, available in the electronic supplement to this article). Station symbol sizes are inversely scaled to acoustic travel time data misfit.}
 \label{fig:meso_eddy}
 \end{figure}
+
+\newpage
 
 %% Comparison to previous tools
 \begin{figure}[h]
@@ -47,12 +59,16 @@
 \label{fig:compare_tool}
 \end{figure}
 
+\newpage
+
 %% Exploring survey geometries
 \begin{figure}[h]
 \includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=12cm]{Figure06.pdf}
-\caption{ a--c) RMS model parameter misfits for 10,000 synthetic survey realizations of various survey geometries with varying radii: \textit{PACMAN}, \textit{Circle}, \textit{Cross}, \textit{Diamond}, \textit{Line}, and \textit{Triangle}. Each survey geometry is shown to the left of its respective legend entry. Horizontal instrument location misfit is again given by $\delta r_{xy} = \sqrt{\delta x^2 + \delta y^2} $. Open stars for the line tests denote misfit in the direction running parallel to the line ($x$-direction for these tests). d) Quantification of diminishing returns as radius of \textit{PACMAN} survey is increased, where $\lambda$ is the product of survey radius with $\delta r_{xy}$ misfit. The lowest (ideal) value of $\lambda$ occurs with a radius of 0.75~Nm. e) Decrease in horizontal location misfit with increasing \textit{PACMAN} survey radius ($\nabla r_{xy}$). Improvements in misfit become negligible as radius increases beyond 0.75--1~Nm.}
+\caption{ a--c) RMS model parameter misfits for 10,000 synthetic survey realizations of various survey geometries with varying radii: \textit{PACMAN}, \textit{Circle}, \textit{Cross}, \textit{Diamond}, \textit{Line}, and \textit{Triangle}. Each survey geometry is shown to the left of its respective legend entry. Horizontal instrument location misfit is again given by $\delta r_{xy} = \sqrt{\delta x^2 + \delta y^2} $. Open stars for the line tests denote misfit in the direction running parallel to the line ($x$-direction for these tests). d) Quantification of diminishing returns as radius of \textit{PACMAN} survey is increased, where $\lambda$ is the product of survey radius with $\delta r_{xy}$ misfit. The lowest (ideal) value of $\lambda$ occurs with a radius of 0.75~Nm. e) Decrease in horizontal location misfit with increasing \textit{PACMAN} survey radius ($\nabla r_{xy}$). Improvements in horizontal misfit become negligible as radius increases beyond 0.75--1~Nm.}
 \label{fig:survey_geom_explore}
 \end{figure}
+
+\newpage
 
 %% Resolution and correlation matrices
 \begin{figure}[h]

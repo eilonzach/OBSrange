@@ -1,4 +1,5 @@
-\documentclass[11pt]{amsart}
+\documentclass[12pt,titlepage]{article}
+\usepackage[margin=1in]{geometry}
 \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
 \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
 %\geometry{landscape}                % Activate for for rotated page geometry
@@ -8,21 +9,37 @@
 \usepackage{epstopdf}
 \usepackage[round,sort,comma]{natbib}
 \usepackage{multirow}
+\usepackage{lineno}
+\linenumbers
+\usepackage{setspace}
+\doublespacing
+%\usepackage{amsaddr}
+\usepackage[breaklinks,colorlinks]{hyperref}
+\usepackage{amsmath}
+\usepackage{authblk}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \graphicspath{{./figs/}}
 
-\title{OBSrange: A new tool for the precise remote location of Ocean Bottom Seismometers}
-\author{Russell~J., Eilon~Z., and Mosher~S. }
-%\date{}                                           % Activate to display a given date or no date
 
 \begin{document}
+\title{\Large\bfseries OBSrange: A new tool for the precise remote location of Ocean Bottom Seismometers}
+
+\author[ ]{Joshua B. Russell \thanks{jrussell@ldeo.columbia.edu}}
+\author[2]{Zachary Eilon}
+\author[3]{Stephen G. Mosher}
+
+\affil[1]{Department of Earth and Environmental Sciences, Lamont-Doherty Earth Observatory of Columbia University, Palisades, NY, USA.}
+\affil[2]{Department of Earth Science, University of California Santa Barbara, Santa Barbara, CA, USA.}
+\affil[3]{Department of Physics, University of Ottawa, Ottawa, Ontario, Canada.}
+\date{}
+
 \maketitle
+
 %\section{}
 %\subsection{}
 
 \input{sections_noTAT/abstract.tex}
-
 %% ---------------- INTRODUCTION ---------------- %%
 \section{Introduction}
 \input{sections_noTAT/introduction.tex}
@@ -43,6 +60,14 @@
 \section{Conclusion }
 \input{sections_noTAT/conclusion.tex}
 
+%% ---------------- DATA AND RESOURCES ---------------- %%
+\section{Data and Resources }
+\input{sections_noTAT/data_and_resources.tex}
+
+%% ---------------- ACKNOWLEDGMENTS ---------------- %%
+\section{Acknowledgments }
+\input{sections_noTAT/acknowledgments.tex}
+
 %% ---------------- REFERENCES ---------------- %%
 \newpage
 %\bibliographystyle{srl.bst}
@@ -50,7 +75,7 @@
 
 %% ---------------- FIGURES ---------------- %%
 \newpage
-\section{Figures and Tables }
+%\section{Figures and Tables }
 \input{sections_noTAT/figures.tex}
 \newpage
 \input{sections_noTAT/tables.tex}
