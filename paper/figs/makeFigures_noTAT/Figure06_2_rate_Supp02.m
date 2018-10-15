@@ -364,6 +364,7 @@ text(1,55,txt,'interpreter','latex','fontsize',18);
 
 cla(ax4);
 plot(ax4,xx,df_dx,'-','color',blues(7,:),'linewidth',2); hold on;
+plot(ax4,[0.75 0.75],[-90 0],'--k','linewidth',2);
 set(ax4,'yscale','linear','linewidth',1.5,'fontsize',16,'TickLength',[0.01, 0.001]*3,...
     'layer','top','xminortick','on','yminortick','on','yaxislocation','right');
 % ylabel(ax4,'$\mathbf{m/Nm}$','fontsize',16,'Interpreter','latex')
