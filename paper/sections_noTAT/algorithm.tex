@@ -67,7 +67,7 @@ where $\mathbf{G}$ is a matrix of partial derivatives: $G_{ij} = \partial d_i/\p
 	-\frac{2 \, r_i}{V_P^2} \,.
 \end{align}
 
-We use the drop coordinates and water depth (if available from multibeam) as a starting model, along with $V_P = 1500$ m/s. We fix $\tau =$13 ms, which is the default value for all ITC and ORE Offshore and EdgeTech transponders and underwater communications transducers (Ernest Aaron, \textit{pers. comm.}). There is some degree of trade off between the water depth and the water velocity. Simplistically, if all survey measurements are made at a constant distance from the station (\textit{e.g.}, if the survey is a circle centered on the station) then these parameters co-vary perfectly. As a result, the inverse problem is ill-posed and, like all mixed-determined problems, requires regularization. We damp perturbations in $V_P$, which is not likely to vary substantially from 1500 m/s, and implement global norm damping to stabilize the inversion:
+We use the drop coordinates and water depth (if available from multibeam) as a starting model, along with $V_P = 1500$ m/s. We fix $\tau =$13 ms, which is the default value for all ITC and ORE Offshore and EdgeTech transponders and underwater communications transducers (Ernest Aaron, \textit{pers. comm.}). There is some degree of trade-off between the water depth and the water velocity. Simplistically, if all survey measurements are made at a constant distance from the station (\textit{e.g.}, if the survey is a circle centered on the station) then these parameters co-vary perfectly. As a result, the inverse problem is ill-posed and, like all mixed-determined problems, requires regularization. We damp perturbations in $V_P$, which is not likely to vary substantially from 1500 m/s, and implement global norm damping to stabilize the inversion:
 
 \begin{equation}
 	\mathbf{F} = 
@@ -99,10 +99,10 @@ This equation is solved iteratively, until the root-mean-squared (RMS) of the mi
 
 \subsection{Errors and uncertainty}
 In order to estimate the uncertainty in our model, we perform 1,000 bootstrap iterations on survey travel-time data with a balanced resampling approach. In each iteration the algorithm inverts a random sub-sample of the true data set, with the constraint that all data points are eventually sampled an equal number of times. This approach provides empirical probability distributions of possible model parameters, but does not straightforwardly offer quantitative estimates of model uncertainty because the goodness of data fit for each run in the bootstrap iteration is ignored (that is, within each iteration, a model is found that best fits the randomly sub-sampled dataset, but in the context of the full dataset, the fit and uncertainty of that particular model may be relatively poor). For more statistically robust uncertainty estimates, we perform a grid search over ($x,y,z$) within a region centered on the bootstrapped mean location, 
-$(x_{{\text{best}}},y_{{\text{best}}},z_{{\text{best}}})$. For each perturbed location, ($x^{\prime},y^{\prime},z^{\prime}$), we use an F-test to compare the norm of the data prediction error to the minimum error, assuming they each have a $\chi^2$ distribution. The effective number of degrees of freedom, $\nu$ is calculated as 
+$(x_{{\text{best}}},y_{{\text{best}}},z_{{\text{best}}})$. For each perturbed location, ($x^{\prime},y^{\prime},z^{\prime}$), we use an F-test to compare the norm of the data prediction error to the minimum error, assuming they each have a $\chi^2$ distribution. The effective number of degrees of freedom, $\nu$ can be approximated as 
 
 \begin{equation}
-\nu = N_f - \text{tr}(\mathbf{F}\mathbf{F}_{\text{inv}}) \,,
+\nu \approx N_f - \text{tr}(\mathbf{F}\mathbf{F}_{\text{inv}}) \,,
 \end{equation}
 where $\mathbf{F}_{\text{inv}}= \left[ \mathbf{F}^{\text{T}} \mathbf{F} \right]^{-1} \mathbf{F}^{\text{T}}$, $N_f$ is the length of vector $\mathbf{f}$, and $\text{tr}()$ denotes the trace. Using the F-test, we can evaluate the statistical probability of the true OBS location departing from our best-fitting location by a given value. 
 
