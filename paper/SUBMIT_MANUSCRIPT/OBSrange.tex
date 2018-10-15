@@ -1,0 +1,109 @@
+\documentclass[12pt,titlepage]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage[round,sort,comma]{natbib}
+\usepackage{multirow}
+\usepackage{lineno}
+\linenumbers
+\usepackage{setspace}
+\doublespacing
+%\usepackage{amsaddr}
+\usepackage[colorlinks=true,allcolors=blue,breaklinks]{hyperref}
+\usepackage{amsmath}
+\usepackage{authblk}
+%\usepackage[none]{hyphenat}
+
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+%\graphicspath{{./figs/}}
+
+
+\begin{document}
+\title{\Large\bfseries OBSrange: A new tool for the precise remote location of Ocean Bottom Seismometers}
+
+\author[ ]{Joshua B. Russell \thanks{jrussell@ldeo.columbia.edu}}
+\author[2]{Zachary Eilon}
+\author[3]{Stephen G. Mosher}
+
+\affil[1]{Department of Earth and Environmental Sciences, Lamont-Doherty Earth Observatory of Columbia University, Palisades, NY, USA.}
+\affil[2]{Department of Earth Science, University of California Santa Barbara, Santa Barbara, CA, USA.}
+\affil[3]{Department of Physics, University of Ottawa, Ottawa, Ontario, Canada.}
+\date{}
+
+\maketitle
+
+%\section{}
+%\subsection{}
+
+\input{abstract.tex}
+%% ---------------- INTRODUCTION ---------------- %%
+\section{Introduction}
+\input{introduction.tex}
+
+%% ---------------- ALGORITHM ---------------- %%
+\section{Algorithm }
+\input{algorithm.tex}
+
+%% ---------------- RESULTS ---------------- %%
+\section{Results }
+\input{results.tex}
+
+%% ---------------- DISCUSSION ---------------- %%
+\section{Discussion }
+\input{discussion.tex}
+
+%% ---------------- CONCLUSION ---------------- %%
+\section{Conclusion }
+\input{conclusion.tex}
+
+%% ---------------- DATA AND RESOURCES ---------------- %%
+\section{Data and Resources }
+\input{data_and_resources.tex}
+
+%% ---------------- ACKNOWLEDGMENTS ---------------- %%
+\section{Acknowledgments }
+\input{acknowledgments.tex}
+
+%% ---------------- ADDRESSES ---------------- %%
+\newpage
+{\bfseries\sffamily 
+\noindent Joshua B. Russell \\
+Department of Earth and Environmental Sciences \\
+Lamont-Doherty Earth Observatory of Columbia University \\
+61 Route 9W - PO Box 1000 \\
+Palisades, New York 10964 U.S.A. \\
+
+\noindent Zachary Eilon \\
+Department of Earth Science \\
+2016 Webb Hall \\
+University of California Santa Barbara \\
+Santa Barbara, California 93106 U.S.A. \\
+
+\noindent Stephen G. Mosher \\
+Department of Earth and Environmental Sciences \\
+University of Ottawa \\
+Office Number 15038, 120 University Private \\
+Ottawa, Ontario \\
+Canada K1N 6N5
+}
+%% ---------------- REFERENCES ---------------- %%
+\newpage
+%\bibliographystyle{srl.bst}
+%\bibliographystyle{plainnat}
+\bibliographystyle{agufull08.bst}
+\bibliography{refs.bib}
+
+%% ---------------- FIGURES ---------------- %%
+\newpage
+%\section{Figures and Tables }
+\input{figures.tex}
+\newpage
+\input{tables.tex}
+
+
+\end{document}  
