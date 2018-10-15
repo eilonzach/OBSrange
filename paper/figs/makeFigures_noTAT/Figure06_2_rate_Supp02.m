@@ -4,7 +4,7 @@
 function Figure06
 addpath('/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/OBSrange_v1_MATLAB/functions/');
 ofile = '../Figure06';
-ofile_supp = '../Figure_Supp02';
+ofile_supp = '../FigureS2';
 ifsave = 1;
 
 projname = 'mats_SynthBoot_summary_noTAT';

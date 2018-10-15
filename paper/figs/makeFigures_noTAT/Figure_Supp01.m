@@ -2,7 +2,7 @@
 %  Figure S1 geostrophic flow data
 function Figure_Supp01
 addpath('/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/OBSrange_v1_MATLAB/functions/');
-ofile = '../Figure_supp01';
+ofile = '../FigureS1';
 datadir = '/Users/russell/Lamont/PROJ_OBSrange/geostrophicflow_plots/data/dataset-duacs-nrt-global-merged-allsat-phy-l4-v3/unzipped/';
 ifsave = 1;
 
