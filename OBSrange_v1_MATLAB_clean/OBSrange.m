@@ -19,13 +19,9 @@ clear; close all;
 
 % JOSH
 projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_noTAT/'; % DATA
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03 only
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTHETIC
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest4/'; % SYNTHETIC 3
 
 % ZACH
 % projpath = '~/Work/OBSrange/projects/PacificORCA/';
-% projpath = '~/Work/OBSrange/synthetics/synth_recovery_1sta/';
 
 % STEVE
 % projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
@@ -35,7 +31,7 @@ projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/Pacifi
 
 % path to survey data from the project directory
 datapath = './'; 
-% path to output directory from project directory(will be created if it does not yet exist)
+% path to output directory from project directory (will be created if it does not yet exist)
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
@@ -77,8 +73,7 @@ par.epsilon = 1e-10;
 %% ===================================================================== %%
 
 % prepend functions directory to MATLAB path
-fullMAINpath = mfilename('fullpath');
-functionspath = [fullMAINpath(1:regexp(fullMAINpath,mfilename)-1),'functions'];
+functionspath = [pwd,'/functions'];
 addpath(functionspath);
 
 %% Load 2-way Travel Time Data
@@ -179,7 +174,7 @@ for ibs = 1:par.N_bs
     twt_bs = twtmat_bs(:,ibs);
     
     [ m_final,models,v,N,R,Cm ] = ...
-        inv_newtons_noTAT( par,m0_strt,twt_bs,...
+        inv_newtons( par,m0_strt,twt_bs,...
                     x_ship_bs,y_ship_bs,z_ship_bs,...
                     v_ship_bs,H);
 
@@ -225,7 +220,7 @@ range = sqrt( (mean(x_sta)-x_ship).^2 + (mean(y_sta)-y_ship).^2 + (mean(z_sta)-z
 
 %% HISTOGRAMS OF MODEL PARAMETERS
 if ifplot
-PLOT_histograms_all_noTAT
+PLOT_histograms_all
 end
 
 %% F-test for uncertainty using grid search
@@ -246,7 +241,7 @@ if ifplot
 	PLOT_survey
 	PLOT_twt_corr
     %% Model Resolution & Covariance
-    PLOT_resolution_covariance_noTAT
+    PLOT_resolution_covariance
     drawnow;
 end
 
