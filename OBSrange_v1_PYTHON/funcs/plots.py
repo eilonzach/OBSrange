@@ -18,8 +18,8 @@ def model_histos(res, bins):
   ax1 = axes[0,0]
   ax2 = axes[0,1]
   ax3 = axes[0,2]
-  ax4 = axes[1,0]
-  ax5 = axes[1,1]
+  ax4 = axes[1,1]
+  ax5 = axes[1,0]
   ax6 = axes[1,2]
   c = 'orangered'
 
@@ -31,12 +31,11 @@ def model_histos(res, bins):
   p1 = np.mean(res.ys) - res.ys
   p2 = np.mean(res.xs) - res.xs
   p3 = res.zs
-  p4 = res.tats * 1000
   p5 = res.vpws
   p6 = res.drifts
 
   # Plot histograms of each parameter
-  ax1.hist(p1, bins, edgecolor='k', lw=1.0)
+  ax1.hist(p1, bins, edgecolor='k', lw=1.0, density=True)
   ax1.axvline(np.mean(p1) - np.std(p1), 0, 1, color=c, ls='--', lw=2.5)
   ax1.axvline(np.mean(p1) + np.std(p1), 0, 1, color=c, ls='--', lw=2.5)
   ax1.axvline(np.mean(p1), 0, 1, color=c, lw=2.5)
@@ -54,12 +53,8 @@ def model_histos(res, bins):
   ax3.axvline(np.mean(p3), 0, 1, color=c, lw=2.5)
   ax3.set_title('Depth (m)')
   ax3.locator_params(axis='x', nbins=4)
-  
-  ax4.hist(p4, bins, edgecolor='k', lw=1.0)
-  ax4.axvline(np.mean(p4) - np.std(p4), 0, 1, color=c, ls='--', lw=2.5)
-  ax4.axvline(np.mean(p4) + np.std(p4), 0, 1, color=c, ls='--', lw=2.5)
-  ax4.axvline(np.mean(p4), 0, 1, color=c, lw=2.5)
-  ax4.set_title('TAT (ms)')
+
+  ax4.axis('off') # ax4 is a placeholder
   
   ax5.hist(p5, bins, edgecolor='k', lw=1.0)
   ax5.axvline(np.mean(p5) - np.std(p5), 0, 1, color=c, ls='--', lw=2.5)
@@ -464,8 +459,8 @@ def resolution_covariance(R, M):
   ax2 = axes[1]
 
   # Parameters
-  resol = R.resol[:,:,0]
-  cov = R.cov[:,:,0]
+  resol = R.mod_res[:,:,0]
+  cov = R.mod_cov[:,:,0]
 
   # Convert covariance to correlation
   A = np.diag(np.sqrt(np.diag(cov)))
