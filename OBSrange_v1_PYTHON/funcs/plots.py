@@ -35,7 +35,7 @@ def model_histos(res, bins):
   p6 = res.drifts
 
   # Plot histograms of each parameter
-  ax1.hist(p1, bins, edgecolor='k', lw=1.0, density=True)
+  ax1.hist(p1, bins, edgecolor='k', lw=1.0)
   ax1.axvline(np.mean(p1) - np.std(p1), 0, 1, color=c, ls='--', lw=2.5)
   ax1.axvline(np.mean(p1) + np.std(p1), 0, 1, color=c, ls='--', lw=2.5)
   ax1.axvline(np.mean(p1), 0, 1, color=c, lw=2.5)
@@ -474,9 +474,10 @@ def resolution_covariance(R, M):
   #xlabels = [str(int(label) + 1) for label in xlabels]
   #ylabels = ax1.get_yticks()
   #ylabels = [str(int(label) + 1) for label in ylabels]
-  xlabels = ['', '$X$', '$Y$', '$Z$', r'$\tau$', '$V_{P}$']
+  xlabels = ['', '$X$', '$Y$', '$Z$', '$V_{P}$']
+  ylabels = ['', '$X$','','$Y$','','$Z$','','$V_{P}$','']
   ax1.set_xticklabels(xlabels)
-  ax1.set_yticklabels(xlabels)
+  ax1.set_yticklabels(ylabels)
   plt.colorbar(m1, fraction=0.046, pad=0.04, ax=ax1)
 
   # Add grid lines
@@ -492,7 +493,7 @@ def resolution_covariance(R, M):
   #xlabels = [str(int(label) + 1) for label in xlabels]
   #ylabels = ax2.get_yticks()
   #ylabels = [str(int(label) + 1) for label in ylabels]
-  xlabels = ['', '$X$', '$Y$', '$Z$', r'$\tau$', '$V_{P}$']
+  xlabels = ['', '$X$', '$Y$', '$Z$','$V_{P}$']
   ax2.set_xticklabels(xlabels)
   ax2.set_yticklabels([])
   plt.colorbar(m2, fraction=0.046, pad=0.04, ax=ax2)
