@@ -19,15 +19,14 @@ from funcs import fetch, locate, output
 
 vpw = 1500.0      # Assumed velocity of sound in water (m/s)
 dvp = 0           # Assumed perturbation to vpw (m/s)
-tat = 0.013       # Assumed sensor turn-around time (s)
-N_bs = 500        # Number of bootstrap iterations
+tat = 0.014       # Assumed sensor turn-around time (s)
+N_bs = 1000       # Number of bootstrap iterations
 E_thresh = 1e-5   # RMS reduction threshold for inversion
 twtcorr = False   # Option to apply a travel-time correction for ship velocity
 npts = 1          # Npts in moving avg smoothing of ship vel. (1 = no smoothing)
 dampx = 0         # Norm damping for each model parameter             
 dampy = 0         #             .
 dampz = 0         #             .    
-damptat = 2e-1    #             .     
 dampdvp = 5e-8    #             .      
 eps = 1e-10       # Global norm damping for stabilization
 M = 5             # Number of model parameters being solved for by inversion
@@ -37,15 +36,19 @@ bounds = [0.005,
           0.025]  # Acceptable bounds for turn-around time solutions.
 
 parameters = [vpw, dvp, tat, N_bs, E_thresh, twtcorr, npts, dampx, dampy, \
-              dampz, damptat, dampdvp, eps, M, QC, res_thresh, bounds]
+              dampz, dampdvp, eps, M, QC, res_thresh, bounds]
+
+################################ Directory Setup ###############################
+
+survey_dir = './survey_files/'
+output_dir = './output/' 
 
 ###################### Run Inversion for Each Survey File ######################
 
-# Specify location of survey files.
-survey_fles = fetch.data_paths('./survey_files/', matchkey='*.txt')
+# Grab survey files.
+survey_fles = fetch.data_paths(survey_dir, matchkey='*.txt')
 
-# Specify head output directory. Make output directories if necessary.
-output_dir = './output/'
+# Create output sub-directories.
 out_pkls = output_dir+'data_pkls/'
 out_plts = output_dir+'plots/'
 out_txts = output_dir+'data_txts/'
@@ -55,7 +58,7 @@ if not os.path.exists(output_dir):
   os.mkdir(out_plts)
   os.mkdir(out_txts)
 
-# Perform locations for each survey site then save output.
+# Perform locations for each survey site then write results to output.
 for survey_fle in survey_fles:
   results, figs = locate.instruments(survey_fle, parameters)
   output.out(results, figs, out_pkls, out_plts, out_txts)
