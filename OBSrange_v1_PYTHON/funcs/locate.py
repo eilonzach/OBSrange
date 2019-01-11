@@ -32,10 +32,9 @@ def instruments(datafile, parameters):
   dampz      = parameters[9]   
   dampdvp    = parameters[10]
   eps        = parameters[11]    
-  M          = parameters[12]
-  QC         = parameters[13]
-  res_thresh = parameters[14]
-  bounds     = parameters[15]     
+  QC         = parameters[12]
+  res_thresh = parameters[13]
+  bounds     = parameters[14]     
   
   ######################### Load and Clean Input Data ##########################
   
@@ -89,15 +88,15 @@ def instruments(datafile, parameters):
   print('\n Running bootstrap inversion ...')
   
   # Initialize starting model.
-  Tracer()()
-  m0_strt = np.array([x0, y0, z0, tat0, dvp0])
+  m0_strt = np.array([x0, y0, z0, dvp0])
+  M = len(m0_strt)
   
   # Initialize a results object to hold various results.
   R = results.results(N_bs, Nobs, M)
 
   # Perform bootstrap inversion.
-  R = bootstrap.inv(X, Y, Z, V, TWT, R, parameters, m0_strt, coords)
-
+  R = bootstrap.inv(X, Y, Z, V, TWT, R, parameters, m0_strt, coords, M)
+  
   # Unscramble randomly sampled data for plotting and evaluation.
   R.dtwts = np.mean(bootstrap.unscramble(R.dtwts, indxs), axis=1)
   R.twts = np.mean(bootstrap.unscramble(R.twts, indxs), axis=1)
@@ -173,8 +172,8 @@ def instruments(datafile, parameters):
                    'drifts': R.drifts,   # sensor drift distance for each itr
                    'azs': R.azs,         # sensor drift azimuth for each itr
                    'drift_az': drft_az,  # mean drift distance and azimuth
-                   'cov': R.cov,         # final model covariance 
-                   'resolution': R.resol,# final model resolution
+                   'cov': R.mod_cov,     # final model covariance 
+                   'res': R.mod_res,     # final model resolution
                    'Ftest_res': ft_res,  # results from the Ftest
                    'Nbad': N_badpings,   # number of pings removed with QC
                    'vrs': R.vrs          # ship's radial velocity

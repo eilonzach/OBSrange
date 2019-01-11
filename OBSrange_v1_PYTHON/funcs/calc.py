@@ -41,7 +41,7 @@ A function to build the G matrix for the inversion.
 def G(x, y, z, dvp, x_ship, y_ship, z_ship, vpw, Nobs, M):
   # Initialize G matrix.
   G = np.ndarray(shape=(Nobs, M))
-
+  
   # Anonymous function for calculating distances.
   D = lambda x0, y0, z0, x, y, z : np.sqrt((x0-x)**2 + (y0-y)**2 + (z0-z)**2)
 
@@ -51,9 +51,7 @@ def G(x, y, z, dvp, x_ship, y_ship, z_ship, vpw, Nobs, M):
   G[:,1] = -(y_ship-y) * 2 / (vpw+dvp) / D(x_ship, y_ship, z_ship, x, y, z)
   # Third column: dti/dz
   G[:,2] = -(z_ship-z) * 2 / (vpw+dvp) / D(x_ship, y_ship, z_ship, x, y, z)
-  # Fourth column: dti/dTAT
-  G[:,3] = np.ones(Nobs)
   # Fifth column: dti/ddvp
-  G[:,4] = -2 * D(x_ship, y_ship, z_ship, x, y, z) / (vpw+dvp)**2
+  G[:,3] = -2 * D(x_ship, y_ship, z_ship, x, y, z) / (vpw+dvp)**2
 
   return G

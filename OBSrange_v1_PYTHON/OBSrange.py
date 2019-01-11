@@ -29,14 +29,13 @@ dampy = 0         #             .
 dampz = 0         #             .    
 dampdvp = 5e-8    #             .      
 eps = 1e-10       # Global norm damping for stabilization
-M = 5             # Number of model parameters being solved for by inversion
 QC = True         # Option to perform quality control on survey data points
 res_thresh = 500  # Threshold (in ms) beyond which survey data points are tossed
 bounds = [0.005, 
           0.025]  # Acceptable bounds for turn-around time solutions.
 
 parameters = [vpw, dvp, tat, N_bs, E_thresh, twtcorr, npts, dampx, dampy, \
-              dampz, dampdvp, eps, M, QC, res_thresh, bounds]
+              dampz, dampdvp, eps, QC, res_thresh, bounds]
 
 ################################ Directory Setup ###############################
 
@@ -47,6 +46,10 @@ output_dir = './output/'
 
 # Grab survey files.
 survey_fles = fetch.data_paths(survey_dir, matchkey='*.txt')
+
+# Remove below later
+survey_fles = [survey_fles[-16]]
+# Remove above later
 
 # Create output sub-directories.
 out_pkls = output_dir+'data_pkls/'

@@ -67,7 +67,7 @@ def unscramble(data, idxs):
   
   return unscrambled_data
 
-def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
+def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords, M):
   # Grab required parameters.
   vpw0     = parameters[0]    
   dvp0     = parameters[1]    
@@ -78,11 +78,9 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
   dampx    = parameters[7]   
   dampy    = parameters[8]   
   dampz    = parameters[9]   
-  damptat  = parameters[10]
-  dampdvp  = parameters[11]
-  eps      = parameters[12]   
-  M        = parameters[13]
-  bounds   = parameters[16]
+  dampdvp  = parameters[10]
+  eps      = parameters[11]   
+  bounds   = parameters[14]
   Nobs     = X.shape[0]
   x0       = coords[0][0]
   y0       = coords[0][1]
@@ -119,8 +117,7 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
       x = m0[0]
       y = m0[1]
       z = m0[2]
-      tat = m0[3]
-      dvp = m0[4]
+      dvp = m0[3]
 
       # Apply correction to two-way travel-times due to ship velocity.
       ctd, cns, vr = calc.tt_corr(x, y, z, xbs, ybs, zbs, vbs, vpw0, dvp, twtbs)
@@ -133,32 +130,39 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
       G = calc.G(x, y, z, dvp, xbs, ybs, zbs, vpw0, Nobs, M)
       
       # Set up norm damping for each parameter.
-      H = np.eye(M) * np.diag([dampx, dampy, dampz, damptat, dampdvp])
+      H = np.eye(M) * np.diag([dampx, dampy, dampz, dampdvp])
       h = np.zeros(M)
       
       # Calculate predicted travel-times for this iteration and residuals.
-      twt_pre = calc.twt(x, y, z, xbs, ybs, zbs, vpw0, dvp, tat)
+      twt_pre = calc.twt(x, y, z, xbs, ybs, zbs, vpw0, dvp, tat0)
       dtwt = twts - twt_pre
 
       # Calculate RMS error.
       E = np.sqrt( np.sum(dtwt**2) / Nobs)
       
-      # Least squares solution.  
-      F = np.concatenate([G, H])
-      f = np.concatenate([dtwt, h])
-      Finv = LA.solve(np.dot((F.T), F) + (eps * np.eye(M)), F.T)
-      
+      # Least squares solution.
+      J = np.eye(M) * np.sqrt(eps)  
+      F = np.concatenate([G, H, J])
+      f = np.concatenate([dtwt, h, np.zeros(M)])
+      Finv = LA.solve(np.dot((F.T), F), F.T)
+
       # Model update. 
       m1 = m0 + np.dot(Finv, f)
+
+      # Invert G.
+      Ginv = LA.solve(np.dot(G.T, G) + np.dot(H.T, H) + np.dot(J.T, J), G.T)
       
       # Calculate the effective degrees of freedom (for F-test)
       v = len(f) - np.trace(np.dot(F, Finv))
+      
+      # Exclude 0=0 constraint equations from v_eff
+      v = v - np.sum(np.sum(H,axis=1) == 0) - np.sum(np.sum(J, axis=1) == 0)
 
       # Apply turn-around time bounds if necessary.
-      if m1[3] < bounds[0]:
-        m1[3] = bounds[0]
-      elif m1[3] > bounds[1]:
-        m1[3] = bounds[1]
+      #if m1[3] < bounds[0]:
+      #  m1[3] = bounds[0]
+      #elif m1[3] > bounds[1]:
+      #  m1[3] = bounds[1]
       
       # Record output of current iteration in m0, E, and dtwt.
       R.models[str(i)][str(j)] = {'m': m0, 'E': E, 'dtwt': dtwt}
@@ -166,14 +170,15 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords):
       # Update inversion RMS.
       if j > 1:
         dE = R.models[str(i)][str(j-1)]['E'] - R.models[str(i)][str(j)]['E']
-
+    
     # Model resolution and covariance
-    resol = np.matmul(Finv, F)
-    cov = np.matmul(Finv, Finv.T)
+    dat_res = np.matmul(G, Ginv)
+    mod_res = np.matmul(Ginv, G)
+    mod_cov = np.matmul(Ginv, Ginv.T)
 
     # Update results object with stabilized results of current bootstrap it.
     R.update(i, m0, vpw0, E, v, dtwt, twts, cns, vr, x0, y0, z0, xs, ys, \
-             resol, cov)
+             dat_res, mod_res, mod_cov, tat0)
     
     # Convert stabilized result coords of current iteration back to lat lon.
     R.lats[i], R.lons[i] = coord_txs.xy2latlon(R.xs[i], R.ys[i], lat0, lon0)
