@@ -47,10 +47,6 @@ output_dir = './output/'
 # Grab survey files.
 survey_fles = fetch.data_paths(survey_dir, matchkey='*.txt')
 
-# Remove below later
-survey_fles = [survey_fles[-16]]
-# Remove above later
-
 # Create output sub-directories.
 out_pkls = output_dir+'data_pkls/'
 out_plts = output_dir+'plots/'
