@@ -9,7 +9,7 @@ Stephen M. 04/23/18
 # Import modules and functions
 import numpy as np
 
-class resl:
+class results:
   '''
   Initialization
   '''

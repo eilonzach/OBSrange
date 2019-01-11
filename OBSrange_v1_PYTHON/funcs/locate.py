@@ -15,9 +15,10 @@ import numpy as np
 import numpy.linalg as LA
 from funcs import pings, coord_txs, bootstrap, results, calc, ftest, plots, vel
 
+from IPython.core.debugger import Tracer
+
 def instruments(datafile, parameters):
   ################### Independent Parameter Initializations ####################
- 
   print('\n Initializing independent parameters ...')
   vpw0       = parameters[0]    
   dvp0       = parameters[1]    
@@ -29,13 +30,12 @@ def instruments(datafile, parameters):
   dampx      = parameters[7]   
   dampy      = parameters[8]   
   dampz      = parameters[9]   
-  damptat    = parameters[10]
-  dampdvp    = parameters[11]
-  eps        = parameters[12]    
-  M          = parameters[13]
-  QC         = parameters[14]
-  res_thresh = parameters[15]
-  bounds     = parameters[16]     
+  dampdvp    = parameters[10]
+  eps        = parameters[11]    
+  M          = parameters[12]
+  QC         = parameters[13]
+  res_thresh = parameters[14]
+  bounds     = parameters[15]     
   
   ######################### Load and Clean Input Data ##########################
   
@@ -81,7 +81,6 @@ def instruments(datafile, parameters):
   ############################ Bootstrap Resampling ############################
   
   print('\n Performing bootstrap resampling ...')
-  
   # Randomly resample model data. First columns are unpermutted input data.
   X, Y, Z, V, TWT, indxs = bootstrap.sampling(xs, ys, zs, vs, twts, N_bs)
 
@@ -90,10 +89,11 @@ def instruments(datafile, parameters):
   print('\n Running bootstrap inversion ...')
   
   # Initialize starting model.
+  Tracer()()
   m0_strt = np.array([x0, y0, z0, tat0, dvp0])
   
   # Initialize a results object to hold various results.
-  R = results.resl(N_bs, Nobs, M)
+  R = results.results(N_bs, Nobs, M)
 
   # Perform bootstrap inversion.
   R = bootstrap.inv(X, Y, Z, V, TWT, R, parameters, m0_strt, coords)
