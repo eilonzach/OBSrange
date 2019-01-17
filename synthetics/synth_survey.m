@@ -5,7 +5,8 @@ addpath('/Users/russell/GRAD/FIELD_WORK/PacificArray_2018/UsefulMATLAB/');
 % profile clear 
 % profile on
 %% TRUE VALUES
-drop_location = [-7.54 -133.62 5]; % [lat,lon,z]
+water_depth = 5; % in km
+drop_location = [-7.54 -133.62 water_depth]; % [lat,lon,z]
 noise = 0.004; %0.004; % std of timing error
 
 ifsave = true;
@@ -46,7 +47,7 @@ tat_std = 3e-3; %1e-3; %3e-3;
 
 % system/default parameters
 nm2km = 1.852;
-obs_default_xyz = [ 0 0 5 ]; % x,y,z (km)
+obs_default_xyz = [ 0 0 water_depth ]; % x,y,z (km)
 vp_default = 1.5; % km/s
 tat_default = 0.013; %s
 

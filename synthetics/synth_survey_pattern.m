@@ -112,7 +112,31 @@ switch survey
     % full survey path
     fsurvx = [mox,dix]'; % in km
     fsurvy = [moy,diy]'; % in km  
-    case 'line'
+    case 'hourglass'
+    %% like cross but with quarter-circles instead of diagonals, and return to station
+    % move-out to point at heading 0
+    moy = [0:dl:radius*nm2km];
+    mox = zeros(size(moy));
+    % quarter circle
+    % steam across station to other side
+    % quarter circle other way
+    % return to station
+    % full survey path
+    fsurvx = [mox,dix]'; % in km
+    fsurvy = [moy,diy]'; % in km  
+    case 'cardinal'
+    %% cross, with the instrument at the center, but doing two diagonals
+    % move-out to point at heading 0
+    moy = [0:dl:radius*nm2km];
+    mox = zeros(size(moy));
+    % long axis, across, long axis sides
+    nperside = radius*nm2km*sqrt(2)./dl; 
+    dix = radius*nm2km*[linspace(0,1,nperside),linspace(1,-1,2*nperside),linspace(-1,0,nperside)];
+    diy = radius*nm2km*[linspace(1,0,nperside),linspace(0,0,2*nperside),linspace(0,-1,nperside)];
+    % full survey path
+    fsurvx = [mox,dix]'; % in km
+    fsurvy = [moy,diy]'; % in km  
+case 'line'
     %% line, with the instrument at the center
     fsurvx = [-radius*nm2km:dl:radius*nm2km];
     fsurvy = zeros(size(fsurvx));
