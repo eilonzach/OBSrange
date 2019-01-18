@@ -101,6 +101,8 @@ N = G*Ginv;
 % Model Resolution
 R = Ginv*G;
 % Model Covariance
-Covm = Ginv*Ginv';
+sigma_d = 10/1000; % s
+Cd = sigma_d^2 * eye(Nobs,Nobs);
+Covm = Ginv * Cd * Ginv';
 end
 
