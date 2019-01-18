@@ -22,8 +22,11 @@ azi = trudata.survaz;
 [ x_elli, y_elli , z_elli] = lonlat2xy_nomap( olon, olat, lon, lat );
 [ x_sph, y_sph , z_sph] = lonlat2xy_nomap_sphere( olon, olat, lon, lat );
 
+% [ lon_sph, lat_sph ] = xy2lonlat_nomap( olon, olat, x_sph, y_sph );
+% dr_ellipsoid2 = distance(lon,lat,lon_sph,lat_sph);
+% dr_ellipsoid2 = deg2km(dr_ellipsoid2)*1000;
 %% Distance correction
-dr_ellipsoid = sqrt((y_sph-y_elli).^2+(x_sph-x_elli).^2);
+dr_ellipsoid = sqrt((y_sph-y_elli).^2+(x_sph-x_elli).^2+(z_sph-z_elli).^2);
 
 figure(1); clf;
 subplot(2,1,1);
@@ -52,3 +55,5 @@ dTWT_p2p = (max(dTWT_ellipsoid)-min(dTWT_ellipsoid))*1000;
 %%
 disp(['Max/Min dr of ship due to ellipsoid correction: ',num2str(max(dr_ellipsoid)),'/',num2str(min(dr_ellipsoid)),' m'])
 disp(['TWT residual peak-to-peak: ',num2str(dTWT_p2p),' ms'])
+
+save2pdf('ellipsoid_corr.pdf',1,100);
