@@ -32,7 +32,7 @@ M = length(m_start);
 dE = 1000; % initialize
 iiter = 0;
 models = struct([]);
-m1 = m_start;
+m1 = m_start(:);
 while dE > E_thresh
     % Update from previous iteration
     m0 = m1; 

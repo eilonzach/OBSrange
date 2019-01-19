@@ -2,8 +2,9 @@ function [ v ] = pt_veloc( x, y, z, t )
 % [ v ] = pt_veloc( x, y, z, t )
 % 
 % Calculate velocity between points in 3-D - "x,y,z" are vectors of points
-% visited by the ship at times "t". "v" is a column matrix with velocities
-% in x,y, and z directions in columns 1,2, and 3 respectively.
+% visited by the ship (units of meters) at times "t" (expecting times in
+% units of seconds). "v" is a column matrix with velocities in x,y, and z
+% directions in columns 1,2, and 3 respectively (velocities then in m/s).
 %
 % J. Russell, 2018
 

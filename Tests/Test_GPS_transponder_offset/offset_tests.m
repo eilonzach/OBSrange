@@ -1,4 +1,4 @@
-addpath('../../OBSrange_v1_MATLAB/functions/')
+addpath('../../OBSrange_v1_MATLAB_clean/functions/')
 addpath('../../synthetics/')
 %% Some simple tests of location
 % apparent location (GPS location)
@@ -10,25 +10,42 @@ dforward = -10;
 dstarboard = -10;
 cog = 340;
 
-[dE,dN] = GPS_transp_correction(dforward,dstarboard,cog);
+[dE,dy] = GPS_transp_correction(dforward,dstarboard,cog);
 
 Et = Eg + dE;
-Nt = Ng + dN;
+Nt = Ng + dy;
 
 figure(1); clf; hold on
 plot(Eg,Ng,'*b','markersize',15);
 plot(Et,Nt,'^r','markersize',15);
 set(gca,'xlim',[80,120],'ylim',[80,120]);
 
+%% ------------------------------------------------------------------------
+%% ------------------------------------------------------------------------
 %% synthetic survey (copied from synth_survey.m) with/without offset
 water_depth = 5; % in km
 drop_location = [-7.54 -133.62 water_depth]; % [lat,lon,z]
 noise = 0.004; %0.004; % std of timing error
 
-datN = 10; 
-obs_location_xyz = [+.1 +.3 5.050]; % x,y,z (km)
-vp_actual = 1.520; % km/s
+obs_location_xyz = [.1 .055 water_depth+0.00]; % x,y,z (km)
+vp_actual = 1.51; % km/s
 tat = 0.014; %s
+
+vship_kn = 8; % constant ship velocity
+
+dforward = 10; % m
+dstarboard = -10; % m
+
+nm2km = 1.852;
+
+niter = 1;
+
+fprintf('\n\nTRUE\n X=%5.1fm Y=%5.1fm Z = %6.1fm, dVp=%4.1fm/s\n',...
+         obs_location_xyz*1e3,(vp_actual-1.5)*1e3)
+
+%% start loop on survey, random noise and semi-random patterns
+for iter = 1:niter
+    iter
 
 %% survey parameters
 survey = 'PACMAN'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
@@ -36,12 +53,6 @@ radius = 1.0; % radius of survey, in Nm
 fprintf('Survey %s rad=%.00f\n',survey,radius);
 survstart = now;
 survey_dt = max([10,60*radius/1.3]); % time lapse of ranging
-
-% system/default parameters
-nm2km = 1.852;
-obs_default_xyz = [ 0 0 water_depth ]; % x,y,z (km)
-vp_default = 1.5; % km/s
-tat_default = 0.013; %s
 
 %% set up geometry and project to map coords
 % centpt = drop_location(1:2); % [lat lon]
@@ -52,19 +63,10 @@ az = 0; % azimuth of +y direction
 % mstruct = defaultm( mstruct ); 
 % proj.map_proj = mstruct;
 
-if niter==1
-% obs location
-% [obs_location_laloz(1),obs_location_laloz(2)] = project_xy(proj,obs_location_xyz(1),obs_location_xyz(2),'inverse');
-[obs_location_laloz(2),obs_location_laloz(1)] = xy2lonlat_nomap(drop_location(2),drop_location(1),1e3*obs_location_xyz(1),1e3*obs_location_xyz(2));
-
-obs_location_laloz(3) = obs_location_xyz(3);
-
-fprintf('True OBS location: \nlat = %.5f \nlon = %.5f \ndep = %.4f\n',obs_location_laloz)
-
-end
 %% make survey
 dl = 0.005;
 [ fsurvx,fsurvy ] = synth_survey_pattern( survey, radius,dl );
+
 
 % add noise + smooth to round the corners (as the ships do..
 fsurvx =  moving_average(fsurvx + normrnd(0,1e-2,size(fsurvx)),50); 
@@ -74,14 +76,19 @@ fsurvl = [0;cumsum(sqrt(diff(fsurvx).^2 + diff(fsurvy).^2))];
 
 Nf = length(fsurvx);
 % ship speed at each point - keep constant
-vship_kn = 8*[1,1];
+vship_kn = vship_kn.*[1,1];
             
-
-vship_ms = vship_kn*1.852*1000/60/60; % in m/s
+vship_ms = vship_kn*nm2km*1000/60/60; % in m/s
 % noisify ship speed
 % vship_ms = vship_ms + normrnd(0,0.05,size(vship_ms));
 % times at each point on survey
 fsurvt = [0;cumsum(1000*diff(fsurvl)./midpts(vship_ms))];
+fsurvsog = sqrt(diff(fsurvx).^2 + diff(fsurvy).^2)./diff(fsurvt)*1000; % in m/s
+fsurvcog = atan2d(diff(fsurvx),diff(fsurvy));
+% make these just as long as position vectors by extending
+fsurvsog = midpts(fsurvsog([1,1:end,end]));
+fsurvcog = midpts(fsurvcog([1,1:end,end]));
+
 clf, plot(fsurvt/3600); axis equal
 
 % interogate every survey_dt seconds
@@ -89,37 +96,19 @@ send_survt = [zeros(4,1);[0:survey_dt:fsurvt(end)-10]'];
 % + add in some random extra times
 send_survt = sort([send_survt;fsurvt(end)*rand(3,1)]);
 
-%% loop and do forward model  different OBS locations and different data shadows
-if niter > 1
-    data = struct('survey',survey,'radius',radius,'rmsnoise',noise,...
-                  'drop',drop_location,'vship_kn',unique(vship_kn),'dt_survey',survey_dt,...
-                  'survx',fsurvx,'survy',fsurvy,'survt',fsurvt,...
-                  'obs_loc_xyz',[],'obs_loc_laloz',[],...
-                  'TAT',[],'Vp_water',[],...
-                  'Nobs',[],'survlats',[],'survlons',[],'survts',[],'tot_dt',[],...
-                  'corr_dt',[],'v_surv_true',[]);
-end
-                             
 
-for jj = 1:niter
-    if jj == 1 || rem(jj,500)==0,fprintf('Iteration %.0f\n',jj);end
+%% loop and do forward model  different OBS locations and different data shadows                        
+[ obs_location_laloz(2), obs_location_laloz(1) ] = xy2lonlat_nomap( drop_location(2),drop_location(1), obs_location_xyz(1), obs_location_xyz(2));
 
-% randomise model parameters if bootstrapping
-if niter > 1
-    obs_location_xyz = obs_default_xyz + [normrnd(0,x_std),normrnd(0,y_std),normrnd(0,z_std)];
-    tat = tat_default + normrnd(0,tat_std);
-    vp_actual = vp_default + normrnd(0,vp_std);
-    [obs_location_laloz(2),obs_location_laloz(1)] = xy2lonlat_nomap(drop_location(2),drop_location(1),1e3*obs_location_xyz(1),1e3*obs_location_xyz(2));
-    obs_location_laloz(3) = obs_location_xyz(3);
-    % save these true values
-    data(jj).obs_loc_xyz = obs_location_xyz;
-    data(jj).obs_loc_laloz = obs_location_laloz;
-    data(jj).TAT = tat;
-    data(jj).Vp_water = vp_actual;
-end
+send_survx_gps = linterp(fsurvt,fsurvx,send_survt);
+send_survy_gps = linterp(fsurvt,fsurvy,send_survt);
+send_surv_cog = linterp(fsurvt,fsurvcog,send_survt);
 
-send_survx = linterp(fsurvt,fsurvx,send_survt);
-send_survy = linterp(fsurvt,fsurvy,send_survt);
+% account for gps-transp offset
+[dE,dy] = GPS_transp_correction(dforward,dstarboard,send_surv_cog);
+send_survx = send_survx_gps + dE/1000;
+send_survy = send_survy_gps + dy/1000;
+
 send_dr = sqrt( (send_survx-obs_location_xyz(1)).^2 ...
                +(send_survy-obs_location_xyz(2)).^2 ...
                + obs_location_xyz(3).^2);
@@ -130,8 +119,14 @@ delt = 10;
 % cycle to make time correction as accurate as possible.
 while delt>1e-6
 rec_survt = send_survt + shift_dt;
-rec_survx = linterp(fsurvt,fsurvx,rec_survt);
-rec_survy = linterp(fsurvt,fsurvy,rec_survt);
+rec_survx_gps = linterp(fsurvt,fsurvx,rec_survt);
+rec_survy_gps = linterp(fsurvt,fsurvy,rec_survt);
+rec_surv_cog = linterp(fsurvt,fsurvcog,rec_survt);
+% account for gps-transp offset
+[dE,dy] = GPS_transp_correction(dforward,dstarboard,rec_surv_cog);
+rec_survx = rec_survx_gps + dE/1000;
+rec_survy = rec_survy_gps + dy/1000;
+
 rec_dr = sqrt(  (rec_survx-obs_location_xyz(1)).^2 ...
                +(rec_survy-obs_location_xyz(2)).^2 ...
                + obs_location_xyz(3).^2);
@@ -147,47 +142,137 @@ corr_dt = rec_dt-send_dt;
 % calc instantaneous velocities
 v_surv = [1i*(rec_survx-send_survx)+(rec_survy-send_survy)]./(send_dt+rec_dt); % in m/s
 [abs(v_surv)*1000,r2d(angle(v_surv)) + az];
-v_surv_true = abs(v_surv).*1000.*[cosd(r2d(angle(v_surv)) + az),sind(r2d(angle(v_surv)) + az)]; % in m/s
+sog = abs(v_surv).*1000;
+cog = r2d(angle(v_surv)) + az;
+survsog = sog.*[cosd(cog),sind(cog)]; % in m/s [N,E]
 
 % add a little noise
 tot_dt = tot_dt + normrnd(0,noise,size(tot_dt));
 
 % assign rec_survx/y/t to survx/y/t
-survx = rec_survx;
-survy = rec_survy;
+survx = rec_survx_gps;
+survy = rec_survy_gps;
 survt = rec_survt/24/60/60 + survstart;
 
 % project back to lon,lat
 % [survlat,survlon] = project_xy(proj,survx,survy,'inverse');
 [ survlon, survlat ] = xy2lonlat_nomap( drop_location(2),drop_location(1), survx*1.e3, survy*1.e3);
-[survgc,survaz] = distance(drop_location(1), drop_location(2),survlat,survlon);
+% [survgc,survaz] = distance(drop_location(1), drop_location(2),survlat,survlon);
 
 
 %% randomly drop out some points
 okpt = rand(size(survlat))>0.2;
 
 % drop out all within some distance of 3 bazs (if not line...
-% if ~any(regexp(survey,'line'))
-% badaz = 360*rand(3,1);
-% badazw = abs(normrnd(0,20,3,1)); % width of drop-out bin
-% for ibz = 1:3
-%     okpt(ang_diff(survaz,badaz(ibz))<badazw(ibz)) = false;
-% end
-% end
+if ~any(regexp(survey,'line'))
+badaz = 360*rand(3,1);
+badazw = abs(normrnd(0,20,3,1)); % width of drop-out bin
+for ibz = 1:3
+    okpt(ang_diff(survaz,badaz(ibz))<badazw(ibz)) = false;
+end
+end
 % reinstate points immediately on top of (<100m from) station
 okpt(survgc*111.1<0.1) = true;
 % kill not-ok points
-tot_dt(~okpt) = nan;
+tot_dt = tot_dt(okpt);
+survlat = survlat(okpt);
+survlon = survlon(okpt);
+survt = survt(okpt);
+survsog = survsog(okpt);
+
+%% data values in synthetic dataset (i.e. available to algorithm)
+survlat;
+survlon;
+survt;
+tot_dt;
+% and
+corr_dt;
+survsog;
+
+%% plots of send, receive points
+if iter==1
+figure(4), clf; hold on
+plot(send_survx_gps,send_survy_gps,'og',...
+     send_survx,send_survy,'*g',...     
+     rec_survx_gps,rec_survy_gps,'or',...
+     rec_survx,rec_survy,'*r'...     
+     )
+ 
+%  figure(1);
+% plot(fsurvx,fsurvy)
+% 
+% figure(2);
+% plot(send_survx,send_survy,'xr',rec_survx,rec_survy,'xb'); axis equal
+% 
+% 
+figure(3), clf; hold on
+scatter(survlon,survlat,60,tot_dt,'filled');
+% plot(survlon(~okpt),survlat(~okpt),'xk','markersize',8,'linewidth',2);
+plot(obs_location_laloz(2),obs_location_laloz(1),'*r','markersize',14)
+end
+ 
+%% Estimates of sog, cog for corrections a posteriori (based only on data)
+% Parameters
+
+par = struct([]);
+par(1).vp_w = 1500; % Assumed water velocity (m/s)
+par.E_thresh = 1e-8; % RMS reduction threshold for inversion
+par.if_twtcorr = 0;
+par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
+par.TAT = tat; % (s)
+% Norm damping for each model parameter (damping towards starting model)
+% Larger values imply more damping towards the starting model.
+par.dampx = 0;
+par.dampy = 0;
+par.dampz = 0; %1e3; %0
+par.dampdvp = 5e-8; %1e3; %5e-8
+H = diag([par.dampx, par.dampy, par.dampz, par.dampdvp]);
+% Global norm damping for stabilization
+par.epsilon = 1e-10;
+m0_strt = [0,0,water_depth*1000,0]';
+% shots
+[ x_ship, y_ship ] = lonlat2xy_nomap( drop_location(2), drop_location(1), survlon, survlat );
+z_ship = zeros(size(x_ship));
+t_ship = (survt - survt(1))*24*60*60;
+% Calculate velocity of ship
+v_ship = pt_veloc( x_ship, y_ship, z_ship, t_ship );
+v_ship = [moving_average(v_ship(1,:),par.npts_movingav)'; moving_average(v_ship(2,:),par.npts_movingav)'; moving_average(v_ship(3,:),par.npts_movingav)'];
+
+% dumb estimate
+par.if_twtcorr = 0;
+[ m_final_1(:,iter),models,v,N,R,Cm ] = inv_newtons( par,m0_strt,tot_dt,...
+                    x_ship,y_ship,z_ship,...
+                    v_ship,H);
+if niter==1
+fprintf('Dumb estimate\n X=%5.1fm Y=%5.1fm Z = %6.1fm, dVp=%4.1fm/s\n',...
+         m_final_1(:,iter))
+end
+     
+% estimate accounting for doppler
+par.if_twtcorr = 1;
+[ m_final_2(:,iter),models,v,N,R,Cm ] = inv_newtons( par,m0_strt,tot_dt,...
+                    x_ship,y_ship,z_ship,...
+                    v_ship,H);
+if niter==1
+fprintf('w/ Doppler\n X=%5.1fm Y=%5.1fm Z = %6.1fm, dVp=%4.1fm/s\n',...
+         m_final_2(:,iter))
+end
+     
+% estimate accounting for GPS offset
+par.if_twtcorr = 1;
+survcog = atan2d(v_ship(1,:),v_ship(2,:));
+[dx,dy] = GPS_transp_correction(dforward,dstarboard,survcog');
+x_ship = x_ship + dx;
+y_ship = y_ship + dy;
+
+[ m_final_3(:,iter),models,v,N,R,Cm ] = inv_newtons( par,m0_strt,tot_dt,...
+                    x_ship,y_ship,z_ship,...
+                    v_ship,H);
+if niter==1
+fprintf('w/ Doppler+GPSoffset\n X=%5.1fm Y=%5.1fm Z = %6.1fm, dVp=%4.1fm/s\n',...
+         m_final_3(:,iter))
+end
 
 
-%% save synth data values
-data(jj).Nobs = length(survlon);
-data(jj).survlats = survlat;
-data(jj).survlons = survlon;
-data(jj).survts = survt;
-data(jj).tot_dt = tot_dt;
-data(jj).corr_dt = corr_dt;
-data(jj).v_surv_true = v_surv_true;
+end; clear iter % loop on iter
 
-
-end % loop on iterations
