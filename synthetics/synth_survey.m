@@ -14,7 +14,15 @@ vship_kn = 8; % constant ship velocity
 dforward = -10;
 dstarboard = -10;
 
-ifsave = true;
+niter = 1; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
+
+ifsave = false;
+
+%% system/default parameters
+nm2km = 1.852;
+obs_default_xyz = [ 0 0 water_depth ]; % x,y,z (km)
+vp_default = 1.5; % km/s
+tat_default = 0.013; %s
 
 %% survey parameters
 survey = 'PACMAN'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
@@ -42,19 +50,13 @@ obs_location_xyz = [+.2 -.4 5.050]; %[+.1 +.3 5.050]; % x,y,z (km)
 vp_actual = 1.520; %1.520; % km/s
 tat = 0.014; %0.014; %s
 
-% if doing many iterations
-niter = 1e4; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
+%% model parameters - if doing many iteration
 x_std = 0.100; % in km
 y_std = 0.100; % in km
 z_std = 0.050; % in km
 vp_std = 0.010; % in km/s
 tat_std = 3e-3; %1e-3; %3e-3;
 
-% system/default parameters
-nm2km = 1.852;
-obs_default_xyz = [ 0 0 water_depth ]; % x,y,z (km)
-vp_default = 1.5; % km/s
-tat_default = 0.013; %s
 
 %% set up geometry and project to map coords
 % centpt = drop_location(1:2); % [lat lon]
@@ -259,7 +261,7 @@ if ifsave
 
 % many iterations - output data structure
 if niter>1
-    save(sprintf('synth_surveys_paper/SynthBoot_%s_rad%.2f.mat',survey,radius),'data');
+    save(sprintf('synth_surveys_paper/SynthBoot_%s_rad%.2f_z%.0fm.mat',survey,radius,water_depth*1e3),'data');
 end
 
 if niter==1
