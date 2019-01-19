@@ -11,6 +11,9 @@ noise = 0.004; %0.004; % std of timing error
 
 vship_kn = 8; % constant ship velocity
 
+dforward = -10;
+dstarboard = -10;
+
 ifsave = true;
 
 %% survey parameters
