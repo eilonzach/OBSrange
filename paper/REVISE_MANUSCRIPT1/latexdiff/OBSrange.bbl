@@ -1,0 +1,79 @@
+\begin{thebibliography}{11}
+\providecommand{\natexlab}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem[{\textit{Accardo et~al.}(2017)\textit{Accardo, Gaherty, Shillington,
+  Ebinger, Nyblade, Mbogoni, Chindandali, Ferdinand, Mulibo, Kamihanda, Keir,
+  Scholz, Selway, Donnell, Tepp, Gallacher, Mtelela, Salima, and
+  Mruma}}]{Accardo2017}
+Accardo, N.~J., J.~B. Gaherty, D.~J. Shillington, C.~J. Ebinger, A.~A. Nyblade,
+  G.~J. Mbogoni, P.~R.~N. Chindandali, R.~W. Ferdinand, G.~D. Mulibo,
+  G.~Kamihanda, D.~Keir, C.~Scholz, K.~Selway, J.~P.~O. Donnell, G.~Tepp,
+  R.~Gallacher, K.~Mtelela, J.~Salima, and A.~Mruma (2017), {Surface wave
+  imaging of the weakly extended Malawi Rift from ambient-noise and teleseismic
+  Rayleigh waves from}, \textit{Geophysical Journal International},
+  \textit{209}, 1892--1905, \doi{10.1093/gji/ggx133}.
+
+\bibitem[{\textit{Davison et~al.}(1986)\textit{Davison, Hinkley, and
+  Schechtman}}]{Davison1986}
+Davison, A., D.~Hinkley, and E.~Schechtman (1986), {Efficient bootstrap
+  simulation}, \textit{Biometrika}, \textit{73}(3), 555--566.
+
+\bibitem[{\textit{Eilon and Abers}(2017)}]{Eilon2017}
+Eilon, Z.~C., and G.~A. Abers (2017), {High seismic attenuation at a mid-ocean
+  ridge reveals the distribution of deep melt}, \textit{Science Advances},
+  \textit{3}, 1--8.
+
+\bibitem[{\textit{Gaherty et~al.}(2018)\textit{Gaherty, Eilon, Forsyth, and
+  Ekstr{\"o}m}}]{Gaherty2018}
+Gaherty, J., Z.~Eilon, D.~Forsyth, and G.~Ekstr{\"o}m (2018), Imaging
+  small-scale convection and structure of the mantle in the south pacific: A
+  {U}.{S}. contribution to an international {P}acific{A}rray, in \textit{IRIS
+  Workshop 2018}, HC7, Albuquerque, NM U.S.A.
+
+\bibitem[{\textit{Hawley et~al.}(2016)\textit{Hawley, Allen, and
+  Richards}}]{Hawley2016}
+Hawley, W.~B., R.~M. Allen, and M.~A. Richards (2016), {Tomography reveals
+  buoyant asthenosphere accumulating beneath the Juan de Fuca plate},
+  \textit{Science}, \textit{353}(6306), 1--4.
+
+\bibitem[{\textit{Hung et~al.}(2011)\textit{Hung, Lee, and Chuang}}]{Hung2011}
+Hung, W.-l., E.~S. Lee, and S.-c. Chuang (2011), {Balanced bootstrap resampling
+  method for neural model selection}, \textit{Computers and Mathematics with
+  Applications}, \textit{62}(12), 4576--4581,
+  \doi{10.1016/j.camwa.2011.10.039}.
+
+\bibitem[{\textit{Janiszewski and Abers}(2015)}]{Janiszewski2015}
+Janiszewski, H.~A., and G.~A. Abers (2015), {Imaging the Plate Interface in the
+  Cascadia Seismogenic Zone : New Constraints from Offshore Receiver
+  Functions}, \textit{Seismological Research Letters}, \textit{86}(5),
+  1261--1269, \doi{10.1785/0220150104}.
+
+\bibitem[{\textit{Lin et~al.}(2016)\textit{Lin, Gaherty, Jin, Collins,
+  Lizarralde, Evans, and Hirth}}]{Lin2016}
+Lin, P.-Y.~P., J.~B. Gaherty, G.~Jin, J.~A. Collins, D.~Lizarralde, R.~L.
+  Evans, and G.~Hirth (2016), {High-resolution seismic constraints on flow
+  dynamics in the oceanic asthenosphere}, \textit{Nature}, \textit{535}(7613),
+  1--9, \doi{10.1038/nature18012}.
+
+\bibitem[{\textit{Lynner and Bodmer}(2017)}]{Lynner2017}
+Lynner, C., and M.~Bodmer (2017), {Mantle flow along the eastern North American
+  margin inferred from shear wave splitting}, \textit{Geology},
+  \textit{45}(10), 1--4, \doi{10.1130/G38980.1}.
+
+\bibitem[{\textit{Menke}(2018)}]{Menke2018}
+Menke, W. (2018), \textit{{Geophysical Data Analysis: Discrete Inverse
+  Theory}}, fourth edition ed., Elsevier.
+
+\bibitem[{\textit{Takeo et~al.}(2016)\textit{Takeo, Kawakatsu, Isse, Nishida,
+  Sugioka, Ito, Shiobara, and Suetsugu}}]{Takeo2016}
+Takeo, A., H.~Kawakatsu, T.~Isse, K.~Nishida, H.~Sugioka, A.~Ito, H.~Shiobara,
+  and D.~Suetsugu (2016), {Seismic azimuthal anisotropy in the oceanic
+  lithosphere and asthenosphere from broadband surface wave analysis of OBS
+  array records at 60 Ma seafloor}, \textit{Journal of Geophysical Research :
+  Solid Earth}, \textit{121}, 1927--1947, \doi{10.1002/2015JB012429.Received}.
+
+\end{thebibliography}

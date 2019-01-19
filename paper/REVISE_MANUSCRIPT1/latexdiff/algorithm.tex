@@ -1,0 +1,127 @@
+
+
+\subsection{The forward problem}
+
+We wish to locate an instrument which rests at unknown position and depth on the ocean floor (Figure~\ref{fig:cartoon}). Taking the drop coordinates as the center of a Cartesian coordinate system in which $x$ is positive towards East, $y$ is positive towards North, and $z$ is positive upwards from the sea surface, the instrument lies at location $(x,y,z)$. The time taken for an acoustic pulse to travel from the ship to the instrument and back is a function of the sound speed in water ($V_P$), and the location of the ship, as well as the ``turn-around time'' ($\tau$) that corresponds to the (fixed) processing time between the OBS transducer receiving a ping and sending its response. In detail, we can account for the possibility that if the ship is under way, its position changes between sending and receiving pings. Thus, the total travel time, $T$, is: 
+
+\begin{equation}
+T = \frac{r_s + r_r}{V_P} + \tau \,, \label{eq:forward_send_receive}
+\end{equation}
+where
+
+\begin{align}
+	r_s &= \sqrt{(x_s - x)^2 + (y_s - y)^2 + z^2}\\
+	r_r &= \sqrt{(x_r - x)^2 + (y_r - y)^2 + z^2} \,.
+\end{align}
+
+Subscript ``$s$'' indicates the ship sending a ping and ``$r$'' indicates the ship receiving the OBS's response. These positions are related by the velocity ($\mathbf{u} = (u_x,u_y,0)$) of the ship, which is estimated from the survey data by differencing neighboring survey points:
+
+\begin{equation}
+\begin{pmatrix} x_s\\y_s\\0 \end{pmatrix} = \begin{pmatrix} x_r\\y_r\\0 \end{pmatrix} - T\begin{pmatrix} u_x\\u_y\\0 \end{pmatrix} \,.
+\end{equation}
+
+It follows that, to a close approximation,
+
+\begin{align}
+\begin{split}
+r_s &\approx r_r - T \left(\mathbf{u} \cdot \mathbf{\hat{r}}_r \right)\\
+	&= r_r - \delta r \,,
+\end{split}	
+\end{align}
+
+where $\mathbf{\hat{r}}_r$ is the unit-vector pointing from the instrument to the ship at the time of receiving. If we know the distance $\delta r$, we can account for the send-receive timing offset related to a change in the ship's position by computing a correction time, $\delta T = \delta r/V_P$. Substituting this into equation (\ref{eq:forward_send_receive}), we have
+
+\begin{equation}
+T + \delta T = \frac{2 r_r}{V_P} + \tau \,. \label{eq:forward}
+\end{equation}
+
+\subsection{The inverse problem}
+
+If the ship location and travel times between the OBS and ship are known, but the position of the OBS is not, equation (\ref{eq:forward}) can be thought of as a non-linear inverse problem, of the form $ \mathbf{d} = g(\mathbf{m})$, where $g(\mathbf{m})$ represents the forward-model. In practice, a limited survey radius makes it difficult to uniquely solve for $z$, $V_P$, and $\tau$. Since turn-around time is a parameter provided by the transponder manufacturer, we choose to fix $\tau$ in order to reduce unnecessary trade-offs in the inversion and more precisely resolve depth and water velocity. Thus, the model contains four parameters: $\mathbf{m} = \{x,y,z,V_P\}$. The data, $\mathbf{d}$, are a vector of corrected travel times, $T+\delta T$ (note that $\delta T$ is itself a function of $\mathbf{m}$; this will be adjusted iteratively). Uncorrected travel-time residuals predicted from the starting model with magnitude $>$500~ms are considered anomalous and are removed before beginning the inversion. This type of problem can be solved iteratively using Newton's method \citep{Menke2018}:
+
+\begin{equation}
+	\mathbf{m}_{k+1} = \mathbf{m}_k + \left[\mathbf{G}^{\text{T}} \mathbf{G}\right]^{-1} \mathbf{G}^{\text{T}} \left(\mathbf{d} - g(\mathbf{m}_k)\right) \,,
+\end{equation}
+
+where $\mathbf{G}$ is a matrix of partial derivatives: $G_{ij} = \partial d_i/\partial m_j$, as follows:
+
+%\begin{align*}
+%\frac{\partial d_i}{\partial x_O} &= 
+%	-\frac{2 x_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\
+%\frac{\partial d_i}{\partial y_O} &= 
+%	-\frac{2 y_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\
+%\frac{\partial d_i}{\partial z_O} &= 
+%	\frac{2 z_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\	
+%\frac{\partial d_i}{\partial V_P} &= 
+%	-\frac{2}{V_P^2} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{\frac{1}{2}}\\	
+%\frac{\partial d_i}{\partial \tau} &= 1\\	
+%\end{align*}
+\begin{align}
+\frac{\partial d_i}{\partial x} &= 
+	-\frac{2 (x_i - x)}{V_P \, r_i}\\
+\frac{\partial d_i}{\partial y} &= 
+	-\frac{2 (y_i - y)}{V_P \, r_i} \\
+\frac{\partial d_i}{\partial z} &= 
+	\frac{2 z}{V_P \, r_i} \\	
+\frac{\partial d_i}{\partial V_P} &= 
+	-\frac{2 \, r_i}{V_P^2} \,.
+\end{align}
+
+We use the drop coordinates and water depth (if available from multibeam) as a starting model, along with $V_P = 1500$ m/s. We fix $\tau =$13 ms, which is the default value for all ITC and ORE Offshore and EdgeTech transponders and underwater communications transducers (Ernest Aaron, \textit{pers. comm.}). There is some degree of trade-off between the water depth and the water velocity. Simplistically, if all survey measurements are made at a constant distance from the station (\textit{e.g.}, if the survey is a circle centered on the station) then these parameters co-vary perfectly. As a result, the inverse problem is ill-posed and, like all mixed-determined problems, requires regularization. We damp perturbations in $V_P$, which is not likely to vary substantially from 1500 m/s, and implement global norm damping to stabilize the inversion:
+
+\begin{equation}
+	\mathbf{F} = 
+	\left[\begin{matrix}
+	\mathbf{G}\\\mathbf{H}\\\epsilon^{1/2}\mathbf{I}
+	\end{matrix}\right] \,,
+	\hspace{15mm}
+	\mathbf{f} = 
+	\left[\begin{matrix}
+	\mathbf{d} - g(\mathbf{m})\\0\\\mathbf{0}
+	\end{matrix}\right] \,,
+\end{equation}
+where $\mathbf{I}$ is the $4\times 4$ identity matrix, $\epsilon = 10^{-10}$, $\mathbf{H}=\left( 0, 0, 0, \gamma_{V_P} \right)$, and $\gamma_{V_P} = 5\times10^{-8}$. The equation to be solved becomes:
+
+\begin{equation}
+	\mathbf{m}_{k+1} = \mathbf{m}_k + \left[ \mathbf{F}^{\text{T}} \mathbf{F} \right]^{-1} \mathbf{F}^{\text{T}} \mathbf{f} \,. \label{eq:inverse}
+\end{equation}
+
+This equation is solved iteratively, until the root-mean-squared (RMS) of the misfit, $e$, (where $e = T+\delta T-g(\mathbf{m})$) decreases by less than 0.1 ms compared to the previous iteration. This criterion is typically reached after $\sim$4 iterations. 
+
+\subsection{Errors and uncertainty}
+In order to estimate the uncertainty in our model, we perform 1,000 bootstrap iterations on survey travel-time data with a balanced resampling approach \citep{Davison1986}. In each iteration the algorithm inverts a random sub-sample of the true data set, with the constraint that all data points are eventually sampled an equal number of times. This approach reduces variance in bias and achieves robust uncertainty estimates in fewer iterations compared to traditional uniform sampling approaches \citep{Hung2011}. Although balanced resampling provides empirical probability distributions of possible model parameters, it does not straightforwardly offer quantitative estimates of model uncertainty because the goodness of data fit for each run in the bootstrap iteration is ignored (that is, within each iteration, a model is found that best fits the randomly sub-sampled dataset, but in the context of the full dataset, the fit and uncertainty of that particular model may be relatively poor). For more statistically robust uncertainty estimates, we perform a grid search over ($x,y,z$) within a region centered on the bootstrapped mean location, 
+$(x_{{\text{best}}},y_{{\text{best}}},z_{{\text{best}}})$. For each perturbed location, ($x^{\prime},y^{\prime},z^{\prime}$), we use an F-test to compare the norm of the data prediction error to the minimum error, assuming they each have a $\chi^2$ distribution. The effective number of degrees of freedom, $\nu$ can be approximated as 
+
+\begin{equation}
+\nu \approx N_f - \text{tr}(\mathbf{F}\mathbf{F}_{\text{inv}}) \,,
+\end{equation}
+where $\mathbf{F}_{\text{inv}}= \left[ \mathbf{F}^{\text{T}} \mathbf{F} \right]^{-1} \mathbf{F}^{\text{T}}$, $N_f$ is the length of vector $\mathbf{f}$, and $\text{tr}()$ denotes the trace. Using the F-test, we can evaluate the statistical probability of the true OBS location departing from our best-fitting location by a given value. 
+
+Some care is required in implementing this grid search. Since $z$ covaries with $V_P$, varying $z$ quickly leads to large errors in data prediction as $|z^{\prime}-z_{{\text{best}}}|$ increases if one holds $V_P$ fixed. As a result, it appears as if the gradient in the error surface is very sharp in the $z$ direction, implying this parameter is very well resolved; in fact, the opposite is true. We find the empirical covariance of $z$ and $V_P$ by performing principal component analysis on the bootstrap model solutions. We then use the largest eigenvector to project perturbations in $z$ within the grid search onto $V_P$, adjusting velocity appropriately as we progress through the grid search. 
+
+\subsection{Model resolution and trade-offs}
+In order to quantitatively compare various survey configurations and assess their ability to recover the true model parameters, we calculate the model resolution, $\mathbf{R}$, and correlation, $\mathbf{C}$, matrices. The $M \times M$ model resolution matrix is given by \citep{Menke2018}:
+
+\begin{equation}
+\mathbf{R} = \mathbf{G}_{\text{inv}} \mathbf{G} \,,
+\end{equation}
+where $\mathbf{G}_{\text{inv}}= \left[ \mathbf{G}^{\text{T}} \mathbf{G} + \mathbf{H}^{\text{T}} \mathbf{H} + \epsilon\mathbf{I} \right]^{-1} \mathbf{G}^{\text{T}}$. Since the resolution matrix depends only on the data kernel and applied damping and is thus independent of the data themselves, it reflects strongly the chosen survey geometry. Each model parameter is independently resolved when $\mathbf{R}=\mathbf{I}$. Since perfect resolution occurs when $\mathbf{R}$ is equal to the identity matrix, off-diagonal elements (or ``spread'') indicate poor model resolution and trade-offs between the respective parameters. The spread of the model resolution matrix is defined as the squared $L_2$ norm of the difference between $\mathbf{R}$ and the identity matrix \citep{Menke2018}:
+
+\begin{equation}
+\text{spread}(\mathbf{R}) = \sum_{i=1}^M\sum_{j=1}^M \left[ R_{ij}-\delta_{ij}\right]^2 \,,
+\end{equation}
+where $\delta_{ij}$ is the Dirac delta function. Therefore, model resolution is perfect when $\text{spread}(\mathbf{R})=0$.
+
+The model correlation matrix (or unit covariance matrix), $\mathbf{C}$, describes the mapping of error between model parameters. Given the covariance matrix $\mathbf{\Sigma}_{\text{m}} = \mathbf{G}_{\text{inv}} \mathbf{G}_{\text{inv}}^{\text{T}}$, the correlation matrix is defined as:
+
+\begin{equation}
+\mathbf{C} = \mathbf{D}^{-1}\mathbf{\Sigma}_{\text{m}}\mathbf{D}^{-1} \,,
+\end{equation}
+where $\mathbf{D} = \text{diag}(\mathbf{\Sigma}_{\text{m}})^{1/2}$ is the diagonal matrix of model parameter standard deviations. The off diagonal elements of this unitless matrix indicate how model parameters trade off with one another in the inversion, with negative numbers indicating negatively correlated parameters and vice versa.
+
+
+
+
+
+
+
