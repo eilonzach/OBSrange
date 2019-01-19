@@ -67,7 +67,6 @@ az = 0; % azimuth of +y direction
 dl = 0.005;
 [ fsurvx,fsurvy ] = synth_survey_pattern( survey, radius,dl );
 
-
 % add noise + smooth to round the corners (as the ships do..
 fsurvx =  moving_average(fsurvx + normrnd(0,1e-2,size(fsurvx)),50); 
 fsurvy =  moving_average(fsurvy + normrnd(0,1e-2,size(fsurvy)),50);
