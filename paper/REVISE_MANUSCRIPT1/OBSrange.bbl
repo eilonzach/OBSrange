@@ -1,4 +1,4 @@
-\begin{thebibliography}{12}
+\begin{thebibliography}{14}
 \providecommand{\natexlab}[1]{#1}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
@@ -16,6 +16,10 @@ Accardo, N.~J., J.~B. Gaherty, D.~J. Shillington, C.~J. Ebinger, A.~A. Nyblade,
   imaging of the weakly extended Malawi Rift from ambient-noise and teleseismic
   Rayleigh waves from}, \textit{Geophysical Journal International},
   \textit{209}, 1892--1905, \doi{10.1093/gji/ggx133}.
+
+\bibitem[{\textit{Agency and Mapping}(2000)}]{WGS84_2000}
+Agency, N.~I., and Mapping (2000), {Department of Defense World Geodetic System
+  1984: its definition and relationships with local geodetic systems}.
 
 \bibitem[{\textit{Creager and Dorman}(1982)}]{Creager1982}
 Creager, K.~C., and L.~M. Dorman (1982), {Location of Instruments on the
@@ -44,6 +48,12 @@ Gaherty, J., Z.~Eilon, D.~Forsyth, and G.~Ekstr{\"o}m (2018), Imaging
 Hawley, W.~B., R.~M. Allen, and M.~A. Richards (2016), {Tomography reveals
   buoyant asthenosphere accumulating beneath the Juan de Fuca plate},
   \textit{Science}, \textit{353}(6306), 1--4.
+
+\bibitem[{\textit{Hoffmann-Wellenhof et~al.}(2001)\textit{Hoffmann-Wellenhof,
+  Lichtenegger, and Collins}}]{Hoffmann_Wellenhof_2001}
+Hoffmann-Wellenhof, B., H.~Lichtenegger, and J.~Collins (2001), \textit{{Global
+  Positioning System: theory and practice}}, fifth edit ed., 279--284 pp.,
+  Springer, Vienna, Springer-Verlag, New York,.
 
 \bibitem[{\textit{Hung et~al.}(2011)\textit{Hung, Lee, and Chuang}}]{Hung2011}
 Hung, W.-l., E.~S. Lee, and S.-c. Chuang (2011), {Balanced bootstrap resampling
