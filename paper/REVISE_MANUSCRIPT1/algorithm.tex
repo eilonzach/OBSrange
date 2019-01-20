@@ -77,10 +77,10 @@ We use the drop coordinates and water depth (if available from multibeam) as a s
 	\hspace{15mm}
 	\mathbf{f} = 
 	\left[\begin{matrix}
-	\mathbf{d} - g(\mathbf{m})\\0\\\mathbf{0}
+	\mathbf{d} - g(\mathbf{m})\\\mathbf{0}\\\mathbf{0}
 	\end{matrix}\right] \,,
 \end{equation}
-where $\mathbf{I}$ is the $4\times 4$ identity matrix, $\epsilon = 10^{-10}$, $\mathbf{H}=\left( 0, 0, 0, \gamma_{V_P} \right)$, and $\gamma_{V_P} = 5\times10^{-8}$. The equation to be solved becomes:
+where $\mathbf{I}$ is the $4\times 4$ identity matrix, $\epsilon = 10^{-10}$, $\mathbf{H}=\text{diag}\left( \gamma_{x}, \gamma_{y}, \gamma_{z}, \gamma_{V_P} \right)$, $\gamma_{x}=\gamma_{y}=\gamma_{z}=0$, and $\gamma_{V_P} = 5\times10^{-8}$. These values for the damping parameters were determined by trial and error and are the defaults in the code. They have been tested on many different survey geometries, and thus, should require little tuning in practice. The equation to be solved becomes:
 
 \begin{equation}
 	\mathbf{m}_{k+1} = \mathbf{m}_k + \left[ \mathbf{F}^{\text{T}} \mathbf{F} \right]^{-1} \mathbf{F}^{\text{T}} \mathbf{f} \,. \label{eq:inverse}
