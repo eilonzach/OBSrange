@@ -5,7 +5,7 @@ function [ fsurvx,fsurvy ] = synth_survey_pattern( survey, radius,dl )
 % radii in Nm
 
 if nargin < 2 || isempty(radius)
-    radius = 1.3;
+    radius = 1;
 end
 if nargin < 3 || isempty(dl)
     dl = 0.005;
@@ -118,12 +118,24 @@ switch survey
     moy = [0:dl:radius*nm2km];
     mox = zeros(size(moy));
     % quarter circle
+    npercirc = round((pi/2)*radius*nm2km./dl);
+    thetas = linspace(0,pi./2,npercirc);
+    c1x = radius*nm2km*sin(thetas);
+    c1y = radius*nm2km*cos(thetas);
     % steam across station to other side
+    nperacross = round(2*radius*nm2km./dl); 
+    dix = radius*nm2km*linspace(1,-1,nperacross);
+    diy = zeros(1,nperacross);
     % quarter circle other way
+    thetas = linspace(-pi/2,-pi,npercirc);
+    c2x = radius*nm2km*sin(thetas);
+    c2y = radius*nm2km*cos(thetas);
     % return to station
+    miy = [-radius*nm2km:dl:0];
+    mix = zeros(size(miy));
     % full survey path
-    fsurvx = [mox,dix]'; % in km
-    fsurvy = [moy,diy]'; % in km  
+    fsurvx = [mox,c1x,dix,c2x,mix]'; % in km
+    fsurvy = [moy,c1y,diy,c2y,miy]'; % in km  
     case 'cardinal'
     %% cross, with the instrument at the center, but doing two diagonals
     % move-out to point at heading 0

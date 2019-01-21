@@ -5,18 +5,19 @@ close all
 % profile clear 
 % profile on
 %% TRUE VALUES
-water_depth = 5; % in km
+for water_depth = [5,2,0.5] % in km
 drop_location = [-7.54 -133.62 water_depth]; % [lat,lon,z]
 noise = 0.004; %0.004; % std of timing error
 
 vship_kn = 8; % constant ship velocity
 
-dforward = -10;
-dstarboard = -10;
+dforward = 10; % in m
+dstarboard = 10; % in m
+gps_offset_str = 'fr10';
 
-niter = 1; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
+niter = 1e4; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
 
-ifsave = false;
+ifsave = true;
 
 %% system/default parameters
 nm2km = 1.852;
@@ -25,9 +26,12 @@ vp_default = 1.5; % km/s
 tat_default = 0.013; %s
 
 %% survey parameters
-survey = 'PACMAN'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
-radius = 1.0; % radius of survey, in Nm
-fprintf('Survey %s rad=%.00f\n',survey,radius);
+surveys = {'tri_edge' , 'tri_center' , 'cross', 'cross2','line','line2','hourglass'};
+for isurvey = 1:length(surveys)
+survey = surveys{isurvey};
+for radius = [1]; % radius of survey, in Nm
+% survey = 'PACMAN'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
+fprintf('Survey %s rad=%4.2f depth=%4.0f\n',survey,radius,water_depth*1e3);
 survstart = now;
 survey_dt = max([10,60*radius/1.3]); % time lapse of ranging
 
@@ -112,7 +116,7 @@ fsurvcog = atan2d(diff(fsurvx),diff(fsurvy));
 fsurvsog = midpts(fsurvsog([1,1:end,end]));
 fsurvcog = midpts(fsurvcog([1,1:end,end]));
 
-clf, plot(fsurvt/3600); axis equal
+% clf , plot(fsurvt/3600); axis equal
 
 % interogate every survey_dt seconds
 send_survt = [zeros(4,1);[0:survey_dt:fsurvt(end)-10]'];
@@ -123,6 +127,7 @@ send_survt = sort([send_survt;fsurvt(end)*rand(3,1)]);
 if niter > 1
     data = struct('survey',survey,'radius',radius,'rmsnoise',noise,...
                   'drop',drop_location,'vship_kn',unique(vship_kn),'dt_survey',survey_dt,...
+                  'TG_dforward',dforward,'TG_dstarboard',dstarboard,...
                   'survx',fsurvx,'survy',fsurvy,'survt',fsurvt,...
                   'obs_loc_xyz',[],'obs_loc_laloz',[],...
                   'TAT',[],'Vp_water',[],...
@@ -189,7 +194,7 @@ corr_dt = rec_dt-send_dt;
 % calc instantaneous velocities
 v_surv = [1i*(rec_survx-send_survx)+(rec_survy-send_survy)]./(send_dt+rec_dt); % in m/s
 [abs(v_surv)*1000,r2d(angle(v_surv)) + az];
-sog = abs(v_surv).*1000;
+sog = abs(v_surv).*1000; % m/s
 cog = r2d(angle(v_surv)) + az;
 surv_vel_true = sog.*[cosd(cog),sind(cog)]; % in m/s [N,E]
 
@@ -261,7 +266,7 @@ if ifsave
 
 % many iterations - output data structure
 if niter>1
-    save(sprintf('synth_surveys_paper/SynthBoot_%s_rad%.2f_z%.0fm.mat',survey,radius,water_depth*1e3),'data');
+    save(sprintf('synth_surveys_paper/SynthBoot_%s_rad%.2f_z%.0fm_%s.mat',survey,radius,water_depth*1e3,gps_offset_str),'data');
 end
 
 if niter==1
@@ -302,3 +307,10 @@ end
 
 end
 
+
+
+
+
+end
+end
+end
