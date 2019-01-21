@@ -18,7 +18,7 @@ clear; close all;
 % path to project
 
 % JOSH
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_noTAT/'; % DATA
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_noTAT_sphere/'; % DATA
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03 only
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTHETIC
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest4/'; % SYNTHETIC 3
@@ -39,7 +39,7 @@ datapath = './';
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = 'CC05'; %''; %'EC03';
+onesta = ''; %''; %'EC03';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -303,9 +303,9 @@ if ifsave
 	datamat.z_ship = z_ship;
 	datamat.v_ship = v_ship;
 	datamat.databad = data_bad;
-	datamat.dtwt_bs = dtwt_bs;
-	datamat.twtcorr_bs = twtcorr_bs;
-	datamat.dtwtcorr_bs = dtwtcorr_bs;
+	datamat.dtwt_bs = dtwt_bs; % TWT residual
+	datamat.twtcorr_bs = twtcorr_bs; % corrected TWT
+	datamat.dtwtcorr_bs = dtwtcorr_bs; % doppler correction
 	datamat.lon_sta_bs = lon_sta;
 	datamat.lat_sta_bs = lat_sta;
 	datamat.x_sta_bs = x_sta;
