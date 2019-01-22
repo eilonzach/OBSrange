@@ -25,6 +25,10 @@
 % glat,glon are a single point, or points along a path, perhaps found by dist.m
 % 'param' is one of 'c', 'T', 'S', or 'N' for
 % sound speed, temperature, salinity, or buoyancy, respectively.
+% 
+% typeSSP = 0 indicates annual Levitus,
+% typeSSP = 1:12 indicates Levitus for month 1:12
+% typeSSP = 13:16 indicates Levitus for Winter, Spring, Summer, or Fall  
 %
 % Returns P, a matrix of profiles: 33X(No. of points)
 % and z, the standard 33 World Ocean Atlas depths
