@@ -98,7 +98,7 @@ end
 
 
 for iz = 1:Nz
-    set(ax1,'ydir','rev','xaxislocation','top','xlim',[0 xmax],...
+    set(ax1,'ydir','rev','xaxislocation','top','xlim',[0 xmax],'ylim',[0 1000*max(zmaxs)],...
         'box','on','layer','top','linewidth',2)
     set(ax2,'xlim',[0 xmax],'ylim',[0 max(dlength_m(Dx_ray_z<xmax*nm2km))],...
         'box','on','layer','top','linewidth',2)
@@ -120,7 +120,7 @@ if ifsave
 end
 
 %% Plot travel times
-figure(12); clf; set(gcf,'pos',[327 6 803 799])
+figure(12); clf; set(gcf,'pos',[1140 6 803 799])
 ax1 = axes('pos',[0.09    0.4100    0.61    0.5500]); hold on
 ax2 = axes('pos',[0.09    0.2300    0.61    0.1577]); hold on
 ax3 = axes('pos',[0.73    0.4100    0.23    0.5500]); hold on
@@ -131,7 +131,7 @@ for ip=1:Np
     p = ps(ip);    
     % compute rays
     try
-        [rx,rz,Dr,rt,rv] = shootrays(p, v_profile, max(zmaxs), dr,vdz);
+        [rx,rz,Dr,rt,rv] = shootrays_jbr(p, v_profile, max(zmaxs), dr,vdz);
     end
     %plot true rays
     plot(ax1,rx/nm2km,rz*1000,'-k','linewidth',1.5); hold on;
@@ -152,7 +152,7 @@ for iz = 1:Nz
 end
 
 for iz = 1:Nz
-    set(ax1,'ydir','rev','xaxislocation','top','xlim',[0 xmax],...
+    set(ax1,'ydir','rev','xaxislocation','top','xlim',[0 xmax],'ylim',[0 1000*max(zmaxs)],...
         'box','on','layer','top','linewidth',2)
     set(ax2,'xlim',[0 xmax],'ylim',[0 max(t_ray(Dx_ray_z<xmax*nm2km))*2],...
         'box','on','layer','top','linewidth',2,'XTickLabel',[])
