@@ -17,7 +17,7 @@ gps_offset_str = 'fr10';
 
 niter = 1e4; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
 
-ifsave = true;
+ifsave = false;
 
 %% system/default parameters
 nm2km = 1.852;
@@ -30,7 +30,7 @@ surveys = {'tri_edge' , 'tri_center' , 'cross', 'cross2','line','line2','hourgla
 for isurvey = 1:length(surveys)
 survey = surveys{isurvey};
 for radius = [1]; % radius of survey, in Nm
-% survey = 'PACMAN'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
+% survey = 'PACMAN'; % 'PACMAN' or 'circle' or 'diamond' or 'hourglass' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
 fprintf('Survey %s rad=%4.2f depth=%4.0f\n',survey,radius,water_depth*1e3);
 survstart = now;
 survey_dt = max([10,60*radius/1.3]); % time lapse of ranging
