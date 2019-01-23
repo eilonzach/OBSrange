@@ -1,15 +1,13 @@
 clear
 close all
-% addpath('/Users/russell/GRAD/FIELD_WORK/PacificArray_2018/UsefulMATLAB/'); 
-% addpath('~/Dropbox/MATLAB/myFUNCTIONS/');
-% profile clear 
-% profile on
+% special version of synthetic survey creation script that just has the
+% ship hold station at 4 cardinal points and over the drop location. 
+addpath('../OBSrange_v1_MATLAB_clean/functions');
+
 %% TRUE VALUES
 for water_depth = [5,2,0.5] % in km
 drop_location = [-7.54 -133.62 water_depth]; % [lat,lon,z]
 noise = 0.004; %0.004; % std of timing error
-
-vship_kn = 8; % constant ship velocity
 
 dforward = 10; % in m
 dstarboard = 10; % in m
@@ -17,7 +15,7 @@ gps_offset_str = 'fr10';
 
 niter = 1e4; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
 
-ifsave = true;
+ifsave = false;
 
 %% system/default parameters
 nm2km = 1.852;
@@ -26,9 +24,7 @@ vp_default = 1.5; % km/s
 tat_default = 0.013; %s
 
 %% survey parameters
-surveys = {'tri_edge' , 'tri_center' , 'cross', 'cross2','line','line2','hourglass'};
-for isurvey = 1:length(surveys)
-survey = surveys{isurvey};
+survey = 'cardinal';
 for radius = [1]; % radius of survey, in Nm
 % survey = 'PACMAN'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
 fprintf('Survey %s rad=%4.2f depth=%4.0f\n',survey,radius,water_depth*1e3);
@@ -81,54 +77,12 @@ obs_location_laloz(3) = obs_location_xyz(3);
 fprintf('True OBS location: \nlat = %.5f \nlon = %.5f \ndep = %.4f\n',obs_location_laloz)
 
 end
-%% make survey
-dl = 0.005;
-[ fsurvx,fsurvy ] = synth_survey_pattern( survey, radius,dl );
-
-% add noise + smooth to round the corners (as the ships do..
-fsurvx =  moving_average(fsurvx + normrnd(0,1e-2,size(fsurvx)),50); 
-fsurvy =  moving_average(fsurvy + normrnd(0,1e-2,size(fsurvy)),50);
-
-fsurvl = [0;cumsum(sqrt(diff(fsurvx).^2 + diff(fsurvy).^2))];
-
-Nf = length(fsurvx);
-% ship speed at each point 
-% vship_kn_a = [4.5+3.5*sind(-90 + 180*[0:dl:.2]'/.2); % ramp up
-%               8*ones(round(2/dl),1); % go at 8 for 2k
-%               7 - sind(-90 + 180*[0:dl:0.2]'/.2); % slow to 6 kn
-%               6*ones(round(3/dl),1); % go at 6 for 3k
-%               7 + sind(-90 + 180*[0:dl:0.3]'/.3)]; % back up to 8 kn
-% vship_kn_b = [6 - 2*sind(-90 + 180*[0:dl:0.3]'/.3); % slow to 4 kn
-%               4*ones(round(1/dl),1)]; % go at 4 for 1k
-% vship_kn = [vship_kn_a;
-%             8*ones(Nf - length(vship_kn_a)- length(vship_kn_b),1);
-%             vship_kn_b];
-vship_kn = vship_kn.*[1,1];
-            
-vship_ms = vship_kn*nm2km*1000/60/60; % in m/s
-% noisify ship speed
-% vship_ms = vship_ms + normrnd(0,0.05,size(vship_ms));
-% times at each point on survey
-fsurvt = [0;cumsum(1000*diff(fsurvl)./midpts(vship_ms))];
-fsurvsog = sqrt(diff(fsurvx).^2 + diff(fsurvy).^2)./diff(fsurvt)*1000; % in m/s
-fsurvcog = atan2d(diff(fsurvx),diff(fsurvy));
-% make these just as long as position vectors by extending
-fsurvsog = midpts(fsurvsog([1,1:end,end]));
-fsurvcog = midpts(fsurvcog([1,1:end,end]));
-
-% clf , plot(fsurvt/3600); axis equal
-
-% interogate every survey_dt seconds
-send_survt = [zeros(4,1);[0:survey_dt:fsurvt(end)-10]'];
-% + add in some random extra times
-send_survt = sort([send_survt;fsurvt(end)*rand(3,1)]);
 
 %% loop and do forward model  different OBS locations and different data shadows
 if niter > 1
     data = struct('survey',survey,'radius',radius,'rmsnoise',noise,...
-                  'drop',drop_location,'vship_kn',unique(vship_kn),'dt_survey',survey_dt,...
+                  'drop',drop_location,'vship_kn',0,'dt_survey',survey_dt,...
                   'TG_dforward',dforward,'TG_dstarboard',dstarboard,...
-                  'survx',fsurvx,'survy',fsurvy,'survt',fsurvt,...
                   'obs_loc_xyz',[],'obs_loc_laloz',[],...
                   'TAT',[],'Vp_water',[],...
                   'Nobs',[],'survlats',[],'survlons',[],'survts',[],'tot_dt',[],...
@@ -153,41 +107,35 @@ if niter > 1
     data(jj).Vp_water = vp_actual;
 end
 
-send_survx_gps = linterp(fsurvt,fsurvx,send_survt);
-send_survy_gps = linterp(fsurvt,fsurvy,send_survt);
-send_surv_cog = linterp(fsurvt,fsurvcog,send_survt);
-
-% account for gps-transp offset
-[dx,dy] = GPS_transp_correction(dforward,dstarboard,send_surv_cog);
-send_survx = send_survx_gps + dx/1000;
-send_survy = send_survy_gps + dy/1000;
+%% make survey
+% send
+send_survx_gps = radius*nm2km*[zeros(1,4),zeros(1,4),ones(1,4),zeros(1,4),-ones(1,4)]';
+send_survy_gps = radius*nm2km*[zeros(1,4),ones(1,4),zeros(1,4),-ones(1,4),zeros(1,4)]';
+Nping = length(send_survx_gps);
+send_surv_cog = 120*ones(Nping,1) + normrnd(0,1,[Nping 1]);
+send_survx_gps = send_survx_gps + normrnd(0,1e-2,[Nping 1]);
+send_survy_gps = send_survy_gps + normrnd(0,1e-2,[Nping 1]);
+    % account for gps-transp offset
+    [dx,dy] = GPS_transp_correction(dforward,dstarboard,send_surv_cog);
+    send_survx = send_survx_gps + dx/1000;
+    send_survy = send_survy_gps + dy/1000;
 send_dr = sqrt( (send_survx-obs_location_xyz(1)).^2 ...
                +(send_survy-obs_location_xyz(2)).^2 ...
                + obs_location_xyz(3).^2);
-
-prelim_dt = 2*send_dr./vp_actual;
-shift_dt = prelim_dt;
-delt = 10;
-% cycle to make time correction as accurate as possible.
-while delt>1e-6
-rec_survt = send_survt + shift_dt;
-rec_survx_gps = linterp(fsurvt,fsurvx,rec_survt);
-rec_survy_gps = linterp(fsurvt,fsurvy,rec_survt);
-rec_surv_cog = linterp(fsurvt,fsurvcog,rec_survt);
-% account for gps-transp offset
-[dx,dy] = GPS_transp_correction(dforward,dstarboard,rec_surv_cog);
-rec_survx = rec_survx_gps + dx/1000;
-rec_survy = rec_survy_gps + dy/1000;
-
+% receive
+rec_survx_gps = send_survx_gps + normrnd(0,2e-3,[Nping 1]);
+rec_survy_gps = send_survy_gps + normrnd(0,2e-3,[Nping 1]);
+rec_surv_cog  = send_surv_cog + normrnd(0,1,[Nping 1]);
+    % account for gps-transp offset
+    [dx,dy] = GPS_transp_correction(dforward,dstarboard,rec_surv_cog);
+    rec_survx = rec_survx_gps + dx/1000;
+    rec_survy = rec_survy_gps + dy/1000;
 rec_dr = sqrt(  (rec_survx-obs_location_xyz(1)).^2 ...
                +(rec_survy-obs_location_xyz(2)).^2 ...
                + obs_location_xyz(3).^2);
 send_dt = send_dr./vp_actual;
 rec_dt  = rec_dr./vp_actual;
 tot_dt = send_dt+rec_dt + tat;
-delt = rms(tot_dt-shift_dt);
-shift_dt = tot_dt;
-end
 
 corr_dt = rec_dt-send_dt;
 
@@ -195,7 +143,7 @@ corr_dt = rec_dt-send_dt;
 v_surv = [1i*(rec_survx-send_survx)+(rec_survy-send_survy)]./(send_dt+rec_dt); % in m/s
 [abs(v_surv)*1000,r2d(angle(v_surv)) + az];
 sog = abs(v_surv).*1000; % m/s
-cog = r2d(angle(v_surv)) + az;
+cog = send_surv_cog;
 surv_vel_true = sog.*[cosd(cog),sind(cog)]; % in m/s [N,E]
 
 % add a little noise
@@ -204,7 +152,7 @@ tot_dt = tot_dt + normrnd(0,noise,size(tot_dt));
 % assign rec_survx/y/t to survx/y/t
 survx = rec_survx_gps;
 survy = rec_survy_gps;
-survt = rec_survt/24/60/60 + survstart;
+survt = now + [1:Nping];
 
 % project back to lon,lat
 % [survlat,survlon] = project_xy(proj,survx,survy,'inverse');
@@ -212,31 +160,14 @@ survt = rec_survt/24/60/60 + survstart;
 [survgc,survaz] = distance(drop_location(1), drop_location(2),survlat,survlon);
 
 
-%% randomly drop out some points
-okpt = rand(size(survlat))>0.2;
-
-% drop out all within some distance of 3 bazs (if not line...
-% if ~any(regexp(survey,'line'))
-% badaz = 360*rand(3,1);
-% badazw = abs(normrnd(0,20,3,1)); % width of drop-out bin
-% for ibz = 1:3
-%     okpt(ang_diff(survaz,badaz(ibz))<badazw(ibz)) = false;
-% end
-% end
-% reinstate points immediately on top of (<100m from) station
-okpt(survgc*111.1<0.1) = true;
-% kill not-ok points
-tot_dt(~okpt) = nan;
-
-
 %% save synth data values
 data(jj).Nobs = length(survlon);
 data(jj).survlats = survlat;
 data(jj).survlons = survlon;
-data(jj).survts = survt;
 data(jj).tot_dt = tot_dt;
 data(jj).corr_dt = corr_dt;
 data(jj).v_surv_true = surv_vel_true;
+data(jj).cog_true = cog;
 
 
 end % loop on iterations
@@ -313,4 +244,4 @@ end
 
 end
 end
-end
+
