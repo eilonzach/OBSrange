@@ -14,14 +14,13 @@ glon = -131.91;
 gmonth = 0;
 
 % Depths
-zmaxs = flip([0.1:0.1:5]); %[5,2,0.5]; % units of km
+zmaxs = flip([0.1:0.5:5.1]); %[5,2,0.5]; % units of km
 
 % Ray parameters
 ps = 0.01:0.01:1.5;
 
 
-ifsave = true;
-% ifsave = false;
+ifsave = false;
 
 %% prep plot
 figure(11); clf, set(gcf,'pos',[327 6 803 799])
@@ -78,7 +77,7 @@ for ip = 1:Np
         Dx_ray_z(ip,iz) = interp1(rz,rx,zmax); % bent ray
         t_ray(ip,iz) = interp1(rz,rt,zmax); % bent ray
         Sr_apx(ip,iz) = sqrt(Dx_ray_z(ip,iz).^2 + zmax.^2); % straight line start to end
-        t_apx(ip,iz) = Sr_apx(ip,iz) / mean(rv(rz<=zmax));
+        t_apx(ip,iz) = Sr_apx(ip,iz) / harmmean(rv(rz<=zmax));
     end % loop on depths
     
     % difference in ray length( metres)
