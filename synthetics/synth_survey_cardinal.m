@@ -15,7 +15,7 @@ gps_offset_str = 'fr10';
 
 niter = 1e4; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
 
-ifsave = true;
+ifsave = false;
 
 %% system/default parameters
 nm2km = 1.852;
