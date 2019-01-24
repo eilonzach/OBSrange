@@ -26,7 +26,6 @@ tat_default = 0.013; %s
 %% survey parameters
 survey = 'cardinal';
 for radius = [1]; % radius of survey, in Nm
-% survey = 'PACMAN'; % 'PACMAN' or 'circle' or 'diamond' or 'tri_edge' or 'tri_center' or 'cross(2)' or 'line(2)'
 fprintf('Survey %s rad=%4.2f depth=%4.0f\n',survey,radius,water_depth*1e3);
 survstart = now;
 survey_dt = max([10,60*radius/1.3]); % time lapse of ranging
