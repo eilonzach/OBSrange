@@ -120,7 +120,7 @@ rawdatfile = dir([datapath,surv,'*']);data = [];
 if exist([modified_outdir,'/mats/',surv,'_OUT.mat'],'file') == 2
     fprintf('\n%s already processed. Skipping...\n',files(is).name);
     load([rawdatfile.folder,'/',rawdatfile.name]); 
-%     continue
+    continue
 else
     load([rawdatfile.folder,'/',rawdatfile.name]);    
 %     fprintf('\nWorking on: %s\n',surv);
@@ -143,7 +143,7 @@ vship_kn = data(1).vship_kn;
 dt_survey = data(1).dt_survey;
 % survx = data(1).survx*1000;
 % survy = data(1).survy*1000;
-survt = data(1).survt;
+% survt = data(1).survt;
 lat_drop = data(1).drop(1);
 lon_drop = data(1).drop(2);  
 z_drop = data(1).drop(3)*-1000;

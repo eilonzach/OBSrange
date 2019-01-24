@@ -85,7 +85,7 @@ if niter > 1
                   'TG_dforward',dforward,'TG_dstarboard',dstarboard,...
                   'obs_loc_xyz',[],'obs_loc_laloz',[],...
                   'TAT',[],'Vp_water',[],...
-                  'Nobs',[],'survlats',[],'survlons',[],'survt',[],'tot_dt',[],...
+                  'Nobs',[],'survlats',[],'survlons',[],'survts',[],'tot_dt',[],...
                   'corr_dt',[],'v_surv_true',[]);
 end
                              
@@ -164,7 +164,7 @@ survt = now + [1:Nping];
 data(jj).Nobs = length(survlon);
 data(jj).survlats = survlat;
 data(jj).survlons = survlon;
-data(jj).survt = survt;
+data(jj).survts = survt;
 data(jj).tot_dt = tot_dt;
 data(jj).corr_dt = corr_dt;
 data(jj).v_surv_true = surv_vel_true;
