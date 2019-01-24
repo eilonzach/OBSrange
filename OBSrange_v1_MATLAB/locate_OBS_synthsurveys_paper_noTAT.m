@@ -21,14 +21,17 @@ clear; close all;
 % path to project
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % Josh
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtestboot/'; % Josh PAPER
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT/'; % Josh PAPER
-% projpath = '~/Work/OBSrange/synthetics/'; 
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT/'; % Josh PAPER
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1/'; % Josh PAPER
+
 
 % path to survey data from the project directory
-datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; % Josh
+% datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; % Josh
+datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys_paper_REVISION1/'; % Josh
 % datapath = 'synth_surveys_paper/';
 % path to output directory from project directory(will be created if it does not yet exist)
-outdir = './OUT_OBSrange_synthsurveys/'; 
+% outdir = './OUT_OBSrange_synthsurveys/';
+outdir = './OUT_OBSrange_synthsurveys_REVISION1/'; 
 
 % % path to survey data from the project directory
 % %datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/';
@@ -38,7 +41,7 @@ outdir = './OUT_OBSrange_synthsurveys/';
 
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
-onesurvey = ''; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
+onesurvey = ''; %'SynthBoot_PACMAN_rad1.00_z5000m_fr10'; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -48,6 +51,11 @@ par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
 par.N_bs = 1; %500; % Number of bootstrap iterations (= 1 for these tests)
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
+
+% Correct GPS location for transponder offset?
+par.if_GPScorr = 1;
+% par.dforward = 10; % in m (y-direction  transponder offset from GPS)
+% par.dstarboard = 10; % in m (x-direction transponder offset from GPS)
 
 % Traveltime correction parameters
 par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
@@ -59,15 +67,14 @@ ifQC_ping = 1; % Do quality control on pings?
 res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnitude
 
 % TAT - Define turnaround time to damp towards in the inversion
-par.TAT_start = 0.013; % (s)
-par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT
+par.TAT = 0.013; % (s)
 
 % Norm damping for each model parameter (damping towards survrting model)
 % Larger values imply more damping towards the survrting model.
 par.dampx = 0;
 par.dampy = 0;
 par.dampz = 0; %0
-par.dampTAT = 2e-1; %2e-1; %2e-1
+% par.dampTAT = 2e-1; %2e-1; %2e-1
 par.dampdvp = 5e-8; %5e-8
 
 % Global norm damping for stabilization
@@ -121,6 +128,12 @@ end
 if isempty(data)
 	continue;
 end
+
+
+dforward = data(1).TG_dforward;
+dstarboard = data(1).TG_dstarboard;
+par.dforward = dforward;
+par.dstarboard = dstarboard;
 
 % Store "global" variables for survey
 survey = data(1).survey;
@@ -182,6 +195,16 @@ for ii = 1:length(data)
     % Convert Lon/Lat to x/y
     [ x_ship, y_ship ] = lonlat2xy_nomap( olon, olat, lons_ship, lats_ship );
     [ x_drop, y_drop ] = lonlat2xy_nomap( olon, olat, lon_drop, lat_drop );
+    
+    % Calculate ship COG
+    survcog = atan2d(diff(x_ship),diff(y_ship));
+    survcog = midpts(survcog([1,1:end,end])')';
+    if par.if_GPScorr
+        % account for gps-transp offset
+        [dx,dy] = GPS_transp_correction(dforward,dstarboard,survcog);
+        x_ship = x_ship + dx;
+        y_ship = y_ship + dy;
+    end
 
     % Calculate velocity of ship
     v_ship = pt_veloc( x_ship, y_ship, z_ship, t_ship );
@@ -227,7 +250,7 @@ for ii = 1:length(data)
         x_sta(ibs) = m_final(1);
         y_sta(ibs) = m_final(2);
         z_sta(ibs) = m_final(3);
-        TAT(ibs) = par.TAT_start; %m_final(4);
+        TAT(ibs) = par.TAT; %m_final(4);
         dvp(ibs) = m_final(4);
         V_w(ibs) = par.vp_w + dvp(ibs);
         E_rms(ibs) = models(end).E;

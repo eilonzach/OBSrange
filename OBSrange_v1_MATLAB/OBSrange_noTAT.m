@@ -46,9 +46,13 @@ ifsave = 1; % Save results to *.mat?
 ifplot = 1; % Plot results?
 
 par = struct([]);
-par(1).vp_w = 1500; % Assumed water velocity (m/s)
+par(1).vp_w = 1500; % Starting water velocity (m/s)
 par.N_bs = 1000; % Number of bootstrap iterations
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
+
+% Correct GPS location for transponder offset
+par.dforward = 10; % in m (y-direction  transponder offset from GPS)
+par.dstarboard = 10; % in m (x-direction transponder offset from GPS)
 
 % Traveltime correction parameters
 % ==>  +1 if location is RECEIVE, -1 if location is SEND, 0 if no correction
@@ -130,6 +134,15 @@ z_ship = zeros(Nobs,1); % ship is always at surface
 % Convert Lon/Lat to x/y
 [ x_ship, y_ship ] = lonlat2xy_nomap( olon, olat, lons_ship, lats_ship );
 [ x_drop, y_drop ] = lonlat2xy_nomap( olon, olat, lon_drop, lat_drop );
+
+% Calculate ship COG
+survcog = atan2d(diff(x_ship),diff(y_ship));
+survcog = midpts(survcog([1,1:end,end])')';
+% account for gps-transp offset
+[dx,dy] = GPS_transp_correction(dforward,dstarboard,survcog);
+x_ship = x_ship + dx;
+y_ship = y_ship + dy;
+
 
 % Calculate velocity of ship
 v_ship = pt_veloc( x_ship, y_ship, z_ship, t_ship );
