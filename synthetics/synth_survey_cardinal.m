@@ -163,6 +163,7 @@ survt = now + [1:Nping];
 data(jj).Nobs = length(survlon);
 data(jj).survlats = survlat;
 data(jj).survlons = survlon;
+data(jj).survts = survt;
 data(jj).tot_dt = tot_dt;
 data(jj).corr_dt = corr_dt;
 data(jj).v_surv_true = surv_vel_true;
