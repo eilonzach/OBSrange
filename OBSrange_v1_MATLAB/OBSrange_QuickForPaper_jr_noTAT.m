@@ -21,7 +21,8 @@ clear; close all;
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % DATA
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03 only
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTHETIC
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest4_noTAT/'; % SYNTHETIC 2
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest4_noTAT/'; % SYNTHETIC 2
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest4_REVISION1_GPScorr/'; % REVISION1
 
 % ZACH
 % projpath = '~/Work/OBSrange/projects/PacificORCA/';
@@ -48,12 +49,14 @@ modified_outdirs = {
     '4_OUT_wcorr_xrec_Vp';
     '5_OUT_wcorr_xrec_Z';
     '6_OUT_wcorr_xrec_TAT_Vp_Z';
+    '10_OUT_wcorr_xrec_noGPScorr';
     };
 
-if_twtcorr = [0;    1;    1;   1;    1;   ];
-dampz =      [0;    0;    0;   1e3;  1e3; ];
-dampTAT =    [2e-1; 2e-1; 1e1; 1e1;  1e5; ];
-dampdvp =    [5e-8; 5e-8; 1e3; 5e-8; 1e3; ];
+if_twtcorr = [0;    1;    1;   1;    1;    1;  ];
+is_GPScorr = [1;    1;    1;   1;    1;    0;  ];
+dampz =      [0;    0;    0;   1e3;  1e3;  1e3;];
+dampTAT =    [2e-1; 2e-1; 1e1; 1e1;  1e5;  1e5;];
+dampdvp =    [5e-8; 5e-8; 1e3; 5e-8; 1e3;  5e-8;];
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -71,12 +74,18 @@ par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 par.if_twtcorr = if_twtcorr(irun); %0; % Apply a traveltime correction to account for ship velocity?
 par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
+% GPS transponder offset
+par.is_GPScorr = is_GPScorr(irun);
+par.dforward = 10; % in m (y-direction  transponder offset from GPS)
+par.dstarboard = 10; % in m (x-direction transponder offset from GPS)
+
+
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
 ifQC_ping = 1; % Do quality control on pings?
 res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnitude
 
 % TAT - Define turnaround time to damp towards in the inversion
-par.TAT_start = 0.013; %0.014; % (s)
+par.TAT = 0.014; %0.014; % (s)
 par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT (lower bound should never be < 0)
 
 % Norm damping for each model parameter (damping towards starting model)
@@ -153,6 +162,13 @@ z_ship = zeros(Nobs,1); % ship is always at surface
 v_ship = pt_veloc( x_ship, y_ship, z_ship, t_ship );
 v_ship = [moving_average(v_ship(1,:),par.npts_movingav)'; moving_average(v_ship(2,:),par.npts_movingav)'; moving_average(v_ship(3,:),par.npts_movingav)'];
 
+if par.is_GPScorr
+    % Account for GPS-transponder offset
+    survcog = atan2d(v_ship(1,:),v_ship(2,:));
+    [dx,dy] = GPS_transp_correction(par.dforward,par.dstarboard,survcog');
+    x_ship = x_ship + dx;
+    y_ship = y_ship + dy;
+end
 %% Set up initial model
 m0_strt(1,1) = x_drop; %x0;
 m0_strt(2,1) = y_drop; %y0;
@@ -205,7 +221,7 @@ for ibs = 1:par.N_bs
     x_sta(ibs) = m_final(1);
     y_sta(ibs) = m_final(2);
     z_sta(ibs) = m_final(3);
-    TAT(ibs) = par.TAT_start;%m_final(4);
+    TAT(ibs) = par.TAT;%m_final(4);
     dvp(ibs) = m_final(4);
     V_w(ibs) = par.vp_w + dvp(ibs);
     E_rms(ibs) = models(end).E;

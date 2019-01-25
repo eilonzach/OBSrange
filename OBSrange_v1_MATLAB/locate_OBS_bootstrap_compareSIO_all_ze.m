@@ -14,19 +14,27 @@ addpath('./functions');
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % path to project
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTH
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest3/'; % SYNTH 3
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest3/'; % SYNTH 3
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest4_REVISION1_GPScorr/'; % REVISION1
 datapath = './'; % path to survey data
 datapathSIO = './'; % path to survey data
 outdir_OBSrange = './OUT_OBSrange/2_OUT_wcorr_xrec/'; % output directory
-outdir_SIOcomp = './OUT_OBSrange/SIO_compare_wbads/'; % output directory
+% outdir_SIOcomp = './OUT_OBSrange/SIO_compare_wbads/'; % output directory
 is_savemat = 1; % Save *.mat file of results?
 Nbins = 15; % Bins for histogram plots
-is_nobads = 0; % use SIO results with all bad pings removed
+is_nobads = 1; % use SIO results with all bad pings removed
+
+if is_nobads
+    outdir_SIOcomp = './OUT_OBSrange/8_SIO_compare_nobads/';
+else
+    outdir_SIOcomp = './OUT_OBSrange/9_SIO_compare_wbads/';
+end
 
 wd = pwd;
 cd(projpath);
 files = dir([datapath,'/*.txt']);
-stas = unique(strtok({files.name},{'_','.txt'}));
+% stas = unique(strtok({files.name},{'_','.txt'}));
+stas = {'syn12_z5000m_fr10'};
 Nstas = length(stas);
 for is = 1:Nstas
     sta = stas{is};
@@ -37,7 +45,8 @@ for is = 1:Nstas
     data = load_pings(rawdatafile);
     invdata = load(invdatafile); invdata = invdata.datamat;
     if is_nobads
-        dataSIO = loadSIO([datapathSIO,data.sta,'_SIOcorrected_nobads.txt']);
+%         dataSIO = loadSIO([datapathSIO,data.sta,'_SIOcorrected_nobads.txt']);
+        dataSIO = loadSIO([datapathSIO,data.sta,'_nobads_SIOcorrected.txt']);
     else
         dataSIO = loadSIO([datapathSIO,data.sta,'_SIOcorrected.txt']);
     end
