@@ -22,22 +22,23 @@ clear; close all;
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % Josh
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtestboot/'; % Josh PAPER
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT/'; % Josh PAPER
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1/'; % Josh PAPER
 
 
 % path to survey data from the project directory
 % datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; % Josh
-datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys_paper_REVISION1/'; % Josh
 % datapath = 'synth_surveys_paper/';
 % path to output directory from project directory(will be created if it does not yet exist)
-% outdir = './OUT_OBSrange_synthsurveys/';
-outdir = './OUT_OBSrange_synthsurveys_REVISION1/'; 
+% outdir = './OUT_OBSrange_synthsurveys/'; 
 
 % % path to survey data from the project directory
 % %datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/';
 % datapath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/synthetics/synth_surveys_paper/noise4ms/';
 % % path to output directory from project directory(will be created if it does not yet exist)
 % outdir = './OUT_OBSrange_synthsurveys_noise4ms/'; 
+
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1_fixtat/'; % Josh PAPER
+datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys_paper_REVISION1/'; % Josh
+outdir = './OUT_OBSrange_synthsurveys_REVISION1/';
 
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
@@ -67,10 +68,11 @@ ifQC_ping = 1; % Do quality control on pings?
 res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnitude
 
 % TAT - Define turnaround time to damp towards in the inversion
+par.isperfect_TAT = 1;
 par.TAT = 0.013; % (s)
 
 % Norm damping for each model parameter (damping towards survrting model)
-% Larger values imply more damping towards the survrting model.
+% Larger values imply more damping towards the starting model.
 par.dampx = 0;
 par.dampy = 0;
 par.dampz = 0; %0
@@ -184,6 +186,9 @@ for ii = 1:length(data)
     t_ship = data(ii).survts(Is0nan)*24*60*60;
     corr_dt = data(ii).corr_dt(Is0nan);
     v_surv_true = data(ii).v_surv_true(Is0nan,:);
+    if par.isperfect_TAT
+        par.TAT = data(ii).TAT;
+    end
     
     % Set origin of coordinate system to be lat/lon of drop point
     olon = lon_drop;
