@@ -7,10 +7,10 @@ nm2km = 1.852;
 xmax = 1.5; % units of nm
 
 % profile location
-% glat = 46;
-% glon = -133;
-glat = -6.29;
-glon = -131.91;
+glat = 46;
+glon = -133;
+% glat = -6.29;
+% glon = -131.91;
 gmonth = 0;
 
 % Depths
@@ -115,9 +115,9 @@ for iz = 1:Nz
 end
 
 
-if ifsave
-    save2pdf('Test_ray_vs_straight_approx.pdf',11,100)
-end
+% if ifsave
+%     save2pdf('Test_ray_vs_straight_approx.pdf',11,100)
+% end
 
 %% Plot travel times
 figure(12); clf; set(gcf,'pos',[1140 6 803 799])
@@ -172,5 +172,5 @@ for iz = 1:Nz
 end
 
 if ifsave
-    save2pdf('Test_ray_vs_straight_approx_jbr_traveltimes.pdf',11,100)
+    save2jpg(12,'Test_ray_vs_straight_approx_jbr_traveltimes')
 end
