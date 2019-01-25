@@ -1,4 +1,4 @@
-% levSSPs = getLevSSPs (typeSSP, lons, lats, dataBaseDir,typeVAR);
+% levSSPs = getLevSSPs (typeSSP, lons, lats, dataBaseDir);
 %
 % interpolate SSPS derived from Levitus DataBase of typeSSP (as described below)
 %  to get Sound Speed Profiles at (lons, lats)

@@ -1,4 +1,4 @@
-% function [SSP,z]=getlev(glat,glon,typessd,ifofile)
+% function [SSP,z]=getlev_obsrange(glat,glon,typessd,ifofile,dataBaseDir)
 %
 % A routine to extract SSPs, temperature, salinity, or buoyancy profiles 
 % along a given point or points along a path (glat,glon)
@@ -46,7 +46,7 @@
 % Modified from original for simpler application (only sound speed) by 
 %  Zach Eilon on 01/25/19
 
-function [ssp,z,typeStr]=getlev_obsrange(glat,glon,typeSSP,ofile)
+function [ssp,z,typeStr]=getlev_obsrange(glat,glon,typeSSP,ofile,dataBaseDir)
 
 if nargin < 3
     typeSSP = 0;
@@ -56,7 +56,11 @@ if nargin < 4
     ofile = false;
 end
 
-dataBaseDir='./ssp_09';
+if nargin < 5
+    dataBaseDir='./ssp_09';
+else
+    dataBaseDir = [dataBaseDir,'/ssp_09'];
+end
 
 if glon(1) < 0
    glon=glon+360;
@@ -80,9 +84,9 @@ z=stdDpts(:);
 
 % Finally print SSPs
 if ofile~=false
-    disp ('Sound speed saved in file ',ofile]);
+    disp (['Sound speed saved in file ',ofile]);
     fid = fopen (ofile, 'w');
-    fprintf (fid, '-1 %11.3f\n', rtmp(k));
+    fprintf (fid, 'depth(m) ssp(m/s)\n');
     for l=1:33
         fprintf (fid, '%5d %10.2f\n', z(l), ssp(l));
     end

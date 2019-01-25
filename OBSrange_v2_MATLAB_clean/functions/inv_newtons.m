@@ -1,4 +1,4 @@
-function [ m_final,models,v_eff,N,R,Covm ] = inv_newtons( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H)
+function [ m_final,models,v_eff,N,R,Covm ] = inv_newtons( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H,dt_rvl)
 %[ m_final,models,v_eff ] = inv_newton( par,m_start,twt,x_ship,y_ship,z_ship,v_ship,H )
 % 
 %   Conduct interative inversion for OBS location and other parameters
@@ -13,6 +13,7 @@ function [ m_final,models,v_eff,N,R,Covm ] = inv_newtons( par,m_start,twt,x_ship
 %   z_ship:   z position of ship relative to drop point, in m (should be zero!)
 %   v_ship:   absolute velocity of ship, in m/s
 %   H:        norm damping matrix, with weights set in the main script
+%   dt_rvl:   structure with correction times for ray-bending effects
 % OUTPUTS:
 %   m_final:  output model after Newton's method iterations cease 
 %   models:   output structure with all models from the iterative inversion
@@ -55,6 +56,12 @@ while dE > E_thresh
     % (+) if logging ship location at receive time (*)
     % (-) if logging ship location at transmit time
     twt_corr = twt + if_twtcorr*dtwtcorr; % Apply correction to the data
+    
+    % Apply ray bending correction
+    if par.if_raycorrect && ~isempty(dt_rvl)
+        dT_ray_v_line = ray_correct_gettime(dt_rvl,r); % positive if ray slower than line
+        twt_corr = twt_corr - dT_ray_v_line; 
+    end
 
     % Build the G matrix
     G = buildG_noTAT( x0, y0, z0, dvp0, x_ship, y_ship, z_ship, vp_w, Nobs, M);

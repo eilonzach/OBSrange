@@ -35,7 +35,7 @@ datapath = './';
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = 'EC03'; %''; %'EC03';
+onesta = 'EC04'; %''; %'EC03';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -52,14 +52,14 @@ par.if_twtcorr = 0; % Apply a traveltime correction to account for ship velocity
 par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Raybending correction parameters
-par.if_raycorrect = 0; % Apply a traveltime correction to account for rays bending?
+par.if_raycorrect = 1; % Apply a traveltime correction to account for rays bending?
 %  NOTE - if you choose to do this you can either input your own
-%  depth-soundspeed profile (make sure "Z_SSP_stationname.txt" files are
+%  depth-soundspeed profile (make sure "SSP_stationname.txt" files are
 %  sitting in the directory defined below, where "stationname" is the same
 %  as "sta" in the code below) OR our code will calculate one for you based
 %  on the location and the date of the survey (using monthly means and a
 %  decadal SSP projection)
-par.sspfiledir = './OUT_OBSrange/depth_soundspeed_profiles';
+par.sspfiledir = './OUT_OBSrange/station_soundspeed_profiles';
 
 % GPS-transponder offset
 % if this is not known, set both of these to zero
@@ -131,8 +131,13 @@ t_ship = data.t_ship;
 twt = data.twt;
 
 if par.if_raycorrect
-% Make soundspeed profiles (or load user's) and ray-line correction matrix 
-dt_rvl = ray_vs_straight_correct([lat_drop,lon_drop]);
+    % Make soundspeed profiles (or load user's) and ray-line correction matrix 
+    % NOTE - if user profile, make sure it extends down to z_drop depth
+    dt_rvl = ray_correct_makegrid([lat_drop,lon_drop],par,sta,z_drop,t_ship(1),[functionspath,'/ocean_profiles_obsrange']);
+    % note these will be two-way correction times, to be SUBTRACTED from
+    % actual data in order to remove the effect of ray bending.
+else
+    dt_rvl = [];
 end
 
 % Set origin of coordinate system to be lat/lon of drop point
@@ -203,7 +208,7 @@ for ibs = 1:par.N_bs
     [ m_final,models,v,N,R,Cm ] = ...
         inv_newtons( par,m0_strt,twt_bs,...
                     x_ship_bs,y_ship_bs,z_ship_bs,...
-                    v_ship_bs,H);
+                    v_ship_bs,H,dt_rvl);
 
     x_sta(ibs) = m_final(1);
     y_sta(ibs) = m_final(2);
@@ -256,9 +261,9 @@ Ftest_res = f_test_gridsearch(par,x_ship,y_ship,x_sta,y_sta,z_sta,V_w,TAT,v_eff,
 
 %% Print some results
 fprintf('\nStation: %s',data.sta);
-fprintf('\nlat:   %.5f deg (%f) \nlon:   %.5f deg (%f) \nx:     %f m (%f) \ny:    %f m (%f) \ndepth: %f m (%f) \nTAT:   %f ms (%f) \nv_H20: %f m/s (%f)',mean(lat_sta),std(lat_sta)*2,mean(lon_sta),std(lon_sta)*2,mean(x_sta),std(x_sta)*2,mean(y_sta),std(y_sta)*2,mean(z_sta),std(z_sta)*2,mean(TAT)*1000,std(TAT)*1000*2,mean(V_w),std(V_w)*2);
-fprintf('\nDrift Lon: %f m (%f) \nDrift Lat: %f m (%f) \nDrift:    %f m (%f) \nDrift Azi: %f deg (%f)\ndz: %f m (%f)\n',mean(dx_drift),std(dx_drift)*2,mean(dy_drift),std(dx_drift)*2,mean(drift),std(drift)*2,mean(azi),std(azi)*2,mean(dz_sta),std(dz_sta)*2);
-fprintf('\nRMS:  %f ms (%f)\n',mean(E_rms)*1000,std(E_rms)*2*1000);
+fprintf('\nlat:   %.5f deg (%f) \nlon:   %.5f deg (%f) \nx:     %.1f m (%.1f) \ny:    %.1f m (%.1f) \ndepth: %.1f m (%.1f) \nTAT:   %.1f ms \nv_H20: %.1f m/s (%.1f)',mean(lat_sta),std(lat_sta)*2,mean(lon_sta),std(lon_sta)*2,mean(x_sta),std(x_sta)*2,mean(y_sta),std(y_sta)*2,mean(z_sta),std(z_sta)*2,mean(TAT)*1000,mean(V_w),std(V_w)*2);
+fprintf('\nDrift Lon: %.1f m (%.1f) \nDrift Lat: %.1f m (%.1f) \nDrift:    %.1f m (%.1f) \nDrift Azi: %.1f deg (%.1f)\ndz: %.1f m (%.1f)\n',mean(dx_drift),std(dx_drift)*2,mean(dy_drift),std(dx_drift)*2,mean(drift),std(drift)*2,mean(azi),std(azi)*2,mean(dz_sta),std(dz_sta)*2);
+fprintf('\nRMS:  %.3f ms (%.3f)\n',mean(E_rms)*1000,std(E_rms)*2*1000);
 
 %% PLOTTING
 if ifplot
@@ -290,9 +295,9 @@ end
 fid = fopen([modified_outdir,'/',data.sta,'_location.txt'],'w');
 fprintf(fid,'Bootstrap inversion results (2sigma uncertainty)');
 fprintf(fid,'\nStation: %s',data.sta);
-fprintf(fid,'\nLat:   %.5f deg (%f) \nLon:   %.5f deg (%f) \nX:     %f m (%f) \nY:    %f m (%f) \nDepth: %f m (%f) \nTAT:   %f ms (%f) \nWater Vel.: %f m/s (%f)',mean(lat_sta),std(lat_sta)*2,mean(lon_sta),std(lon_sta)*2,mean(x_sta),std(x_sta)*2,mean(y_sta),std(y_sta)*2,mean(z_sta),std(z_sta)*2,mean(TAT)*1000,std(TAT)*1000*2,mean(V_w),std(V_w)*2);
+fprintf(fid,'\nLat:   %.5f deg (%f) \nLon:   %.5f deg (%f) \nX:     %.1f m (%.1f) \nY:    %.1f m (%.1f) \nDepth: %.1f m (%.1f) \nTAT:   %.1f ms (%f) \nWater Vel.: %.1f m/s (%f)',mean(lat_sta),std(lat_sta)*2,mean(lon_sta),std(lon_sta)*2,mean(x_sta),std(x_sta)*2,mean(y_sta),std(y_sta)*2,mean(z_sta),std(z_sta)*2,mean(TAT)*1000,std(TAT)*1000*2,mean(V_w),std(V_w)*2);
 fprintf(fid,'\nDrift Lon: %f m (%f) \nDrift Lat: %f m (%f) \nDrift:    %f m (%f) \nDrift Azi: %f deg (%f)\ndz: %f m (%f)\n',mean(dx_drift),std(dx_drift)*2,mean(dy_drift),std(dy_drift)*2,mean(drift),std(drift)*2,mean(azi),std(azi)*2,mean(dz_sta),std(dz_sta)*2);
-fprintf(fid,'\nRMS:  %f ms (%f)\n',mean(E_rms)*1000,std(E_rms)*2*1000);
+fprintf(fid,'\nRMS:  %.4f ms (%f)\n',mean(E_rms)*1000,std(E_rms)*2*1000);
 fprintf(fid,'\nBad pings Removed: %d',N_badpings);
 fprintf(fid,'\n===================================================\n');
 fprintf(fid,'%10s %10s %15s %15s %15s %15s \n','Lat','Lon','Range (m)','Residual (s)','Doppler Vel. (m/s)','TWT corr. (ms)');
