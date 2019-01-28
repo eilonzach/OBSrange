@@ -42,7 +42,7 @@ outdir = './OUT_OBSrange_synthsurveys_REVISION1_noGPScorr/';
 
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
-onesurvey = 'SynthBoot_PACMAN_rad1.00_z5000m_0'; %'SynthBoot_PACMAN_rad1.00_z5000m_fr10'; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
+onesurvey = 'SynthBoot_PACMAN_rad1.00_z5000m_fr10'; %'SynthBoot_PACMAN_rad1.00_z5000m_fr10'; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -54,7 +54,7 @@ par.N_bs = 1; %500; % Number of bootstrap iterations (= 1 for these tests)
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Correct GPS location for transponder offset?
-par.if_GPScorr = 0;
+par.if_GPScorr = 1;
 % par.dforward = 10; % in m (y-direction  transponder offset from GPS)
 % par.dstarboard = 10; % in m (x-direction transponder offset from GPS)
 
@@ -205,20 +205,27 @@ for ii = 1:length(data)
     [ x_ship, y_ship ] = lonlat2xy_nomap( olon, olat, lons_ship, lats_ship );
     [ x_drop, y_drop ] = lonlat2xy_nomap( olon, olat, lon_drop, lat_drop );
     
-    % Calculate ship COG
-    survcog = atan2d(diff(x_ship),diff(y_ship));
-    survcog = midpts(survcog([1,1:end,end])')';
-    if par.if_GPScorr
-        % account for gps-transp offset
-        [dx,dy] = GPS_transp_correction(dforward,dstarboard,survcog);
-        x_ship = x_ship + dx;
-        y_ship = y_ship + dy;
-    end
+%     % Calculate ship COG
+%     survcog = atan2d(diff(x_ship),diff(y_ship));
+%     survcog = midpts(survcog([1,1:end,end])')';
+%     if par.if_GPScorr
+%         % account for gps-transp offset
+%         [dx,dy] = GPS_transp_correction(dforward,dstarboard,survcog);
+%         x_ship = x_ship + dx;
+%         y_ship = y_ship + dy;
+%     end
 
     % Calculate velocity of ship
     v_ship = pt_veloc( x_ship, y_ship, z_ship, t_ship );
     v_ship = [moving_average(v_ship(1,:),par.npts_movingav)'; moving_average(v_ship(2,:),par.npts_movingav)'; moving_average(v_ship(3,:),par.npts_movingav)'];
-
+    
+    % Account for GPS-transponder offset
+    survcog = atan2d(v_ship(1,:),v_ship(2,:));
+    if par.if_GPScorr
+    [dx,dy] = GPS_transp_correction(dforward,dstarboard,survcog');
+    x_ship = x_ship + dx;
+    y_ship = y_ship + dy;
+    end
     %% Set up initial model
     m0_strt(1,1) = x_drop; %x0;
     m0_strt(2,1) = y_drop; %y0;
