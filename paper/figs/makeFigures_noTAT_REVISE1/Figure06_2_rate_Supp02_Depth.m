@@ -11,7 +11,7 @@ ifsave = 1;
 % projname = 'mats_SynthBoot_summary_noTAT_REVISION1';
 projname = 'mats_SynthBoot_summary_noTAT_REVISION1_fixtat';
 
-depth = 2000; %5000, 2000, 500 % station depth (m)
+depth = 500; %5000, 2000, 500 % station depth (m)
 % surveynames = {'PACMAN','cross','diamond','line','tri','circle'};
 surveynames = {'PACMAN','cross','diamond','line','tri','circle','hourglass','cardinal'};
 
@@ -273,7 +273,7 @@ dx_shift = -0.33;
 dx = 1.75;
 dy_shift = 0.012; %0.0;%-0.08;
 dy_static = -0.032;
-dy = 1;%1.4;
+dy = 0.97;%1.4;
 ax5.Position = [ax5.Position(1)+dx_shift, ax5.Position(2)+dy_shift*0+dy_static,   ax5.Position(3)*dx, ax5.Position(4)*dy];
 ax6.Position = [ax6.Position(1)+dx_shift, ax6.Position(2)+dy_shift*1+dy_static, ax6.Position(3)*dx, ax6.Position(4)*dy];
 ax7.Position = [ax7.Position(1)+dx_shift, ax7.Position(2)+dy_shift*2+dy_static, ax7.Position(3)*dx, ax7.Position(4)*dy];
@@ -312,7 +312,7 @@ for ifil = 1:Nfils
 %     ylim(ax5,[0.7 max(misfit_r_xy)+10^(floor(log10(max(misfit_r_xy))))*4]);
     ylim(ax5,[min(misfit_r_xy)-0.3 100]);
     xlim(ax5,[0 20]);
-    title(ax5,'\textbf{RMS}','interpreter','latex','fontsize',FONTSIZE);
+%     title(ax5,'\textbf{RMS}','interpreter','latex','fontsize',FONTSIZE);
     yticks(ax5,[0.001 0.01 0.1 1 10 100 1000]);
     ylabel(ax5,'$\mathbf{\delta r_{xy}\, (m)}$','fontsize',FONTSIZE,'Interpreter','latex')
     xlabel(ax5,'\bf{Total survey distance (km)}','fontsize',FONTSIZE,'Interpreter','latex');
