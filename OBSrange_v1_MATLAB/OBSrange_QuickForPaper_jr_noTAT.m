@@ -54,8 +54,8 @@ modified_outdirs = {
 
 if_twtcorr = [0;    1;    1;   1;    1;    1;  ];
 is_GPScorr = [1;    1;    1;   1;    1;    0;  ];
-dampz =      [0;    0;    0;   1e3;  1e3;  1e3;];
-dampTAT =    [2e-1; 2e-1; 1e1; 1e1;  1e5;  1e5;];
+dampz =      [0;    0;    0;   1e3;  1e3;  0;  ];
+dampTAT =    [2e-1; 2e-1; 1e1; 1e1;  1e5;  2e-1;];
 dampdvp =    [5e-8; 5e-8; 1e3; 5e-8; 1e3;  5e-8;];
 
 %% Parameters
