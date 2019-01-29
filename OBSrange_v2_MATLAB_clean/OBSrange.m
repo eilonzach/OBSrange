@@ -67,7 +67,7 @@ par.dforward = 0; % units of meters, positive means transponder is further forwa
 par.dstarboard = 0; % units of meters, positive means transponder is further starboard than GPS
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
-ifQC_ping = 1; % Do quality control on pings?
+ifQC_ping = 1; % Do quality control on pings? (We strongly recommend this!)
 res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnitude
 
 % TAT - Define turnaround which remains fixed (transponder-specific value)
