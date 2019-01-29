@@ -20,7 +20,7 @@
 \efloatseparator
  
 \begin{figure}[h]
-\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure06.pdf}
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure06_z5000m.pdf}
 \caption{ a--c) RMS model parameter misfits for 10,000 synthetic survey realizations of various survey geometries with varying radii: \textit{PACMAN}, \textit{Circle}, \textit{Cross}, \textit{Diamond}, \textit{Line}, and \textit{Triangle}. Each survey geometry is shown to the left of its respective legend entry. Horizontal instrument location misfit is again given by $\delta r_{xy} = \sqrt{\delta x^2 + \delta y^2} $. Open stars for the line tests denote misfit in the direction running parallel to the line ($x$-direction for these tests). d) Quantification of diminishing improvement as radius of \textit{PACMAN} survey is increased, where $\lambda$ is the product between survey radius and $\delta r_{xy}$. The lowest (ideal) value of $\lambda$ occurs at a radius of 0.75~Nm. e) Change in the rate of improvement of horizontal location misfit with increasing \textit{PACMAN} survey radius ($\nabla r_{xy}$), where the dashed line indicates minimum $\lambda$. Improvements in horizontal misfit become negligible as radius increases beyond 0.75--1~Nm.}
 \label{fig:survey_geom_explore}
 \end{figure}

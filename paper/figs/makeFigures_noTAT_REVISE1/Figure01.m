@@ -210,7 +210,7 @@ y = 1.1;
 figN_add('d)',ax1,x,y,25);
 figN_add('e)',ax2,x,y,25);
 figN_add('f)',ax3,x,y,25);
-figN_add('a)',ax4,x,y+0.003,25);
+figN_add('a)',ax4,x,y+0.06,25);
 figN_add('b)',ax5,x,y,25);
 figN_add('c)',ax6,x,y,25);
 
