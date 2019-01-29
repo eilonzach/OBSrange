@@ -145,7 +145,7 @@ for ip=1:Np
         plot(ax2,Dx_ray_z(:,iz)/nm2km,t_apx(:,iz)*2,'-^','color',cols(iz,:));     
     end
 end
-% difference in ray travel time (ms) (two-way)
+% difference in ray travel time (ms) (one-way)
 dtime_ms = 1000*(t_ray-t_apx);
 for iz = 1:Nz
         plot(ax4,Dx_ray_z(:,iz)/nm2km,2*dtime_ms(:,iz),'-o','color',cols(iz,:));  
