@@ -18,10 +18,10 @@ clear; close all;
 % path to project
 
 % JOSH
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_noTAT/'; % DATA
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_v2/'; % DATA
 
 % ZACH
-projpath = '~/Work/OBSrange/projects/PacificORCA/';
+% projpath = '~/Work/OBSrange/projects/PacificORCA/';
 
 % STEVE
 % projpath = '~/Seismo/projects/OBSrange/projects/PacificORCA/';
@@ -63,8 +63,8 @@ par.sspfiledir = './OUT_OBSrange/station_soundspeed_profiles';
 
 % GPS-transponder offset
 % if this is not known, set both of these to zero
-par.dforward = -10; % units of meters, positive means transponder is further forward than GPS 
-par.dstarboard = -10; % units of meters, positive means transponder is further starboard than GPS
+par.dforward = 0; % units of meters, positive means transponder is further forward than GPS 
+par.dstarboard = 0; % units of meters, positive means transponder is further starboard than GPS
 
 % Ping QC -- Remove pings > ping_thresh ms away from neighbor
 ifQC_ping = 1; % Do quality control on pings?

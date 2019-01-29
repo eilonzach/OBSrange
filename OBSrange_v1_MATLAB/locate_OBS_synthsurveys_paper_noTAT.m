@@ -54,7 +54,7 @@ par.N_bs = 1; %500; % Number of bootstrap iterations (= 1 for these tests)
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Correct GPS location for transponder offset?
-par.if_GPScorr = 1;
+par.if_GPScorr = 0;
 % par.dforward = 10; % in m (y-direction  transponder offset from GPS)
 % par.dstarboard = 10; % in m (x-direction transponder offset from GPS)
 
