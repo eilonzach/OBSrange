@@ -148,6 +148,7 @@ for ifil = 1:length(synth_dirs)
     else
         misfit_TAT(:,ifil) = rms(0.013 - trudata.tat);
         misfit_Vp(:,ifil) = rms(1500 - trudata.vp_actual*1000);
+        misfit_Vp_bs(:,ifil) = misfit_Vp(:,ifil);
     end
     misfit_r_xy_bs(:,ifil) = sqrt( misfit_xsta_bs(:,ifil).^2 + misfit_ysta_bs(:,ifil).^2 );
 %     misfit_r_xy_bs(:,ifil) = sqrt( (misfit_xsta_bs(:,ifil)./trudata.obs_location_xyz(1)*1000).^2 +...
@@ -161,6 +162,11 @@ for ifil = 1:length(synth_dirs)
     if ifil == 1
         Ftest_res = synth.datamat.Ftest_res;
     end
+    
+    fprintf('%s : diff r_xy = %.2f m\n',xlabels{ifil},sqrt(misfit_xsta(ifil).^2+misfit_ysta(ifil).^2))
+    fprintf('               = %.2f m (+/- %.2f)\n',misfit_r_xy_bs(1,ifil),std(misfit_r_xy_bs(:,ifil)))
+    fprintf('   : diff z    = %.2f m (+/- %.2f)\n',misfit_zsta_bs(1,ifil),std(misfit_zsta_bs(:,ifil)))
+    fprintf('   : diff Vp   = %.2f m (+/- %.2f)\n',misfit_Vp_bs(1,ifil),std(misfit_Vp_bs(:,ifil)))
 end
 r_xy_95(:,8) = [nan nan]';
 r_xy_95(:,9) = [nan nan]';
