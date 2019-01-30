@@ -219,8 +219,8 @@ fprintf(fid,'\\caption{%s}\n',caption);
 fprintf(fid,'\\centering\n');
 fprintf(fid,'\\resizebox{\\textwidth}{!}{\n'); % shrink to page width
 fprintf(fid,'\\begin{tabular}{c | c c c c c | l c c c c}\n');
-fprintf(fid,'                     &                  &                       & \\textbf{ellipsoid}  & \\textbf{GPS}         & \\textbf{remove}     & & $\\mathbf{x}$ & $\\mathbf{y}$ & $\\mathbf{z}$ & $\\mathbf{V_p}$ \\\\ \n');
-fprintf(fid,'\\textbf{Model Name} & \\textbf{method} & $\\mathbf{\\delta T}$ & \\textbf{correction} & \\textbf{correction}  & \\textbf{bad data}   & & \\textbf{(m)} & \\textbf{(m)} & \\textbf{(m)} & \\textbf{(m/s)} \\\\ \n');
+fprintf(fid,'                     &                  & \\textbf{Doppler}     & \\textbf{ellipsoid}  & \\textbf{GPS}         & \\textbf{remove}     & & $\\mathbf{x}$ & $\\mathbf{y}$ & $\\mathbf{z}$ & $\\mathbf{V_p}$ \\\\ \n');
+fprintf(fid,'\\textbf{Model Name} & \\textbf{method} & \\textbf{correction}  & \\textbf{correction} & \\textbf{correction}  & \\textbf{bad data}   & & \\textbf{(m)} & \\textbf{(m)} & \\textbf{(m)} & \\textbf{(m/s)} \\\\ \n');
 fprintf(fid,'\\hline\n');
 
 % Write data

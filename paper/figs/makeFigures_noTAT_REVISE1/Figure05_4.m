@@ -164,9 +164,9 @@ for ifil = 1:length(synth_dirs)
     end
     
     fprintf('%s : diff r_xy = %.2f m\n',xlabels{ifil},sqrt(misfit_xsta(ifil).^2+misfit_ysta(ifil).^2))
-    fprintf('               = %.2f m (+/- %.2f)\n',misfit_r_xy_bs(1,ifil),std(misfit_r_xy_bs(:,ifil)))
-    fprintf('   : diff z    = %.2f m (+/- %.2f)\n',misfit_zsta_bs(1,ifil),std(misfit_zsta_bs(:,ifil)))
-    fprintf('   : diff Vp   = %.2f m (+/- %.2f)\n',misfit_Vp_bs(1,ifil),std(misfit_Vp_bs(:,ifil)))
+    fprintf('               = %.2f m (+/- %.2f)\n',mean(misfit_r_xy_bs(:,ifil)),std(misfit_r_xy_bs(:,ifil)))
+    fprintf('   : diff z    = %.2f m (+/- %.2f)\n',mean(misfit_zsta_bs(:,ifil)),std(misfit_zsta_bs(:,ifil)))
+    fprintf('   : diff Vp   = %.2f m (+/- %.2f)\n',mean(misfit_Vp_bs(:,ifil)),std(misfit_Vp_bs(:,ifil)))
 end
 r_xy_95(:,8) = [nan nan]';
 r_xy_95(:,9) = [nan nan]';
