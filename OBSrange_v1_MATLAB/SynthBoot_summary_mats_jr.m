@@ -13,10 +13,10 @@ clear; close all;
 % path to output directory from project directory (actually input for this script)
 % outdir = [projpath,'/OUT_OBSrange_synthsurveys/OUT_wcorr/']; %
 
-% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1/'; % Josh PAPER
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1_fixtat/'; % Josh PAPER
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1/'; % Josh PAPER
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1_fixtat/'; % Josh PAPER
 datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys_paper_REVISION1/'; % Josh
-outdir = [projpath,'/OUT_OBSrange_synthsurveys_REVISION1/OUT_wcorr/'];
+outdir = [projpath,'/OUT_OBSrange_synthsurveys_REVISION1_noGPS/OUT_wcorr/'];
 
 % prepend functions directory to MATLAB path
 fullMAINpath = mfilename('fullpath');

@@ -36,13 +36,17 @@ clear; close all;
 % % path to output directory from project directory(will be created if it does not yet exist)
 % outdir = './OUT_OBSrange_synthsurveys_noise4ms/'; 
 
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1_table1tests/'; % Josh PAPER
-datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys_paper_REVISION1/'; % Josh
-outdir = './OUT_OBSrange_synthsurveys_REVISION1_noGPScorr/';
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1_table1tests/'; % Josh PAPER
+% datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys_paper_REVISION1/'; % Josh
+% outdir = './OUT_OBSrange_synthsurveys_REVISION1_noGPScorr/';
 
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1/'; % Josh PAPER
+datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys_paper_REVISION1/'; % Josh
+outdir = './OUT_OBSrange_synthsurveys_REVISION1_noGPS/';
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
-onesurvey = 'SynthBoot_PACMAN_rad1.00_z5000m_fr10'; %'SynthBoot_PACMAN_rad1.00_z5000m_fr10'; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
+onesurvey = ''; %'SynthBoot_PACMAN_rad1.00_z5000m_fr10'; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
+surv_suffix = 'z5000m_fr10';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -54,7 +58,7 @@ par.N_bs = 1; %500; % Number of bootstrap iterations (= 1 for these tests)
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
 
 % Correct GPS location for transponder offset?
-par.if_GPScorr = 0;
+par.if_GPScorr = 1;
 % par.dforward = 10; % in m (y-direction  transponder offset from GPS)
 % par.dstarboard = 10; % in m (x-direction transponder offset from GPS)
 
@@ -115,6 +119,7 @@ Nsurveys = length(surveys);
 for is = 1:Nsurveys
 surv = surveys{is};
 if ~isempty(onesurvey), if ~strcmp(surv,onesurvey),continue; end; end
+if ~isempty(surv_suffix), if ~any(regexp(surv,surv_suffix)),continue; end; end
 fprintf('===========================\nWorking on %s\n\n',surv);
 %% load all the data    
 %     rawdatafile = sprintf('%s%s.txt',datapath,surv);

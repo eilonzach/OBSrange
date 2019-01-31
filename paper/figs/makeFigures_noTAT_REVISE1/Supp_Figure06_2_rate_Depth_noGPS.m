@@ -4,10 +4,10 @@
 %  This version calculates for different depths
 function Figure06
 addpath('/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/OBSrange_v1_MATLAB/functions/');
-suff = '';
+suff = '_noGPS';
 
-ofile = ['../Figure06',suff];
-ofile_supp = ['../FigureS2',suff];
+ofile = ['../FigureSupp',suff];
+% ofile_supp = ['../FigureS2',suff];
 ifsave = 1;
 
 % projname = 'mats_SynthBoot_summary_noTAT_REVISION1';
@@ -270,7 +270,7 @@ for ifil = 1:Nfils
 %     yticks(ax4,[0.001 0.01 0.1 1 10 100]);
 end
 %% Place axes
-delete(ax1); delete(ax2); delete(ax3); %delete(ax4); %delete(ax8);
+delete(ax1); delete(ax2); delete(ax3); delete(ax4); delete(ax8);
 dx_shift = -0.33;
 dx = 1.75;
 dy_shift = 0.012; %0.0;%-0.08;
@@ -280,14 +280,6 @@ ax5.Position = [ax5.Position(1)+dx_shift, ax5.Position(2)+dy_shift*0+dy_static, 
 ax6.Position = [ax6.Position(1)+dx_shift, ax6.Position(2)+dy_shift*1+dy_static, ax6.Position(3)*dx, ax6.Position(4)*dy];
 ax7.Position = [ax7.Position(1)+dx_shift, ax7.Position(2)+dy_shift*2+dy_static, ax7.Position(3)*dx, ax7.Position(4)*dy];
 
-dy_shift = -0.005;%-0.08;
-dx = 0.7;
-dx_shift = -0.33;
-ax8.Position = [ax8.Position(1)+dx_shift, ax8.Position(2)+dy_shift, ax8.Position(3)*dx, ax8.Position(4)*dy];
-
-ax4.Position = ax8.Position;
-dx_shift = 0.24;
-ax4.Position = [ax4.Position(1)+dx_shift, ax4.Position(2), ax4.Position(3), ax4.Position(4)];
 for ifil = 1:Nfils
     %% RMS
     lw = 2;
@@ -301,9 +293,9 @@ for ifil = 1:Nfils
     else
         h(ifil) = plot(ax5,data_all(ifil).survey_length/1000,misfit_r_xy(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
     end
-    if ifil == imin
-        plot(ax5,data_all(ifil).survey_length/1000,misfit_r_xy(ifil),symbol{ifil},'color','r','markersize',markersize,'linewidth',2); hold on;
-    end
+%     if ifil == imin
+%         plot(ax5,data_all(ifil).survey_length/1000,misfit_r_xy(ifil),symbol{ifil},'color','r','markersize',markersize,'linewidth',2); hold on;
+%     end
     if any(regexp(lgd{ifil},'line'))
 %         plot(ax5,data_all(ifil).survey_length/1000,misfit_xsta(ifil),symbol{ifil},'markeredgecolor',purp2(end-(Nlines-iline),:),'markersize',markersize,'linewidth',2); hold on;
         plot(ax5,data_all(ifil).survey_length/1000+[-0.5 +0.5],misfit_xsta(ifil)*[1 1],'-.','color',clr(ifil,:),'linewidth',2); hold on;
@@ -344,14 +336,14 @@ for ifil = 1:Nfils
     else
         plot(ax6,data_all(ifil).survey_length/1000,misfit_zsta(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
     end
-    if ifil == imin
-        plot(ax6,data_all(ifil).survey_length/1000,misfit_zsta(ifil),symbol{ifil},'color','r','markersize',markersize,'linewidth',2); hold on;
-    end
+%     if ifil == imin
+%         plot(ax6,data_all(ifil).survey_length/1000,misfit_zsta(ifil),symbol{ifil},'color','r','markersize',markersize,'linewidth',2); hold on;
+%     end
     set(ax6,'yscale','log','linewidth',1.5,'fontsize',FONTSIZE,'XTickLabel',[],'TickLength',[0.01, 0.001]*2,'layer','top','xminortick','on','TickDir','out');
 %     set(ax6,'yscale','linear','linewidth',1.5,'fontsize',FONTSIZE,'XTickLabel',[],'TickLength',[0.01, 0.001]*3,'layer','top','xminortick','on');
 %     ylim(ax6,ax2.YLim);
 %     ylim(ax6,[min(misfit_zsta)-0.2 max(misfit_zsta)+10^(floor(log10(max(misfit_zsta))))*5]);
-    ylim(ax6,[min(misfit_zsta)-0.4 100]);
+    ylim(ax6,[min(misfit_zsta)-1 100]);
     xlim(ax6,[0 20]);
     yticks(ax6,[0.001 0.01 0.1 1 10 100 1000]);
     ylabel(ax6,'$\mathbf{\delta Z\, (m)}$','fontsize',FONTSIZE,'Interpreter','latex')
@@ -381,14 +373,14 @@ for ifil = 1:Nfils
     else
         plot(ax7,data_all(ifil).survey_length/1000,misfit_Vw(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
     end
-    if ifil == imin
-        plot(ax7,data_all(ifil).survey_length/1000,misfit_Vw(ifil),symbol{ifil},'color','r','markersize',markersize,'linewidth',2); hold on;
-    end
+%     if ifil == imin
+%         plot(ax7,data_all(ifil).survey_length/1000,misfit_Vw(ifil),symbol{ifil},'color','r','markersize',markersize,'linewidth',2); hold on;
+%     end
     set(ax7,'yscale','log','linewidth',1.5,'fontsize',FONTSIZE,'XTickLabel',[],'TickLength',[0.01, 0.001]*2,'layer','top','xminortick','on','TickDir','out');
 %     set(ax7,'yscale','linear','linewidth',1.5,'fontsize',FONTSIZE,'XTickLabel',[],'TickLength',[0.01, 0.001]*3,'layer','top','xminortick','on');
 %     ylim(ax7,ax4.YLim);
 %     ylim(ax7,[0.8 max(misfit_Vw)+10^(floor(log10(max(misfit_Vw))))*2]);
-    ylim(ax7,[min(misfit_Vw)-0.2 100]);
+    ylim(ax7,[min(misfit_Vw)-0.6 100]);
     xlim(ax7,[0 20]);
     yticks(ax7,[0.001 0.01 0.1 1 10 100]);
     ylabel(ax7,'$\mathbf{\delta V_{P} \, (m/s)}$','fontsize',FONTSIZE,'Interpreter','latex')
@@ -406,36 +398,6 @@ for ifil = 1:Nfils
             plot(qax7,data_all(ifil).survey_length/1000,Ypl,symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
         end
         set(qax7,'Visible','off','XLim',ax7.XLim,'YLim',ax7.YLim);
-    end
-    %% Calculate diminishing return parameter
-    if any(regexp(lgd{ifil},'PACMAN'))
-%     x = data_all(ifil).survx;
-%     y = data_all(ifil).survy;
-%     t = data_all(ifil).survt;
-%     r = sqrt((x-mean(x)).^2+(y-mean(y)).^2)*1000;
-%     r_mean(ifil) = mean(r);
-%     r_max(ifil) = max(r)/1852;
-%     dist_tot(ifil) = data_all(ifil).survey_length/1000;
-%     dt(ifil) = max(t)/60;
-%     misfit(ifil) = misfit_r_xy(ifil);
-% %     lam(ifil) = r_max(ifil) * misfit_r_xy(ifil);
-%     lam(ifil) = dist_tot(ifil) * misfit_r_xy(ifil);
-    
-    plot(ax8,data_all(ifil).radius,lam(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
-    if ifil == imin
-        plot(ax8,data_all(ifil).radius,lam(ifil),symbol{ifil},'color','r','markersize',markersize,'linewidth',2); hold on;
-    end
-    if any(regexp(lgd{ifil},'line'))
-        lamx = r_max(ifil) * misfit_xsta(ifil);
-        plot(ax8,ifil,lamx,symbol{ifil},'markeredgecolor',purp2(end-(Nlines-iline),:),'markersize',markersize,'linewidth',2); hold on;
-    end
-    set(ax8,'yscale','linear','linewidth',1.5,'fontsize',FONTSIZE,'xminortick','on','yminortick','on','TickLength',[0.01, 0.001]*3,'layer','top','TickDir','out');
-%     ylabel(ax8,'{$\delta$\boldmath$\lambda$ (\textbf{m^2})}','fontsize',18,'Interpreter','latex')
-    xlim(ax8,[min(r_max)-0.1 max(r_max)+0.1]);
-%     ylim(ax8,[35 70]);
-%     yticks(ax8,[0.001 0.01 0.1 1 10 100 1e3 1e4 1e5 1e6 1e7]);
-    ylabel(ax8,'{\boldmath$\lambda$ (\textbf{m}$\cdot$\textbf{km})}','fontsize',FONTSIZE,'Interpreter','latex')
-    xlabel(ax8,'\bf{Radius (Nm)}','fontsize',FONTSIZE,'Interpreter','latex')
     end
 end
 
@@ -484,57 +446,6 @@ for ifil = 1:Nfils
     axis equal;
 end
 
-%% fit line
-% g = fittype('b*exp(-c*x)');
-x = r_max';
-% x = dist_tot';
-y = misfit';
-
-% g = fittype('a*(x)^(b)');
-% f0 = fit(x,y,g,'StartPoint',[1,1]);
-
-fo = fitoptions('Method','NonlinearLeastSquares',...
-               'Lower',[0,-Inf,-100],...
-               'Upper',[Inf,Inf,100],...
-               'StartPoint',[1 1,1]);
-g = fittype('a*((x)^(b)+c)','options',fo);
-f0 = fit(x,y,g);
-
-xx = linspace(min(x),max(x),50);
-xx_rad = linspace(min(r_max),max(r_max),50);
-f12 = figure(12); clf;
-for ifil = 1:7
-    h(ifil) = plot(x(ifil),y(ifil),symbol{ifil},'markerfacecolor',clr(ifil,:),'markersize',markersize); hold on;
-end
-% plot(x,y,'o','linewidth',2,'markersize',10); hold on;
-plot(xx,f0(xx),'-k','linewidth',2);
-xlabel('Radius (Nm)','fontsize',14);
-ylabel('$\mathbf{\delta r_{xy}\, (m)}$','fontsize',14,'Interpreter','latex')
-xlabel('\bf{Radius (Nm)}','fontsize',14,'Interpreter','latex')
-set(gca,'linewidth',1.5,'fontsize',14,'xminortick','on','yminortick','on');
-% ylim([0 65]);
-
-dx = diff(xx);
-dx = dx(1);
-df_dx = gradient(f0(xx),dx);
-txt = sprintf('$y = %.2f(x^{%.2f} + %.2f)$',f0.a,f0.b,f0.c);
-text(0.8,max(f0(xx))-1,txt,'interpreter','latex','fontsize',18);
-% subplot(2,1,2);
-% plot(xx,df_dx,'-b');
-
-cla(ax4);
-plot(ax4,xx,df_dx,'-','color',blues(7,:),'linewidth',2); hold on;
-plot(ax4,[data_all(imin).radius data_all(imin).radius],[-90 0],'--r','linewidth',2);
-set(ax4,'yscale','linear','linewidth',1.5,'fontsize',FONTSIZE,'TickLength',[0.01, 0.001]*3,...
-    'layer','top','xminortick','on','yminortick','on','yaxislocation','right','TickDir','out');
-% ylabel(ax4,'$\mathbf{m/Nm}$','fontsize',16,'Interpreter','latex')
-ylabel(ax4,'$\mathbf{\nabla r_{xy}\, (m/Nm)}$','fontsize',FONTSIZE,'Interpreter','latex')
-xlabel(ax4,'\bf{Radius (Nm)}','fontsize',FONTSIZE,'Interpreter','latex')
-xlim(ax4,[min(r_max)-0.1 max(r_max)+0.1]);
-ylim(ax4,[-90 0]);
-% ylim(ax4,[0.8 max(misfit_Vw_absmean)+10^(floor(log10(max(misfit_Vw_absmean))))*2]);
-% yticks(ax4,[0.001 0.01 0.1 1 10 100]);
-
 %% Figure numbers
 x = 0.92;
 y = 0.9;
@@ -545,24 +456,10 @@ text(ax6,x,y,...
 text(ax7,x,y,...
 '\textbf{c)}','color',[0 0 0],'interpreter','latex','fontsize',18,'Units','normalized');
 
-if depth == 500
-    text(ax8,0.07,0.9,...
-    '\textbf{d)}','color',[0 0 0],'interpreter','latex','fontsize',18,'Units','normalized');
-
-    text(ax4,0.8,0.9,...
-    '\textbf{e)}','color',[0 0 0],'interpreter','latex','fontsize',18,'Units','normalized');
-else
-    text(ax8,0.8,0.9,...
-    '\textbf{d)}','color',[0 0 0],'interpreter','latex','fontsize',18,'Units','normalized');
-
-    text(ax4,0.07,0.9,...
-    '\textbf{e)}','color',[0 0 0],'interpreter','latex','fontsize',18,'Units','normalized');
-end
-
 %% SAVE
 if ifsave
     save2pdf([ofile,'_z',num2str(depth),'m'],f906)
-    save2pdf([ofile_supp,'_z',num2str(depth),'m'],f12);
+%     save2pdf([ofile_supp,'_z',num2str(depth),'m'],f12);
 end
 
 end
