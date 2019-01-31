@@ -28,10 +28,10 @@ fill(ax1,[-2000,2000,2000,-2000,-2000],[-2000,-2000,2000,2000,-2000],col(1,:))
 fill(ax2,[-2000,2000,2000,-2000,-2000],[-8000,-8000,8000,8000,-8000],col(1,:))
 fill(ax3,[-2000,2000,2000,-2000,-2000],[-8000,-8000,8000,8000,-8000],col(1,:))
 
-
 ang = [0:0.1:2*pi];
 %X-Y
 contourf(ax1,Xgrd(:,:,Iz_max),Ygrd(:,:,Iz_max),P(:,:,Iz_max),'linestyle','none');
+plot(ax1,x_sta_bs,y_sta_bs,'.k','MarkerSize',5); hold on;
 % shading(ax1,'flat');
 contour(ax1,Xgrd(:,:,Iz_max),Ygrd(:,:,Iz_max),P(:,:,Iz_max),[[0.05 0.05],[0.32 0.32]],'-w','linewidth',2); hold on;
 plot(ax1,Xgrd(Ix_max,Iy_max,Iz_max),Ygrd(Ix_max,Iy_max,Iz_max),'ok','markerfacecolor',[1 0 0],'markersize',12,'linewidth',1)
@@ -51,6 +51,7 @@ hty1 = text(ax1,x_bds(1)+0.04*diff(axlim(ax1,1:2)),y_bds(1)+0.05*diff(axlim(ax1,
 
 %X-Z
 contourf(ax2,squeeze(Xgrd(Iy_max,:,:)),squeeze(Zgrd(Iy_max,:,:)),squeeze(P(Iy_max,:,:)),'linestyle','none');
+plot(ax2,x_sta_bs,z_sta_bs,'.k','MarkerSize',5); hold on;
 % shading(ax1,'flat');
 contour(ax2,squeeze(Xgrd(Iy_max,:,:)),squeeze(Zgrd(Iy_max,:,:)),squeeze(P(Iy_max,:,:)),[[0.05 0.05],[0.32 0.32]],'-w','linewidth',2); hold on;
 plot(ax2,Xgrd(Ix_max,Iy_max,Iz_max),Zgrd(Ix_max,Iy_max,Iz_max),'ok','markerfacecolor',[1 0 0],'markersize',12,'linewidth',1)
@@ -70,6 +71,7 @@ htz2 = text(ax2,x_bds(1)+0.04*diff(axlim(ax2,1:2)),z_bds(1)+0.05*diff(axlim(ax2,
 
 %Y-Z
 contourf(ax3,squeeze(Ygrd(:,Ix_max,:)),squeeze(Zgrd(:,Ix_max,:)),squeeze(P(:,Ix_max,:)),'linestyle','none');
+plot(ax3,y_sta_bs,z_sta_bs,'.k','MarkerSize',5); hold on;
 % shading(ax1,'flat');
 contour(ax3,squeeze(Ygrd(:,Ix_max,:)),squeeze(Zgrd(:,Ix_max,:)),squeeze(P(:,Ix_max,:)),[[0.05 0.05],[0.32 0.32]],'-w','linewidth',2); hold on;
 plot(ax3,Ygrd(Ix_max,Iy_max,Iz_max),Zgrd(Ix_max,Iy_max,Iz_max),'ok','markerfacecolor',[1 0 0],'markersize',12,'linewidth',1)
