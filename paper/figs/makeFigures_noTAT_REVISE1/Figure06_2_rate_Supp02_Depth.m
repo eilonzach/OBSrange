@@ -11,7 +11,7 @@ ifsave = 1;
 % projname = 'mats_SynthBoot_summary_noTAT_REVISION1';
 projname = 'mats_SynthBoot_summary_noTAT_REVISION1_fixtat';
 
-depth = 500; %5000, 2000, 500 % station depth (m)
+depth = 5000; %5000, 2000, 500 % station depth (m)
 % surveynames = {'PACMAN','cross','diamond','line','tri','circle'};
 surveynames = {'PACMAN','cross','diamond','line','tri','circle','hourglass','cardinal'};
 
