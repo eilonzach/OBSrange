@@ -48,4 +48,5 @@ for ifil = 1:length(dirs)
     catch
         fprintf('Mean difference in GPS-transponder distance: %.2f m\n',0);
     end
+%     pause;
 end

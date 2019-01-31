@@ -46,16 +46,16 @@ synth_dirs = {
 %     };
 
 xlabels = {
-    'OBSrange';
-    'No Doppler';
-    'No Ellipsoid';
-    'No GPS';
+    '(1) OBSrange';
+    '(2) No Doppler';
+    '(3) No Ellipsoid';
+    '(4) No GPS';
 %     'Fix-$\tau$';
-    'Fix-$V_p$';
-    'Fix-Z';
-    'XY-only';
-    'SIOgs';
-    'SIOgs no QC';
+    '(5) Fix-$V_p$';
+    '(6) Fix-Z';
+    '(7) XY-only';
+    '(8) SIOgs';
+    '(9) SIOgs no QC';
     };
 
 symbols = {
@@ -218,7 +218,7 @@ fprintf(fid,'\\begin{table}\n');
 fprintf(fid,'\\caption{%s}\n',caption);
 fprintf(fid,'\\centering\n');
 fprintf(fid,'\\resizebox{\\textwidth}{!}{\n'); % shrink to page width
-fprintf(fid,'\\begin{tabular}{c | c c c c c | l c c c c}\n');
+fprintf(fid,'\\begin{tabular}{l | c c c c c | l c c c c}\n');
 fprintf(fid,'                     &                  & \\textbf{Doppler}     & \\textbf{ellipsoid}  & \\textbf{GPS}         & \\textbf{remove}     & & $\\mathbf{x}$ & $\\mathbf{y}$ & $\\mathbf{z}$ & $\\mathbf{V_p}$ \\\\ \n');
 fprintf(fid,'\\textbf{Model Name} & \\textbf{method} & \\textbf{correction}  & \\textbf{correction} & \\textbf{correction}  & \\textbf{bad data}   & & \\textbf{(m)} & \\textbf{(m)} & \\textbf{(m)} & \\textbf{(m/s)} \\\\ \n');
 fprintf(fid,'\\hline\n');

@@ -45,16 +45,16 @@ synth_dirs = {
 %     };
 
 xlabels = {
-    'OBSrange';
-    'No Doppler';
-    'No Ellipsoid';
-    'No GPS';
+    'OBSrange (1)';
+    'No Doppler (2)';
+    'No Ellipsoid (3)';
+    'No GPS (4)';
 %     'Fix-$\tau$';
-    'Fix-$V_p$';
-    'Fix-Z';
-    'XY-only';
-    'SIOgs';
-    'SIOgs no QC';
+    'Fix-$V_p$ (5)';
+    'Fix-Z (6)';
+    'XY-only (7)';
+    'SIOgs (8)';
+    'SIOgs no QC (9)';
     };
 
 symbols = {
@@ -185,7 +185,7 @@ ax5 = subplot(5,4,[17 18]+2); hold(ax5,'on'); box on;
 ax6 = subplot(5,4,[3,4,7,8]-2); hold(ax6,'on'); box on;
 ax7 = subplot(5,4,[15,16,19,20]-2); hold(ax7,'on'); box on;
 dy = 1.5;
-dy_space = -0.04;
+dy_space = -0.035; %-0.04;
 dx_space = 0.055;
 ax1.Position = [ax1.Position(1)+dx_space, ax1.Position(2)+dy_space, ax1.Position(3), ax1.Position(4)*dy];
 ax2.Position = [ax2.Position(1)+dx_space, ax2.Position(2)+dy_space*2, ax2.Position(3), ax2.Position(4)*dy];
