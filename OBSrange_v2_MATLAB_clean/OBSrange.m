@@ -32,10 +32,10 @@ projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/Pacifi
 % path to survey data from the project directory
 datapath = './'; 
 % path to output directory from project directory (will be created if it does not yet exist)
-outdir = './OUT_OBSrange/'; 
+outdir = './OUT_OBSrange_noraybend/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = 'EC04'; %''; %'EC03';
+onesta = 'EC03'; %''; %'EC03';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -52,7 +52,7 @@ par.if_twtcorr = 0; % Apply a traveltime correction to account for ship velocity
 par.npts_movingav = 1; %5; % number of points to include in moving average smoothing of ship velocity (1 = no smoothing);
 
 % Raybending correction parameters
-par.if_raycorrect = 1; % Apply a traveltime correction to account for rays bending?
+par.if_raycorrect = 0; % Apply a traveltime correction to account for rays bending?
 %  NOTE - if you choose to do this you can either input your own
 %  depth-soundspeed profile (make sure "SSP_stationname.txt" files are
 %  sitting in the directory defined below, where "stationname" is the same
