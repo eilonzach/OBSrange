@@ -42,10 +42,10 @@ clear; close all;
 
 projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1/'; % Josh PAPER
 datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys_paper_REVISION1/'; % Josh
-outdir = './OUT_OBSrange_synthsurveys_REVISION1_noGPS/';
+outdir = './OUT_OBSrange_synthsurveys_REVISION1_fixTAT/';
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
-onesurvey = ''; %'SynthBoot_PACMAN_rad1.00_z5000m_fr10'; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
+onesurvey = 'SynthBoot_hourglass_rad1.00_z5000m_fr10'; %'SynthBoot_PACMAN_rad1.00_z5000m_fr10'; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
 surv_suffix = 'z5000m_fr10';
 
 %% Parameters

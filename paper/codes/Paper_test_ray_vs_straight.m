@@ -19,7 +19,7 @@ zmaxs = flip([0.5:0.5:5.5]); %[5,2,0.5]; % units of km
 % Ray parameters
 ps = 0.01:0.01:1.5;
 
-ifsave = true;
+ifsave = false;
 ofile = '../figs/FigureS12.jpg';
 
 %% prep plot
