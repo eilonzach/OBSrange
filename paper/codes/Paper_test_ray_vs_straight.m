@@ -9,8 +9,8 @@ xmax = 1.5; % units of nm
 % profile location
 glat = 46;
 glon = -133;
-glat = -6.29;
-glon = -131.91;
+% glat = -6.29;
+% glon = -131.91;
 gmonth = 0;
 
 % Depths
@@ -19,8 +19,8 @@ zmaxs = flip([0.5:0.5:5.5]); %[5,2,0.5]; % units of km
 % Ray parameters
 ps = 0.01:0.01:1.5;
 
-ifsave = false;
-ofile = '../figs/FigureS12.jpg';
+ifsave = true;
+ofile = '../figs/FigureS11.jpg';
 
 %% prep plot
 figure(12); clf, set(gcf,'pos',[1151 40 861 960])
@@ -102,7 +102,7 @@ xlabel(ax3,'Soundspeed (km/s)','fontweight','bold')
 
 ylabel(ax1,'Depth (m)','fontweight','bold')
 ylabel(ax2,'2-way times (s)','fontweight','bold')
-ylabel(ax4,'Ray - Line (ms)','fontweight','bold')
+ylabel(ax4,{'\delta T_{bend}','Ray - Line (ms)'},'fontweight','bold')
 
 
 if ifsave
