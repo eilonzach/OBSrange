@@ -198,6 +198,7 @@ azi_locs = cell(par.N_bs,1);
 models = cell(par.N_bs,1);
 R_mat = zeros(M,M,par.N_bs);
 Cm_mat = zeros(M,M,par.N_bs);
+tic
 for ibs = 1:par.N_bs
     x_ship_bs = xmat_ship_bs(:,ibs);
     y_ship_bs = ymat_ship_bs(:,ibs);
@@ -243,6 +244,7 @@ for ibs = 1:par.N_bs
     azi_locss(azi_locss<0) = azi_locss(azi_locss<0) + 360;
     azi_locs{ibs} = azi_locss;
 end
+toc
 dtwt_bs = mean(unscramble_randmat(dtwt_mat,indxs),2);
 twtcorr_bs = mean(unscramble_randmat(twtcorr_mat,indxs),2);
 dtwtcorr_bs = mean(unscramble_randmat(dtwtcorr_mat,indxs),2);
@@ -256,9 +258,9 @@ PLOT_histograms_all
 end
 
 %% F-test for uncertainty using grid search
-
+tic
 Ftest_res = f_test_gridsearch(par,x_ship,y_ship,x_sta,y_sta,z_sta,V_w,TAT,v_eff,twtcorr_bs,ifplot);        
-
+toc
 %% Print some results
 fprintf('\nStation: %s',data.sta);
 fprintf('\nlat:   %.5f deg (%f) \nlon:   %.5f deg (%f) \nx:     %.1f m (%.1f) \ny:    %.1f m (%.1f) \ndepth: %.1f m (%.1f) \nTAT:   %.1f ms \nv_H20: %.1f m/s (%.1f)',mean(lat_sta),std(lat_sta)*2,mean(lon_sta),std(lon_sta)*2,mean(x_sta),std(x_sta)*2,mean(y_sta),std(y_sta)*2,mean(z_sta),std(z_sta)*2,mean(TAT)*1000,mean(V_w),std(V_w)*2);
