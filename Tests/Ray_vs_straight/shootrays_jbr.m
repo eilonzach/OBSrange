@@ -1,4 +1,4 @@
-function [rx,rz,Dr,rt,rv] = shootrays(p, v_profile, zmax, dr,vdz)
+function [rx,rz,Dr,rt,rv] = shootrays_jbr(p, v_profile, zmax, dr,vdz)
 % [rx,rz,Dr] = ray_trace_1D(p, v_profile, zmax, dr,vdz)
 % 
 % 1D ray tracing function

@@ -21,14 +21,14 @@ clear; close all;
 % path to project
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA/'; % Josh
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtestboot/'; % Josh PAPER
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT/'; % Josh PAPER
-% projpath = '~/Work/OBSrange/synthetics/'; 
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT/'; % Josh PAPER
+
 
 % path to survey data from the project directory
-datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; % Josh
+% datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; % Josh
 % datapath = 'synth_surveys_paper/';
 % path to output directory from project directory(will be created if it does not yet exist)
-outdir = './OUT_OBSrange_synthsurveys/'; 
+% outdir = './OUT_OBSrange_synthsurveys/'; 
 
 % % path to survey data from the project directory
 % %datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/';
@@ -36,9 +36,17 @@ outdir = './OUT_OBSrange_synthsurveys/';
 % % path to output directory from project directory(will be created if it does not yet exist)
 % outdir = './OUT_OBSrange_synthsurveys_noise4ms/'; 
 
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1_table1tests/'; % Josh PAPER
+% datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys_paper_REVISION1/'; % Josh
+% outdir = './OUT_OBSrange_synthsurveys_REVISION1_noGPScorr/';
+
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1/'; % Josh PAPER
+datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys_paper_REVISION1/'; % Josh
+outdir = './OUT_OBSrange_synthsurveys_REVISION1_fixTAT/';
 % Put a string survtion name here to only consider that survtion. 
 % Otherwise, to locate all survtions, put ''
-onesurvey = ''; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
+onesurvey = 'SynthBoot_hourglass_rad1.00_z5000m_fr10'; %'SynthBoot_PACMAN_rad1.00_z5000m_fr10'; %'SynthBoot_circle_rad1.00'; %'SynthBoot_line_rad1.00'; %'SynthBoot_PACMAN_rad1.00';
+surv_suffix = 'z5000m_fr10';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
@@ -48,6 +56,11 @@ par = struct([]);
 par(1).vp_w = 1500; % Assumed water velocity (m/s)
 par.N_bs = 1; %500; % Number of bootstrap iterations (= 1 for these tests)
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
+
+% Correct GPS location for transponder offset?
+par.if_GPScorr = 1;
+% par.dforward = 10; % in m (y-direction  transponder offset from GPS)
+% par.dstarboard = 10; % in m (x-direction transponder offset from GPS)
 
 % Traveltime correction parameters
 par.if_twtcorr = 1; % Apply a traveltime correction to account for ship velocity?
@@ -59,15 +72,15 @@ ifQC_ping = 1; % Do quality control on pings?
 res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnitude
 
 % TAT - Define turnaround time to damp towards in the inversion
-par.TAT_start = 0.013; % (s)
-par.TAT_bounds = [0.005 0.025]; % (s) Bounds allowed for TAT
+par.isperfect_TAT = 1;
+par.TAT = 0.013; % (s)
 
 % Norm damping for each model parameter (damping towards survrting model)
-% Larger values imply more damping towards the survrting model.
+% Larger values imply more damping towards the starting model.
 par.dampx = 0;
 par.dampy = 0;
 par.dampz = 0; %0
-par.dampTAT = 2e-1; %2e-1; %2e-1
+% par.dampTAT = 2e-1; %2e-1; %2e-1
 par.dampdvp = 5e-8; %5e-8
 
 % Global norm damping for stabilization
@@ -106,6 +119,7 @@ Nsurveys = length(surveys);
 for is = 1:Nsurveys
 surv = surveys{is};
 if ~isempty(onesurvey), if ~strcmp(surv,onesurvey),continue; end; end
+if ~isempty(surv_suffix), if ~any(regexp(surv,surv_suffix)),continue; end; end
 fprintf('===========================\nWorking on %s\n\n',surv);
 %% load all the data    
 %     rawdatafile = sprintf('%s%s.txt',datapath,surv);
@@ -113,7 +127,7 @@ rawdatfile = dir([datapath,surv,'*']);data = [];
 if exist([modified_outdir,'/mats/',surv,'_OUT.mat'],'file') == 2
     fprintf('\n%s already processed. Skipping...\n',files(is).name);
     load([rawdatfile.folder,'/',rawdatfile.name]); 
-%     continue
+    continue
 else
     load([rawdatfile.folder,'/',rawdatfile.name]);    
 %     fprintf('\nWorking on: %s\n',surv);
@@ -122,15 +136,25 @@ if isempty(data)
 	continue;
 end
 
+try
+    dforward = data(1).TG_dforward;
+    dstarboard = data(1).TG_dstarboard;
+catch
+    dforward = 0;
+    dstarboard = 0;
+end     
+par.dforward = dforward;
+par.dstarboard = dstarboard;
+
 % Store "global" variables for survey
 survey = data(1).survey;
 radius = data(1).radius;
 rmsnoise = data(1).rmsnoise;
 vship_kn = data(1).vship_kn;
 dt_survey = data(1).dt_survey;
-survx = data(1).survx*1000;
-survy = data(1).survy*1000;
-survt = data(1).survt;
+% survx = data(1).survx*1000;
+% survy = data(1).survy*1000;
+% survt = data(1).survt;
 lat_drop = data(1).drop(1);
 lon_drop = data(1).drop(2);  
 z_drop = data(1).drop(3)*-1000;
@@ -171,6 +195,9 @@ for ii = 1:length(data)
     t_ship = data(ii).survts(Is0nan)*24*60*60;
     corr_dt = data(ii).corr_dt(Is0nan);
     v_surv_true = data(ii).v_surv_true(Is0nan,:);
+    if par.isperfect_TAT
+        par.TAT = data(ii).TAT;
+    end
     
     % Set origin of coordinate system to be lat/lon of drop point
     olon = lon_drop;
@@ -182,11 +209,28 @@ for ii = 1:length(data)
     % Convert Lon/Lat to x/y
     [ x_ship, y_ship ] = lonlat2xy_nomap( olon, olat, lons_ship, lats_ship );
     [ x_drop, y_drop ] = lonlat2xy_nomap( olon, olat, lon_drop, lat_drop );
+    
+%     % Calculate ship COG
+%     survcog = atan2d(diff(x_ship),diff(y_ship));
+%     survcog = midpts(survcog([1,1:end,end])')';
+%     if par.if_GPScorr
+%         % account for gps-transp offset
+%         [dx,dy] = GPS_transp_correction(dforward,dstarboard,survcog);
+%         x_ship = x_ship + dx;
+%         y_ship = y_ship + dy;
+%     end
 
     % Calculate velocity of ship
     v_ship = pt_veloc( x_ship, y_ship, z_ship, t_ship );
     v_ship = [moving_average(v_ship(1,:),par.npts_movingav)'; moving_average(v_ship(2,:),par.npts_movingav)'; moving_average(v_ship(3,:),par.npts_movingav)'];
-
+    
+    % Account for GPS-transponder offset
+    survcog = atan2d(v_ship(1,:),v_ship(2,:));
+    if par.if_GPScorr
+    [dx,dy] = GPS_transp_correction(dforward,dstarboard,survcog');
+    x_ship = x_ship + dx;
+    y_ship = y_ship + dy;
+    end
     %% Set up initial model
     m0_strt(1,1) = x_drop; %x0;
     m0_strt(2,1) = y_drop; %y0;
@@ -227,7 +271,7 @@ for ii = 1:length(data)
         x_sta(ibs) = m_final(1);
         y_sta(ibs) = m_final(2);
         z_sta(ibs) = m_final(3);
-        TAT(ibs) = par.TAT_start; %m_final(4);
+        TAT(ibs) = par.TAT; %m_final(4);
         dvp(ibs) = m_final(4);
         V_w(ibs) = par.vp_w + dvp(ibs);
         E_rms(ibs) = models(end).E;

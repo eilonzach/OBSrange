@@ -15,9 +15,9 @@ dforward = 10; % in m
 dstarboard = 10; % in m
 gps_offset_str = 'fr10';
 
-niter = 1e4; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
+niter = 1; %1;%1e4; % if niter>1, will not make plots or save output file in SIO format
 
-ifsave = false;
+ifsave = true;
 
 %% system/default parameters
 nm2km = 1.852;
@@ -26,7 +26,8 @@ vp_default = 1.5; % km/s
 tat_default = 0.013; %s
 
 %% survey parameters
-surveys = {'tri_edge' , 'tri_center' , 'cross', 'cross2','line','line2','hourglass'};
+% surveys = {'tri_edge' , 'tri_center' , 'cross', 'cross2','line','line2','hourglass'};
+surveys = {'PACMAN'};
 for isurvey = 1:length(surveys)
 survey = surveys{isurvey};
 for radius = [1]; % radius of survey, in Nm
@@ -113,8 +114,10 @@ fsurvt = [0;cumsum(1000*diff(fsurvl)./midpts(vship_ms))];
 fsurvsog = sqrt(diff(fsurvx).^2 + diff(fsurvy).^2)./diff(fsurvt)*1000; % in m/s
 fsurvcog = atan2d(diff(fsurvx),diff(fsurvy));
 % make these just as long as position vectors by extending
-fsurvsog = midpts(fsurvsog([1,1:end,end]));
-fsurvcog = midpts(fsurvcog([1,1:end,end]));
+% fsurvsog = midpts(fsurvsog([1,1:end,end]));
+% fsurvcog = midpts(fsurvcog([1,1:end,end]));
+fsurvsog = midpts(fsurvsog([1,1:end,end])')';
+fsurvcog = midpts(fsurvcog([1,1:end,end])')';
 
 % clf , plot(fsurvt/3600); axis equal
 
@@ -262,7 +265,7 @@ end
 
 %% output file
 if ifsave
-    sta = sprintf('syn%u',datN);
+    sta = sprintf('syn%u_z%.0fm_%s',datN,water_depth*1e3,gps_offset_str);
 
 % many iterations - output data structure
 if niter>1

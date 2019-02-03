@@ -7,11 +7,16 @@ clear; close all;
 %% INPUTS - MAKE SURE THESE ARE 
 % path to project
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_strtmodel/'; 
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT/'; 
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT/'; 
 % path to survey data from the project directory
-datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; 
+% datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys/'; 
 % path to output directory from project directory (actually input for this script)
-outdir = [projpath,'/OUT_OBSrange_synthsurveys/OUT_wcorr/']; %
+% outdir = [projpath,'/OUT_OBSrange_synthsurveys/OUT_wcorr/']; %
+
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1/'; % Josh PAPER
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_SynthBoot_surveys_noTAT_REVISION1_fixtat/'; % Josh PAPER
+datapath = '/Users/russell/Lamont/PROJ_OBSrange/synth_tests_paper/synth_surveys_paper_REVISION1/'; % Josh
+outdir = [projpath,'/OUT_OBSrange_synthsurveys_REVISION1_noGPS/OUT_wcorr/'];
 
 % prepend functions directory to MATLAB path
 fullMAINpath = mfilename('fullpath');
@@ -23,6 +28,7 @@ files = dir([outdir,'/mats/*.mat']);
 
 Nfils = length(files);
 for ifil = 1:Nfils
+    display(files(ifil).name)
     load([outdir,'/mats/',files(ifil).name]);
     
     lat_drop = data(1).drop(1);
@@ -37,11 +43,16 @@ for ifil = 1:Nfils
     data_summary.y_ship = y_ship;
     data_summary.v_surv_true = data(1).v_surv_true;
     data_summary.vmag = sqrt(sum(data(1).v_surv_true.^2,2));
-    data_summary.survx = data(1).survx;
-    data_summary.survy = data(1).survy;
-    data_summary.survt = data(1).survt;
+    try
+        data_summary.survx = data(1).survx;
+        data_summary.survy = data(1).survy;
+        data_summary.survt = data(1).survt;
+    end
     data_summary.survey = data(1).survey;
     data_summary.radius = data(1).radius;
+    
+    data_summary.dforward = data(1).TG_dforward;
+    data_summary.dstarboard = data(1).TG_dstarboard;
         
     
     data_summary.misfit_xsta = rms(data(1).misfit_xsta);

@@ -18,10 +18,12 @@ clear; close all;
 % path to project
 
 % JOSH
-projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_noTAT_sphere/'; % DATA
+% projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_noTAT_sphere/'; % DATA
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_EC03/'; % EC03 only
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest/'; % SYNTHETIC
 % projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest4/'; % SYNTHETIC 3
+projpath = '/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/projects/PacificORCA_synthtest4_REVISION1_GPScorr/'; % REVISION1
+
 
 % ZACH
 % projpath = '~/Work/OBSrange/projects/PacificORCA/';
@@ -39,16 +41,20 @@ datapath = './';
 outdir = './OUT_OBSrange/'; 
 % Put a string station name here to only consider that station. 
 % Otherwise, to locate all stations, put ''
-onesta = ''; %''; %'EC03';
+onesta = 'syn12_z5000m_fr10'; %''; %'EC03';
 
 %% Parameters
 ifsave = 1; % Save results to *.mat?
 ifplot = 1; % Plot results?
 
 par = struct([]);
-par(1).vp_w = 1500; % Assumed water velocity (m/s)
+par(1).vp_w = 1500; % Starting water velocity (m/s)
 par.N_bs = 1000; % Number of bootstrap iterations
 par.E_thresh = 1e-5; % RMS reduction threshold for inversion
+
+% Correct GPS location for transponder offset
+par.dforward = 0; % in m (y-direction  transponder offset from GPS)
+par.dstarboard = 0; % in m (x-direction transponder offset from GPS)
 
 % Traveltime correction parameters
 % ==>  +1 if location is RECEIVE, -1 if location is SEND, 0 if no correction
@@ -88,7 +94,8 @@ if ~exist(projpath)
 end
 cd(projpath);
 files = dir([datapath,'/*.txt']);
-stas = unique(strtok({files.name},{'_','.txt'}));
+% stas = unique(strtok({files.name},{'_','.txt'}));
+stas = unique(strtok({files.name},{'.txt'}));
 Nstas = length(stas);
 for is = 1:Nstas
 sta = stas{is};
@@ -134,6 +141,12 @@ z_ship = zeros(Nobs,1); % ship is always at surface
 % Calculate velocity of ship
 v_ship = pt_veloc( x_ship, y_ship, z_ship, t_ship );
 v_ship = [moving_average(v_ship(1,:),par.npts_movingav)'; moving_average(v_ship(2,:),par.npts_movingav)'; moving_average(v_ship(3,:),par.npts_movingav)'];
+
+% Account for GPS-transponder offset
+survcog = atan2d(v_ship(1,:),v_ship(2,:));
+[dx,dy] = GPS_transp_correction(par.dforward,par.dstarboard,survcog');
+x_ship = x_ship + dx;
+y_ship = y_ship + dy;
 
 %% Set up initial model
 m0_strt(1,1) = x_drop; %x0;

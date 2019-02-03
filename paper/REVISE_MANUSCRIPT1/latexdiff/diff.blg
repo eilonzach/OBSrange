@@ -11,14 +11,16 @@ Warning--I didn't find a database entry for "Lynner2017"
 Warning--I didn't find a database entry for "Eilon2017"
 Warning--I didn't find a database entry for "Accardo2017"
 Warning--I didn't find a database entry for "Creager1982"
+Warning--I didn't find a database entry for "Gaherty2018"
+Warning--I didn't find a database entry for "WGS84_2000"
+Warning--I didn't find a database entry for "Hoffmann_Wellenhof_2001"
 Warning--I didn't find a database entry for "Menke2018"
 Warning--I didn't find a database entry for "Davison1986"
 Warning--I didn't find a database entry for "Hung2011"
-Warning--I didn't find a database entry for "Gaherty2018"
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 You've used 0 entries,
             3076 wiz_defined-function locations,
-            1090 strings with 9546 characters,
+            1094 strings with 9612 characters,
 and the built_in function-call counts, 33 in all, are:
 = -- 0
 > -- 0

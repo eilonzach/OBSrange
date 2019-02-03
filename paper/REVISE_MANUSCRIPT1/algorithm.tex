@@ -2,19 +2,19 @@
 
 \subsection{The forward problem}
 
-Here we outline the forward and inverse problems for inverting acoustic ranging data for instrument location following \citet{Creager1982}. We wish to locate an instrument which rests at unknown position and depth on the ocean floor (Figure~\ref{fig:cartoon}). Taking the drop coordinates as the center of a Cartesian coordinate system in which $x$ is positive towards East, $y$ is positive towards North, and $z$ is positive upwards from the sea surface, the instrument lies at location $(x,y,z)$. We account for Earth's ellipticity in converting geodetic coordinates to local ENU coordinates using the WGS84 reference ellipsoid \citep{WGS84_2000} and standard coordinate transformations from \citet{Hoffmann_Wellenhof_2001}. The time taken for an acoustic pulse to travel from the ship to the instrument and back is a function of the sound speed in water ($V_P$), and the location of the ship, as well as the ``turn-around time'' ($\tau$) that corresponds to the (fixed) processing time between the OBS transducer receiving a ping and sending its response. In detail, we can account for the possibility that if the ship is under way, its position changes between sending and receiving pings. Thus, the total travel time, $T$, is: 
+Here we outline the forward and inverse problems for inverting acoustic ranging data for instrument location on the seafloor following \citet{Creager1982}. We wish to locate an instrument which rests at unknown position and depth on the ocean floor (Figure~\ref{fig:cartoon}). Taking the drop coordinates as the center of a Cartesian coordinate system in which $x$ is positive towards East, $y$ is positive towards North, and $z$ is positive upwards from the sea surface, the instrument lies at location $(x,y,z)$. We account for Earth's ellipticity when converting between geodetic and local ENU coordinates using the WGS84 reference ellipsoid \citep{WGS84_2000} and standard coordinate transformations \citep[i.e.,][]{Hoffmann_Wellenhof_2001}. The time taken for an acoustic pulse to travel from the ship's transponder to the instrument and back is a function of the sound speed in water ($V_P$), and the location of the ship, as well as the ``turn-around time'' ($\tau$) that corresponds to the (fixed) processing time between the OBS transducer receiving a ping and sending its response. If the shipboard transponder and GPS are not co-located and their relative positions are known, a heading-dependent correction is applied to the GPS position such that they do coincide. In detail, we can account for the possibility that if the ship is under way, its position changes between sending and receiving pings. Thus, the total travel time, $T$, is: 
 
 \begin{equation}
 T = \frac{r_s + r_r}{V_P} + \tau \,, \label{eq:forward_send_receive}
 \end{equation}
-where
+where for a straight-ray approximation,
 
 \begin{align}
 	r_s &= \sqrt{(x_s - x)^2 + (y_s - y)^2 + z^2}\\
 	r_r &= \sqrt{(x_r - x)^2 + (y_r - y)^2 + z^2} \,.
 \end{align}
 
-Subscript ``$s$'' indicates the ship sending a ping and ``$r$'' indicates the ship receiving the OBS's response. These positions are related by the velocity ($\mathbf{u} = (u_x,u_y,0)$) of the ship, which is estimated from the survey data by differencing neighboring survey points:
+Subscript ``$s$'' indicates the ship's transponder sending a ping and ``$r$'' indicates the ship's transponder receiving the OBS's response. These positions are related by the velocity ($\mathbf{u} = (u_x,u_y,0)$) of the ship, which is estimated from the survey data by differencing neighboring survey points:
 
 \begin{equation}
 \begin{pmatrix} x_s\\y_s\\0 \end{pmatrix} = \begin{pmatrix} x_r\\y_r\\0 \end{pmatrix} - T\begin{pmatrix} u_x\\u_y\\0 \end{pmatrix} \,.
@@ -24,16 +24,20 @@ It follows that, to a close approximation,
 
 \begin{align}
 \begin{split}
-r_s &\approx r_r - T \left(\mathbf{u} \cdot \mathbf{\hat{r}}_r \right)\\
+r_s &\approx r_r - \left(\mathbf{u} \cdot \mathbf{\hat{r}}_r \right) T\\
 	&= r_r - \delta r \,,
 \end{split}	
 \end{align}
 
-where $\mathbf{\hat{r}}_r$ is the unit-vector pointing from the instrument to the ship at the time of receiving. If we know the distance $\delta r$, we can account for the send-receive timing offset related to a change in the ship's position by computing a correction time, $\delta T = \delta r/V_P$. Substituting this into equation (\ref{eq:forward_send_receive}), we have
+where $\mathbf{\hat{r}}_r$ is the unit-vector pointing from the instrument to the ship at the time of receiving. By calculating the distance $\delta r = \left(\mathbf{u} \cdot \mathbf{\hat{r}}_r \right) T$, we can account for the send-receive timing offset related to a change in the ship's position by computing a correction time, $\delta T_{\text{dopp}} = \delta r/V_P$, which will be positive if GPS coordinates correspond to the receive location and negative if they correspond to the send location. 
+
+We can also account for ray-bending due to refraction through the water column by calculating an additional correction time, $\delta T_{\text{bend}}$, that is the difference in two-way travel time between the straight-ray approximation calculated through the depth-averaged water column and the value calculated by ray tracing through a 1D sound-speed profile. A velocity profile is selected from the 2009 World Ocean Atlas database decadal averages (see Data and Resources) for the appropriate survey location and month (determined by GPS location and time stamps in the data), or the user can specify their own. Rays are traced out to 4~km offset for $\pm$200~m about the nominal drop depth, and an evenly spaced mesh of $\delta T_{\text{bend}}$ corrections is constructed. The corrections are then added to the raw travel times for the appropriate depth and offset to convert from bent to straight rays. This correction is most significant for stations in shallow water (less than $\sim$1000~m) at long offsets, in particular if there is a sharp velocity change at the thermocline, but is negligible ($<$1~ms) for deeper instruments and at shorter offsets (see Figures~S1--S2, available in the electronic supplement to this article). With the addition of these corrections to equation (\ref{eq:forward_send_receive}), the two-way travel time is given by:
 
 \begin{equation}
-T + \delta T = \frac{2 r_r}{V_P} + \tau \,. \label{eq:forward}
+T + \delta T = \frac{2 r_r}{V_P} + \tau \,, \label{eq:forward}
 \end{equation}
+
+where $\delta T = \delta T_{\text{dopp}} + \delta T_{\text{bend}}$.
 
 \subsection{The inverse problem}
 
@@ -80,7 +84,7 @@ We use the drop coordinates and water depth (if available from multibeam) as a s
 	\mathbf{d} - g(\mathbf{m})\\\mathbf{0}\\\mathbf{0}
 	\end{matrix}\right] \,,
 \end{equation}
-where $\mathbf{I}$ is the $4\times 4$ identity matrix, $\epsilon = 10^{-10}$, $\mathbf{H}=\text{diag}\left( \gamma_{x}, \gamma_{y}, \gamma_{z}, \gamma_{V_P} \right)$, $\gamma_{x}=\gamma_{y}=\gamma_{z}=0$, and $\gamma_{V_P} = 5\times10^{-8}$. These values for the damping parameters were determined by trial and error and are the defaults in the code. They have been tested on many different survey geometries, and thus, should require little tuning in practice. The equation to be solved becomes:
+where $\mathbf{I}$ is the $4\times 4$ identity matrix, $\epsilon = 10^{-10}$, $\mathbf{H}=\text{diag}\left( \gamma_{x}, \gamma_{y}, \gamma_{z}, \gamma_{V_P} \right)$, $\gamma_{x}=\gamma_{y}=\gamma_{z}=0$, and $\gamma_{V_P} = 5\times10^{-8}$. These values for the damping parameters were determined by trial and error and are the defaults in the code. They have been tested on many different survey geometries, and thus, should require very little tuning for most applications. The equation to be solved becomes:
 
 \begin{equation}
 	\mathbf{m}_{k+1} = \mathbf{m}_k + \left[ \mathbf{F}^{\text{T}} \mathbf{F} \right]^{-1} \mathbf{F}^{\text{T}} \mathbf{f} \,. \label{eq:inverse}
