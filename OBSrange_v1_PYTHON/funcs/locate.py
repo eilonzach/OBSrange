@@ -14,27 +14,31 @@ Josh R. & Zach E. & Stephen M. 4/23/18
 import numpy as np
 import numpy.linalg as LA
 from funcs import pings, coord_txs, bootstrap, results, calc, ftest, plots, vel
+from funcs.ocean_profiles import ray_correct
 
 from IPython.core.debugger import Tracer
 
-def instruments(datafile, parameters):
+def instruments(datafile, parameters, ssp_dir):
   ################### Independent Parameter Initializations ####################
   print('\n Initializing independent parameters ...')
   vpw0       = parameters[0]    
   dvp0       = parameters[1]    
   tat0       = parameters[2]    
   N_bs       = parameters[3]    
-  E_thresh   = parameters[4]
-  twtcorr    = parameters[5] 
-  npts       = parameters[6]    
-  dampx      = parameters[7]   
-  dampy      = parameters[8]   
-  dampz      = parameters[9]   
-  dampdvp    = parameters[10]
-  eps        = parameters[11]    
-  QC         = parameters[12]
-  res_thresh = parameters[13]
-  bounds     = parameters[14]     
+  E_thresh   = parameters[4] 
+  npts       = parameters[5]    
+  dampx      = parameters[6]   
+  dampy      = parameters[7]   
+  dampz      = parameters[8]   
+  dampdvp    = parameters[9]
+  eps        = parameters[10]    
+  QC         = parameters[11]
+  res_thresh = parameters[12]
+  bounds     = parameters[13]
+  dforward   = parameters[14]
+  dstarboard = parameters[15]
+  twtcorr    = parameters[16]
+  raycorr    = parameters[17]     
   
   ######################### Load and Clean Input Data ##########################
   
@@ -76,6 +80,22 @@ def instruments(datafile, parameters):
   # Calculate velocity vector of ship at each survey point. Apply smoothing.
   vs = vel.vector(xs, ys, zs, ts)
   vs = vel.smooth(vs, npts)
+
+  # Account for GPS-transponder offset
+  survcog = np.rad2deg(np.arctan2(vs[:,0], vs[:,1]))
+  dx, dy = calc.GPS_transp_correction(dforward, dstarboard, survcog)
+  xs = xs + dx
+  ys = ys + dy
+
+  ########################### Ray Bending Correction ###########################
+  if raycorr:  
+    Tracer()()
+    dt_rvl = ray_correct.makegrid(lat0, lon0, z0, sta, ts[0], ssp_dir)
+  else:
+    dt_rvl = []
+
+
+
 
   ############################ Bootstrap Resampling ############################
   
