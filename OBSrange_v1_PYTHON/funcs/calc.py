@@ -1,7 +1,7 @@
 '''
 FUNCTION SET calc.py
 
-Functions for several intermediate calculations.
+Functions for several intermediate calculations. Artwork courtesy of Zach.
 
 Josh R. & Zach E. & Stephen M. 4/23/18
 '''
@@ -34,6 +34,49 @@ def tt_corr(x0, y0, z0, xs, ys, zs, vs, vp, dvp, tts):
   
   # Return. (+/-) if logging ship location at (receive/transmit) time.
   return corrected, corrections, vr
+
+'''
+This function computes the location corrections for the case where the GPS and
+hull/side transponder are not co-located. The values dE and dN are distances in
+METERS that should be ADDED to the locations that come from the GPS to give the
+location of the transponder. They are positive East and North, respectively. The
+values dforward and dstarboard are positive if the transponder is further 
+forward (towards the prow) of the ship than the GPS, and if the transponder is
+further starboard than the GPS, respectively. COG is the ship heading 
+("course over ground") in DEGREES.
+ 
+For instance, in the Chagall-esque artwork below, for a ship (sailing up the
+page) with transponder (T) and GPS (G):
+  the value of dforward is positive (+6 ASCII units) and 
+  the value of dstarboard is negative (-5 ASCII units)
+       __
+     /    \  
+    /      \
+   /        \
+  |  T       | 
+  |          | 
+  |          | 
+  |          | 
+  |          | 
+  |          | 
+  |       G  | 
+  |__________| 
+'''
+def GPS_transp_correction(dforward, dstarboard, COG):
+  # Calculate azimuth from GPS to transponder in ship ref frame
+  theta = np.rad2deg(np.arctan2(dstarboard, dforward))
+  
+  # Calculate azimuth from GPS to transponder in geographic ref frame
+  phi = theta + COG
+  
+  # Calculate absolute horizontal distance from GPS to transponder
+  dr = np.sqrt(dforward**2 + dstarboard**2)
+  
+  # Calculate East and North offset of transponder from GPS
+  dE = dr * np.rad2deg(np.sin(phi))
+  dN = dr * np.rad2deg(np.cos(phi))
+
+  return dE, dN
 
 '''
 A function to build the G matrix for the inversion.

@@ -17,28 +17,39 @@ from funcs import fetch, locate, output
 
 ############################# Inversion Parameters #############################
 
-vpw = 1500.0      # Assumed velocity of sound in water (m/s)
-dvp = 0           # Assumed perturbation to vpw (m/s)
-tat = 0.014       # Assumed sensor turn-around time (s)
-N_bs = 1000       # Number of bootstrap iterations
-E_thresh = 1e-5   # RMS reduction threshold for inversion
+vpw = 1500.0            # Assumed velocity of sound in water [m/s]
+dvp = 0                 # Assumed perturbation to vpw [m/s]
+tat = 0.014             # Assumed sensor turn-around time [s]
+N_bs = 1000             # Number of bootstrap iterations
+E_thresh = 1e-5         # RMS reduction threshold for inversion
+npts = 1                # Npts in moving avg of ship vel. (1 = no smoothing)
+dampx = 0               # Norm damping for each model parameter             
+dampy = 0               #             .
+dampz = 0               #             .    
+dampdvp = 5e-8          #             .      
+eps = 1e-10             # Global norm damping for stabilization
+QC = True               # Option to perform quality control on survey points
+res_thresh = 500        # Threshold [ms] beyond which survey points are tossed
+bounds = [0.005, 0.025] # Acceptable bounds for turn-around time solutions.
+dforward = 0            # GPS-transp offset [m] (+ means trans. further forward)
+dstarboard = 0          # GPS-transp offset [m] (+ means trans. further stboard)
 twtcorr = False   # Option to apply a travel-time correction for ship velocity
-npts = 1          # Npts in moving avg smoothing of ship vel. (1 = no smoothing)
-dampx = 0         # Norm damping for each model parameter             
-dampy = 0         #             .
-dampz = 0         #             .    
-dampdvp = 5e-8    #             .      
-eps = 1e-10       # Global norm damping for stabilization
-QC = True         # Option to perform quality control on survey data points
-res_thresh = 500  # Threshold (in ms) beyond which survey data points are tossed
-bounds = [0.005, 
-          0.025]  # Acceptable bounds for turn-around time solutions.
+raycorr = True    # Option to apply a travel-time correction due to ray bending:
+                  #   If you choose to correct for ray beding you can either
+                  #   input your own depth-soundspeed profile (make sure
+                  #   "SSP_stationname.txt" files are sitting in the directory
+                  #   defined below, where "stationname" is the same as "sta" in
+                  #   the code below) OR our code will calculate one for you
+                  #   based on the location and the date of the survey (using
+                  #   monthly means and a decadal SSP projection)
 
-parameters = [vpw, dvp, tat, N_bs, E_thresh, twtcorr, npts, dampx, dampy, \
-              dampz, dampdvp, eps, QC, res_thresh, bounds]
+parameters = [vpw, dvp, tat, N_bs, E_thresh, npts, dampx, dampy, dampz, \
+              dampdvp, eps, QC, res_thresh, bounds, dforward, dstarboard,\
+              twtcorr, raycorr]
 
 ################################ Directory Setup ###############################
 
+ssp_dir = './sound_speed_profiles/'
 survey_dir = './survey_files/'
 output_dir = './output/' 
 
@@ -59,7 +70,7 @@ if not os.path.exists(output_dir):
 
 # Perform locations for each survey site then write results to output.
 for survey_fle in survey_fles:
-  results, figs = locate.instruments(survey_fle, parameters)
+  results, figs = locate.instruments(survey_fle, parameters, ssp_dir)
   output.out(results, figs, out_pkls, out_plts, out_txts)
   
 ##################################### FIN ######################################
