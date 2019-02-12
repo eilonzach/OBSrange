@@ -52,19 +52,49 @@ Modified from original for simpler application (only sound speed) by
 Zach Eilon and Stephen Mosher 01/25/19
 '''
 # Import modules and functions
-from IPython.core.debugger import Tracer
+import numpy as np
 
+from scipy.io import loadmat
+from scipy.interpolate import interp2d
+from IPython.core.debugger import Tracer
 
 # Interpolate SSPs derived from Levitus database to get ssps at (lats, lons)
 def lev_SSPs(type_SSP, lat, lon, dbase_dir):
-  Tracer()()
 
   type_str = ['ann', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', \
               'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 
   lev_fname = dbase_dir + '/lev_' + type_str[type_SSP]
+  lev_dname = dbase_dir + '/lev_latlonZ.mat' 
 
+  # Load in the sound speed profile
+  c = loadmat(lev_fname)['c']
   
+  latlon = loadmat(lev_dname)
+  lats = latlon['lat']
+  lons = latlon['lon']
+  lats = lats.reshape((360,180))[:,0].astype(dtype='float16')
+  lons = lons.reshape((360,180))[0,:].astype(dtype='float16')
+  lats = lats * 0.1
+  lons = lons * 0.1
+
+  lats = np.unique(lats)
+
+  if type(lon) == np.ndarray:
+    lon = lon.T
+    lat = lat.T
+  
+  c = c[0:-1:2,:]
+
+  bb = np.ndarray(shape=(c.shape[1]))
+  for i in range(33):
+    c1 = c[:,i].reshape((180,180))
+    f = interp2d(lons, lats, c1, kind='quintic')
+    bb[i] = (f(lon,lat))
+  bb = 1000 + bb * 0.01
+  
+  return bb
+
 # Main function.
 def lev(lat, lon, type_SSP=0, ofile=False, database_dir='./ssp_09'):
 
@@ -82,6 +112,15 @@ def lev(lat, lon, type_SSP=0, ofile=False, database_dir='./ssp_09'):
 
   type_str = type_str[type_SSP]
 
-  Tracer()()
+  
   # Obtains ssps from levitus database
   pre_d_SSPs = lev_SSPs(type_SSP, lon, lat, database_dir)
+  ssp = pre_d_SSPs
+  z = std_dpts
+
+  # Save SSP to disk.
+  if ofile:
+    Tracer()()
+    print('Sound speed saved in file ' + ofile)
+
+
