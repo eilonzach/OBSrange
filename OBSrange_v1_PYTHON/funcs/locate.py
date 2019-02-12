@@ -93,9 +93,6 @@ def instruments(datafile, parameters, ssp_dir):
   else:
     dt_rvl = []
 
-
-
-
   ############################ Bootstrap Resampling ############################
   
   print('\n Performing bootstrap resampling ...')
@@ -190,12 +187,10 @@ def instruments(datafile, parameters, ssp_dir):
                    'corrs': R.corrs,     # final twt corrections(applied or not)
                    'drifts': R.drifts,   # sensor drift distance for each itr
                    'azs': R.azs,         # sensor drift azimuth for each itr
-                   'drift_az': drft_az,  # mean drift distance and azimuth
                    'cov': R.mod_cov,     # final model covariance 
                    'res': R.mod_res,     # final model resolution
                    'Ftest_res': ft_res,  # results from the Ftest
                    'Nbad': N_badpings,   # number of pings removed with QC
-                   'vrs': R.vrs          # ship's radial velocity
                    }
 
   return final_results, figs
