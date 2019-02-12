@@ -143,11 +143,10 @@
    \begin{tabularx}{\linewidth}{|c|c|X|}
     \hline
     \textbf{MATLAB} & \textbf{PYTHON} & \textbf{Description of Field} \\ \hline
-    -               & vrs        & Ship's radial velocity at each survey point. \\ \hline
-    -               & Nbad       & The number of pings removed via quality control. \\ \hline
     -               & dzs        & The depth difference after each bootstrap iteration. \\ \hline
     azi\_bs         & azs        & Sensor drift azimuth after each bootstrap iteration. \\ \hline
     Cm\_mat         & cov        & Model covariance matrices after each bootstrap iteration. \\ \hline
+    databad         & Nbad       & The number of pings removed via quality control. \\ \hline
     drift\_bs       & drifts     & Sensor drift distance after each bootstrap iteration. \\ \hline
     drop\_lonslatz  & drop\_geo  & Geographic drop coordinates. \\ \hline
     dtwt\_bs        & dtwts      & Final twtt residuals at each survey point. \\ \hline
@@ -165,6 +164,13 @@
     sta             & sta        & Station name. \\ \hline
     TAT\_bs         & tats       & Sensor turn-around time after each bootstrap iteration. \\ \hline
     twtcorr\_bs     & twts       & Final two-way travel-times (twtts) at each survey point. \\ \hline
+    x\_ship         & svy\_xs    & x-coordinates of ship at each survey point. \\ \hline
+    x\_sta\_bs      & x\_sta     & x-coordinates of sensor after each bootstrap iteration. \\ \hline
+    y\_ship         & svy\_ys    & y-coordinates of ship at each survey point. \\ \hline
+    y\_sta\_bs      & y\_sta     & x-coordinates of sensor after each bootstrap iteration. \\ \hline
+    z\_ship         & svy\_zs    & z-coordinates of ship at each survey point. \\ \hline
+    z\_sta\_bs      & z\_sta     & x-coordinates of sensor after each bootstrap iteration. \\ \hline
+    v\_ship         & svy\_vs    & Ship velocity at each survey point. \\ \hline
     \end{tabularx}
    \end{table}
   
