@@ -34,11 +34,10 @@ def instruments(datafile, parameters, ssp_dir):
   eps        = parameters[10]    
   QC         = parameters[11]
   res_thresh = parameters[12]
-  bounds     = parameters[13]
-  dforward   = parameters[14]
-  dstarboard = parameters[15]
-  twtcorr    = parameters[16]
-  raycorr    = parameters[17]     
+  dforward   = parameters[13]
+  dstarboard = parameters[14]
+  twtcorr    = parameters[15]
+  raycorr    = parameters[16]     
   
   ######################### Load and Clean Input Data ##########################
   

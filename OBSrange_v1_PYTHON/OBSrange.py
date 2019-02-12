@@ -44,7 +44,7 @@ raycorr = True    # Option to apply a travel-time correction due to ray bending:
                   #   monthly means and a decadal SSP projection)
 
 parameters = [vpw, dvp, tat, N_bs, E_thresh, npts, dampx, dampy, dampz, \
-              dampdvp, eps, QC, res_thresh, bounds, dforward, dstarboard,\
+              dampdvp, eps, QC, res_thresh, dforward, dstarboard,\
               twtcorr, raycorr]
 
 ################################ Directory Setup ###############################
