@@ -3,6 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%
 \documentclass[titlepage, 12pt]{article}
 \usepackage{color}
+\usepackage{float}
 \usepackage{graphicx}
 \usepackage{tabularx}
 \usepackage{geometry}
@@ -22,7 +23,7 @@
  %%%%%%%%%%%%%%%%%%%%
  \title{\textbf{\textit{\textit{\textbf{OBSrange}}}} v1.0 README}
  \author{Stephen Mosher, Josh Russell and Zachary Eilon}
- \date{August, 2018}
+ \date{February, 2019}
  \maketitle{}
 
  %%%%%%%%%%%%%%%%%%%%
@@ -37,7 +38,7 @@
  \section{Scope}
    The primary goal of \textit{\textbf{OBSrange}} is to provide a robust, efficient, open-source OBS location code to the marine geophysical community.\\ 
 
-   \textit{\textbf{OBSrange}} is a set of scripts written in both MATLAB and PYTHON for precisely locating ocean bottom seismometers (OBSs). The starting point for the code are sets of acoustic ranging survey files obtained during deployment. Using these survey files, the code inverts for instrument locations, turn-around times, and depth averaged sound speeds in water. Additionally, \textit{\textbf{OBSrange}} generates several figures visualizing these results as well as estimates of parameter uncertainties. For a more detailed description of the algorithms we use for our inversion, synthetic tests, and our results, please refer to our paper (\textcolor{red}{put reference here}).
+   \textit{\textbf{OBSrange}} is a set of scripts written in both MATLAB and PYTHON for precisely locating ocean bottom seismometers (OBSs). The starting point for the code are sets of acoustic ranging survey files obtained during deployment. Using these survey files, the code inverts for instrument locations, and depth averaged sound speeds in water. Additionally, \textit{\textbf{OBSrange}} generates several figures visualizing these results as well as estimates of parameter uncertainties. For a more detailed description of the algorithms we use for our inversion, synthetic tests, and our results, please refer to our paper (\textcolor{red}{put reference here}).
 
  \section{Getting Started}
   
@@ -49,6 +50,7 @@
    \item \textit{scipy} v0.19.1
    \item \textit{matplotlib} v2.2.2
    \item \textit{pymap3d} v1.7.4
+   \item \textit{pickle}
   \end{itemize}
 
   \subsection{Survey File Format}
@@ -67,7 +69,8 @@
   \label{section:params}
   Slight design differences exist between the MATLAB and PYTHON versions of the code, but the main usage remains the same between the two. In both cases parameters are set in a single main script which will run and execute every other aspect of the code. Ideally, the only edits users ever need make are in editing the parameters of these main scripts. In the case of the MATLAB version, this script is called \textit{OBSrange.m} and these parameters are set in the top lines of that script. In the case of the PYTHON version, the main script is similarly called \textit{OBSrange.py}, and parameters are set in that script. The parameters to be set by users are described and compared in Table \ref{table:params} (sorted alphabetically by MATLAB parameter names).  Again, in both the MATLAB and PYTHON versions, once these parameters have been set, these scripts may be run and will produce results. 
 
-  \begin{table}[!htb]
+  \newpage
+  \begin{table}[H]
    \centering
    \caption{\textbf{\textit{OBSrange}} Parameter Descriptions.}
    \label{table:params}
@@ -82,23 +85,26 @@
     \textit{onesta}             & \textit{-}                 & Option to process a single station. PYTHON will process whatever survey files (\textit{.txt} files) are located in the directory represented by \textit{survey\_fles}.\\ \hline
     \textit{outdir}             & \textit{output\_dir}       & Path to output directory.\\ \hline
     \textit{par.dampdvp}        & \textit{dampdvp}           & Normal damping for water sound speed.\\ \hline
-    \textit{par.dampTAT}        & \textit{damptat}           & Normal damping for turn-around time.\\ \hline
     \textit{par.dampx}          & \textit{dampx}             & Normal damping for station x-coordinate.\\ \hline
     \textit{par.dampy}          & \textit{dampy}             & Normal damping for station y-coordinate.\\ \hline
     \textit{par.dampz}          & \textit{dampz}             & Normal damping for station z-coordinate.\\ \hline
+    \textit{par.dforward}       & \textit{dforward}          & GPS-transponder offset (meters). If unknown set to 0. Positive means the transponder is further forward than the GPS. \\ \hline
+    \textit{par.dstarboard}     & \textit{dstarboard}        & GPS-transponder offset (meters). If unknown set to 0. Positive means the transponder is further starboard than the GPS. \\ \hline
+    \textit{par.E\_thresh}      & \textit{E\_thresh}         & RMS reduction threshold for the inversion \\ \hline
     \textit{par.epsilon}        & \textit{eps}               & Global norm damping for stabilization.\\ \hline
+    \textit{par.if\_raycorrect} & \textit{raycorr}           & Option to apply a travel time correction for ray-bending. If you choose to do this you can either provide your own sound speed profile for each station or our code will calculate one for you. See \textit{sspfile\_dir/ssp\_dir} below. \\ \hline
     \textit{par.if\_twtcorr}    & \textit{twtcorr}           & Option to apply a correction to two-way travel times due to the ship's radial velocity.\\ \hline
     \textit{par.N\_bs}          & \textit{N\_bs}             & Number of bootstrap iterations.\\ \hline
-    \textit{par.E\_thresh}      & \textit{E\_thresh}         & RMS reduction threshold for the inversion.\\ \hline
-    \textit{par.npts\_movingav} & \textit{npts}              & Number of points in an N-point moving average smoothing filter applied to the ship's velocity. Note that if this parameter is set to “1” that no smoothing is applied. \\ \hline
-    \textit{par.TAT\_bounds}    & \textit{bounds}            & Bounds for turn-around times (\textit{msec}).\\ \hline
-    \textit{par.TAT\_start}     & \textit{tat}               & Turn-around time (\textit{msec}).\\ \hline
-    \textit{par.vp\_w}          & \textit{vpw}               & Water velocity (\textit{m/s}). \\ \hline
-    \textit{projpath}           & \textit{-}                 & Directory for both input and output (MATLAB only). \\ \hline
+    \textit{par.npts\_movingav} & \textit{npts}              & Number of points in an N-point moving average smoothing filter applied to the ship's velocity. Note that if this parameter is set to “1” that no smoothing is applied. stuff\\ \hline
+    \textit{par.sspfiledir}     & \textit{ssp\_dir}          & Path to directory of station sound speed profiles. If providing your own profiles, they \textbf{must} be named according to \textit{SSP\_stationname.txt}. \\ \hline
+    \textit{par.TAT}            & \textit{tat}               & Turn-around time (\textit{msec}).\\ \hline
+    \textit{par.vp\_w}          & \textit{vpw}               & Water velocity (\textit{m/s}).\\ \hline
+    \textit{projpath}           & \textit{-}                 & Directory for both input and output (MATLAB only).\\ \hline
     \textit{res\_thresh}        & \textit{res\_thresh}       & Residual threshold for pings if applying quality control (\textit{msec}, see \textit{ifQC\_ping/QC} above).\\ \hline
    \end{tabularx}
   \end{table}
 
+  \newpage
   \subsection{Structure}
    
    \begin{figure}[!htb]
@@ -125,7 +131,7 @@
    \label{fig:ex}
   \end{figure}
 
-  In both versions, the header of \textit{WC03\_location.txt} summarizes the main results of the inversion performed by \textbf{\textit{OBSrange}} on this station. Shown in the header are the final estimates for the \textit{X} and \textit{Y} coordinates of the package relative to the drop point, as well as their converted latitude and longitude, the sensor turn-around time (\textit{TAT}), and the final depth estimate (\textit{Depth}). Additionally, the header contains the total package drift distance (\textit{Drift}) and azimuth (\textit{Drift Az.}), the difference between the initial estimated depth and final depth estimate (\textit{dz}), and the depth averaged velocity of sound in water (\textit{Water Vel.}). Finally, the header contains the overall RMS misfit for this site and also displays the number of pings that were removed via the ping quality control. Below line 18 of \textit{WC03\_location.txt} the details of each ping are logged, namely, the ship latitude, longitude, estimated distance to the sensor, two-way travel-time residual, the ship's radial velocity and corresponding travel-time correction (whether it was applied or not).
+  In both versions, the header of \textit{WC03\_location.txt} summarizes the main results of the inversion performed by \textbf{\textit{OBSrange}} on this station. Shown in the header are the final estimates for the \textit{X} and \textit{Y} coordinates of the package relative to the drop point, as well as their converted latitude and longitude, and the final depth estimate (\textit{Depth}). Additionally, the header contains the total package drift distance (\textit{Drift}) and azimuth (\textit{Drift Az.}), the difference between the initial estimated depth and final depth estimate (\textit{dz}), and the depth averaged velocity of sound in water (\textit{Water Vel.}). Finally, the header contains the overall RMS misfit for this site and also displays the number of pings that were removed via the ping quality control. Below line 18 of \textit{WC03\_location.txt} the details of each ping are logged, namely, the ship latitude, longitude, estimated distance to the sensor, two-way travel-time residual, the ship's radial velocity and corresponding travel-time correction (whether it was applied or not).
  
   \subsection{The \textit{.pkl} and \textit{.mat} Files}
   In this example PYTHON will also create a \textit{.pkl} file called \textit{WC03\_out.pkl} and MATLAB will create a \textit{.mat} file called \textit{WC03\_out.mat}. In essence, both of these files are simply containers which hold various results of the bootstrap inversion. The \textit{.pkl} file contains a PYTHON \textit{dictionary} object of various results and values and the \textit{.mat} file contains a 1x1 \textit{struct} object called \textit{datamat}. Both data structures contain many of the same fields, all of which are listed in Table \ref{table:dict} (sorted alphabetically by MATLAB parameter names):
@@ -165,7 +171,7 @@
   \newpage
 
   \subsection{Figures}
-  In conclusion we show the figures produced after running \textit{\textbf{OBSrange.py}}.
+  In conclusion we show the figures produced after running \textit{\textbf{OBSrange.py}} for the above example.
 
   \begin{figure}[!htb]
    \centering

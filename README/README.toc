@@ -4,10 +4,10 @@
 \contentsline {subsection}{\numberline {2.2}Survey File Format}{2}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}Coordinate System}{3}{subsection.2.3}
 \contentsline {subsection}{\numberline {2.4}Setting Parameters}{3}{subsection.2.4}
-\contentsline {subsection}{\numberline {2.5}Structure}{4}{subsection.2.5}
-\contentsline {section}{\numberline {3}Example}{5}{section.3}
-\contentsline {subsection}{\numberline {3.1}General Output}{5}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}The \textit {.txt} Files}{6}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}The \textit {.pkl} and \textit {.mat} Files}{7}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Figures}{8}{subsection.3.4}
-\contentsline {section}{References}{12}{section*.2}
+\contentsline {subsection}{\numberline {2.5}Structure}{6}{subsection.2.5}
+\contentsline {section}{\numberline {3}Example}{6}{section.3}
+\contentsline {subsection}{\numberline {3.1}General Output}{6}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}The \textit {.txt} Files}{7}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}The \textit {.pkl} and \textit {.mat} Files}{8}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Figures}{9}{subsection.3.4}
+\contentsline {section}{References}{14}{section*.2}
