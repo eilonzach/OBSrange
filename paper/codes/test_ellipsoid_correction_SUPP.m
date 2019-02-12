@@ -7,7 +7,7 @@ addpath('/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/OBSrange_v1_MATLAB
 trudata = load('/Users/russell/Lamont/PROJ_OBSrange/working/OBSrange/paper/figs/figdata/PacificORCA_synthtest4/trudata_syn12.mat');
 
 % dlat = [7:95];
-dlat = -89;%+1.7; % add to latitude to see how it changes things...
+dlat = +1.7;%+1.7; % add to latitude to see how it changes things...
 olon = trudata.drop_location(2); %-133.62; %0:360;
 olat = trudata.drop_location(1)+dlat; %-7.54;
 lon = trudata.survlon;
