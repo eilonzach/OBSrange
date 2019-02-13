@@ -475,7 +475,7 @@ def resolution_covariance(R, M):
   #ylabels = ax1.get_yticks()
   #ylabels = [str(int(label) + 1) for label in ylabels]
   xlabels = ['', '$X$', '$Y$', '$Z$', '$V_{P}$']
-  ylabels = ['', '$X$','','$Y$','','$Z$','','$V_{P}$','']
+  ylabels = ['', '$X$', '$Y$', '$Z$', '$V_{P}$']
   ax1.set_xticklabels(xlabels)
   ax1.set_yticklabels(ylabels)
   plt.colorbar(m1, fraction=0.046, pad=0.04, ax=ax1)
