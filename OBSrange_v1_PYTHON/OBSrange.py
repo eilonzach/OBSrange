@@ -57,9 +57,6 @@ output_dir = './output/'
 # Grab survey files.
 survey_fles = fetch.data_paths(survey_dir, matchkey='*.txt')
 
-from IPython.core.debugger import Tracer
-Tracer()()
-
 # Create output sub-directories.
 out_pkls = output_dir+'data_pkls/'
 out_plts = output_dir+'plots/'
