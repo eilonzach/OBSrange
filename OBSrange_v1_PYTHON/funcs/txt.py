@@ -31,11 +31,11 @@ def build(fle, R):
   fle.write('Bootstrap Inversion Results ('+pm+' 2' + sig + ' uncertainty)\n')
   fle.write('\n')
   fle.write('{:>11} {} \n'.format('Station:', R['sta']))
-  fle.write(fmt1('Lat:', M(R['lats']), deg+' '+pm, 2 * S(R['lats'])))
-  fle.write(fmt1('Lon:', M(R['lons']), deg+' '+pm, 2 * S(R['lons'])))
-  fle.write(fmt1('X:', M(R['xs']), 'm '+pm, 2 * S(R['xs'])))
-  fle.write(fmt1('Y:', M(R['ys']), 'm '+pm, 2 * S(R['ys'])))
-  fle.write(fmt1('Depth:', M(R['zs']), 'm '+pm, 2 * S(R['zs'])))
+  fle.write(fmt1('Lat:', M(R['lat_sta']), deg+' '+pm, 2 * S(R['lat_sta'])))
+  fle.write(fmt1('Lon:', M(R['lon_sta']), deg+' '+pm, 2 * S(R['lon_sta'])))
+  fle.write(fmt1('X:', M(R['x_sta']), 'm '+pm, 2 * S(R['x_sta'])))
+  fle.write(fmt1('Y:', M(R['y_sta']), 'm '+pm, 2 * S(R['y_sta'])))
+  fle.write(fmt1('Depth:', M(R['z_sta']), 'm '+pm, 2 * S(R['z_sta'])))
   fle.write(fmt1('Water Vel.:', M(R['vpws']), 'm '+pm, 2 * S(R['vpws'])))
   fle.write(fmt1('Drift:', M(R['drifts']), 'm '+pm, 2 * S(R['drifts'])))
   fle.write(fmt1('Drift Az:', M(R['azs']), 'm '+pm, 2 * S(R['azs'])))
@@ -62,9 +62,9 @@ def build(fle, R):
                    i+1, 
                    R['svy_lats'][i], 
                    R['svy_lons'][i], 
-                   dst(R['xs'][i],
-                       R['ys'][i],
-                       R['zs'][i],
+                   dst(R['x_sta'][i],
+                       R['y_sta'][i],
+                       R['z_sta'][i],
                        R['svy_xs'][i],
                        R['svy_ys'][i],
                        R['svy_zs'][i]),

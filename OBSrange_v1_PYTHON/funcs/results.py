@@ -17,6 +17,7 @@ class results:
     # Vectors
     self.lats    = np.zeros(M)   # sensor latitudes
     self.lons    = np.zeros(M)   # sensor longitudes
+    self.tats    = np.zeros(M)   # turn-around times
     self.xs      = np.zeros(M)   # sensor x positions
     self.ys      = np.zeros(M)   # sensor y positions
     self.zs      = np.zeros(M)   # sensor z positions
@@ -48,12 +49,13 @@ class results:
   A function to update the results object.
   '''
   def update(self, i, m0, vpw, E, v, dt, tts, corr, vr, x0, y0, z0, xs, ys, \
-             dat_res, mod_res, mod_cov):
+             dat_res, mod_res, mod_cov, tat):
     self.xs[i]      = m0[0]
     self.ys[i]      = m0[1]
     self.zs[i]      = m0[2]
     self.dvps[i]    = m0[3]
     self.vpws[i]    = vpw + self.dvps[i]
+    self.tats[i]    = tat
     self.E_rms[i]   = E
     self.v_effs[i]  = v
     self.dtwts[:,i] = dt

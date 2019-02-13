@@ -70,17 +70,16 @@ def unscramble(data, idxs):
 def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords, M):
   # Grab required parameters.
   vpw0     = parameters[0]    
-  dvp0     = parameters[1]    
-  tat0     = parameters[2]    
+  dvp0     = parameters[1]
+  tat      = parameters[2]       
   N_bs     = parameters[3]    
   E_thresh = parameters[4]
-  twtcorr  = parameters[5]   
-  dampx    = parameters[7]   
-  dampy    = parameters[8]   
-  dampz    = parameters[9]   
-  dampdvp  = parameters[10]
-  eps      = parameters[11]   
-  bounds   = parameters[14]
+  dampx    = parameters[6]   
+  dampy    = parameters[7]   
+  dampz    = parameters[8]   
+  dampdvp  = parameters[9]
+  eps      = parameters[10] 
+  twtcorr  = parameters[15]   
   Nobs     = X.shape[0]
   x0       = coords[0][0]
   y0       = coords[0][1]
@@ -134,7 +133,7 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords, M):
       h = np.zeros(M)
       
       # Calculate predicted travel-times for this iteration and residuals.
-      twt_pre = calc.twt(x, y, z, xbs, ybs, zbs, vpw0, dvp, tat0)
+      twt_pre = calc.twt(x, y, z, xbs, ybs, zbs, vpw0, dvp, tat)
       dtwt = twts - twt_pre
 
       # Calculate RMS error.
@@ -178,7 +177,7 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords, M):
 
     # Update results object with stabilized results of current bootstrap it.
     R.update(i, m0, vpw0, E, v, dtwt, twts, cns, vr, x0, y0, z0, xs, ys, \
-             dat_res, mod_res, mod_cov, tat0)
+             dat_res, mod_res, mod_cov, tat)
     
     # Convert stabilized result coords of current iteration back to lat lon.
     R.lats[i], R.lons[i] = coord_txs.xy2latlon(R.xs[i], R.ys[i], lat0, lon0)

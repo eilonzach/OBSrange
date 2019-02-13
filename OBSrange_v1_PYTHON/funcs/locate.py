@@ -23,7 +23,7 @@ def instruments(datafile, parameters, ssp_dir):
   print('\n Initializing independent parameters ...')
   vpw0       = parameters[0]    
   dvp0       = parameters[1]    
-  tat0       = parameters[2]    
+  tat        = parameters[2]    
   N_bs       = parameters[3]    
   E_thresh   = parameters[4] 
   npts       = parameters[5]    
@@ -93,6 +93,7 @@ def instruments(datafile, parameters, ssp_dir):
   else:
     dt_rvl = []
 
+  
   ############################ Bootstrap Resampling ############################
   
   print('\n Performing bootstrap resampling ...')
@@ -120,7 +121,7 @@ def instruments(datafile, parameters, ssp_dir):
   R.vrs = np.mean(bootstrap.unscramble(R.vrs, indxs), axis=1)
 
   ################# F-test for uncertainty using a grid search #################
-
+  
   print('\n Performing F-test ...')
   xg,yg,zg,Xg,Yg,Zg,P,mx,my,mz,E = ftest.test(R, coords, lat0, lon0, vpw0)
   
@@ -191,6 +192,7 @@ def instruments(datafile, parameters, ssp_dir):
                    'res': R.mod_res,     # final model resolution
                    'Ftest_res': ft_res,  # results from the Ftest
                    'Nbad': N_badpings,   # number of pings removed with QC
+                   'vrs': R.vrs          # ship's radial velocity
                    }
 
   return final_results, figs
