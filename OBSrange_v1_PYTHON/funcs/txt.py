@@ -36,7 +36,6 @@ def build(fle, R):
   fle.write(fmt1('X:', M(R['xs']), 'm '+pm, 2 * S(R['xs'])))
   fle.write(fmt1('Y:', M(R['ys']), 'm '+pm, 2 * S(R['ys'])))
   fle.write(fmt1('Depth:', M(R['zs']), 'm '+pm, 2 * S(R['zs'])))
-  fle.write(fmt1('TAT:', M(R['tats'])*1000, 'm '+pm, 2 * S(R['tats'])*1000))
   fle.write(fmt1('Water Vel.:', M(R['vpws']), 'm '+pm, 2 * S(R['vpws'])))
   fle.write(fmt1('Drift:', M(R['drifts']), 'm '+pm, 2 * S(R['drifts'])))
   fle.write(fmt1('Drift Az:', M(R['azs']), 'm '+pm, 2 * S(R['azs'])))
