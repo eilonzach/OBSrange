@@ -22,7 +22,6 @@ class results:
     self.zs      = np.zeros(M)   # sensor z positions
     self.dzs     = np.zeros(M)   # changes in depth
     self.vpws    = np.zeros(M)   # sound speeds for water
-    self.tats    = np.zeros(M)   # turn-around times
     self.dvps    = np.zeros(M)   # perturbations to water sound speeds
     self.drifts  = np.zeros(M)   # sensor drift distance
     self.dxdrfts = np.zeros(M)   # changes to drift in x-direction
@@ -49,12 +48,11 @@ class results:
   A function to update the results object.
   '''
   def update(self, i, m0, vpw, E, v, dt, tts, corr, vr, x0, y0, z0, xs, ys, \
-             dat_res, mod_res, mod_cov, tat):
+             dat_res, mod_res, mod_cov):
     self.xs[i]      = m0[0]
     self.ys[i]      = m0[1]
     self.zs[i]      = m0[2]
     self.dvps[i]    = m0[3]
-    self.tats[i]    = tat
     self.vpws[i]    = vpw + self.dvps[i]
     self.E_rms[i]   = E
     self.v_effs[i]  = v
