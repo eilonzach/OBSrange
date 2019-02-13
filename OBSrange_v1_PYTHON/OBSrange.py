@@ -30,7 +30,6 @@ dampdvp = 5e-8          #             .
 eps = 1e-10             # Global norm damping for stabilization
 QC = True               # Option to perform quality control on survey points
 res_thresh = 500        # Threshold [ms] beyond which survey points are tossed
-bounds = [0.005, 0.025] # Acceptable bounds for turn-around time solutions.
 dforward = 0            # GPS-transp offset [m] (+ means trans. further forward)
 dstarboard = 0          # GPS-transp offset [m] (+ means trans. further stboard)
 twtcorr = False   # Option to apply a travel-time correction for ship velocity
@@ -57,6 +56,9 @@ output_dir = './output/'
 
 # Grab survey files.
 survey_fles = fetch.data_paths(survey_dir, matchkey='*.txt')
+
+from IPython.core.debugger import Tracer
+Tracer()()
 
 # Create output sub-directories.
 out_pkls = output_dir+'data_pkls/'
