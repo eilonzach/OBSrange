@@ -44,8 +44,6 @@ def makegrid(lat, lon, z_sta, stn, t, stn_ssp_dir, ssp_dir):
   z = np.array([float(val) for val in z])/1000
   v_profile = np.array([z, ssp])
 
-  Tracer()() 
-
   # Ray-shooting
   ps = np.arange(0.01, 1.501, 0.01)
   zs = z_sta + np.arange(-200, 220, 20)/1000

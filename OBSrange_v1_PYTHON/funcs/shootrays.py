@@ -18,22 +18,22 @@ def find_ilay(r, R):
   
   N = len(r)
   ilay = np.zeros(N, dtype=int)
-  
+
   for i, depth in enumerate(r):
-    idx = np.abs(R - depth).argmin()
+    idx = np.where(R - depth > 0)[0][0]
     ilay[i] = idx
 
   return ilay
 
 # Linear interpolation function.
 def linterp(X, Y, XI):
-  
   YI = np.zeros(len(XI))
 
   ilay = find_ilay(XI, X)
   
+  Tracer()()
   # Linearly interpolate.
-  YI = (XI - X[ilay]) * (Y[ilay + 1] - Y[ilay]) / (X[ilay + 1] - X[ilay]) + Y[ilay]
+  YI = (XI - X[ilay-1]) * (Y[ilay] - Y[ilay - 1]) / (X[ilay] - X[ilay - 1]) + Y[ilay - 1]
 
   # Sort out coincident elements.
   olap = np.intersect1d(X, XI)
@@ -42,8 +42,6 @@ def linterp(X, Y, XI):
 
   return YI
 
-
-
 def shootrays(p, v_profile, zmax, dr=0.001, vdz=0.001):
 
   # Anonymous functions
@@ -51,14 +49,14 @@ def shootrays(p, v_profile, zmax, dr=0.001, vdz=0.001):
   gradv_dist = lambda b, u1, u2, p: (eta(u1,p)/(b*u1*p)) - (eta(u2,p)/(b*u2*p))
   constv_dist = lambda u, dz, p: (p * dz) / eta(u, p)
 
+
+  Tracer()()
   zz1 = np.arange(0, zmax, vdz)
   zz2 = np.arange(vdz, zmax+vdz, vdz)
   
 
   v1  = linterp(v_profile[0], v_profile[1], zz1)
   v2  = linterp(v_profile[0], v_profile[1], zz2)
-  
-  Tracer()()
 
   # assume flat Earth (no radius terms)
   u1 = 1 / v1
