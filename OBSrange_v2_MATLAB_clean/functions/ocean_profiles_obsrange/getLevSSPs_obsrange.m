@@ -52,7 +52,6 @@ end
 for i=1:33
 c1=c(:,i);
 c1=reshape(c1,360,180);
-c1=reshape(c1,360,180);
 bb=[bb interp2(lon',lat',c1',lons,lats,'*cubic')];
 end
 
