@@ -14,11 +14,11 @@ Josh R. & Zach E. & Stephen M. 4/23/18
 import numpy as np
 import numpy.linalg as LA
 from funcs import pings, coord_txs, bootstrap, results, calc, ftest, plots, vel
-from funcs.ocean_profiles import ray_correct
+from funcs import ray_correct
 
 from IPython.core.debugger import Tracer
 
-def instruments(datafile, parameters, ssp_dir):
+def instruments(datafile, parameters, stn_ssp_dir, ssp_dir):
   ################### Independent Parameter Initializations ####################
   print('\n Initializing independent parameters ...')
   vpw0       = parameters[0]    
@@ -87,13 +87,11 @@ def instruments(datafile, parameters, ssp_dir):
   ys = ys + dy
 
   ########################### Ray Bending Correction ###########################
-  if raycorr:  
-    Tracer()()
-    dt_rvl = ray_correct.makegrid(lat0, lon0, z0, sta, ts[0], ssp_dir)
+  if raycorr:
+    dt_rvl = ray_correct.makegrid(lat0, lon0, z0, sta, ts[0], stn_ssp_dir, ssp_dir)
   else:
     dt_rvl = []
 
-  
   ############################ Bootstrap Resampling ############################
   
   print('\n Performing bootstrap resampling ...')
