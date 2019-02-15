@@ -4,7 +4,8 @@ Description
 # Import modules and functions
 import os
 import time
-from funcs import get
+import numpy as np
+from funcs import get, shootrays
 
 def makegrid(lat, lon, z_sta, stn, t, stn_ssp_dir, ssp_dir):
   from IPython.core.debugger import Tracer
@@ -27,6 +28,40 @@ def makegrid(lat, lon, z_sta, stn, t, stn_ssp_dir, ssp_dir):
 
     # Get approptiate ssp/z profile from Levitus database using stn metadata.
     ssp, z = get.lev_based_ssp(lat, lon, month + 1, ssp_dir, ssp_fname)
+  
+  else:
+    ssp, z = [], []
+    f = open(ssp_fname, 'r')
+    lines = f.readlines()
+    for i, line in enumerate(lines):
+      if i == 0:
+        continue
+      z.append(line.split()[0])
+      ssp.append(line.split()[1])
+    f.close()
+
+  ssp = np.array([float(val) for val in ssp])
+  z = np.array([float(val) for val in z])/1000
+  v_profile = np.array([z, ssp])
+
+  Tracer()() 
 
   # Ray-shooting
-  Tracer()()
+  ps = np.arange(0.01, 1.501, 0.01)
+  zs = z_sta + np.arange(-200, 220, 20)/1000
+  zmax = max(zs)
+
+  Np = len(ps)
+  Nz = len(zs)
+
+  Dr_ray = np.zeros(shape=(Np, Nz))
+  Dx = np.zeros(shape=(Np, Nz))
+  t_ray = np.zeros(shape=(Np, Nz))
+  t_lin = np.zeros(shape=(Np, Nz))
+
+  for i, ray in enumerate(ps):
+    try:
+      shootrays.shootrays(ray, v_profile, zmax)
+    except Exception as e:
+      Tracer()()
+      
