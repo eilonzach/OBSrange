@@ -108,7 +108,6 @@ def makegrid(lat, lon, z_sta, stn, t, stn_ssp_dir, ssp_dir):
     f_dT = interp1d(Dx[indx == True, i]*1000, dt_ray_ms[indx == True, i])
     dT_grid[:,i] = f_dT(Dx_grid)
 
-  Tracer()()
   # Put results in a dictionary and write to disk
   dT_ray_v_line_grid = {'Dx_grid_m': Dx_grid,
                         'dz_grid_km': zs,
