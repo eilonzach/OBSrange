@@ -21,7 +21,7 @@ Outputs of the third function qc() are two dictionaries into which the good and
 bad data points are segregated. Bad points are considered as those for which the
 two-way travel time exceeds a time threshold (in msec). The threshold is based 
 on a reasonable amount of time needed to traverse the Euclidean distance between
-the survey point and the sensor drop coordinates based on a static sound speed
+the survey point and the sensor drop coordinates based on an average sound speed
 in water (vpw).                                 
 
 Josh R. & Zach E. & Stephen M. 4/23/18

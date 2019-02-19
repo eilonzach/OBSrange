@@ -4,9 +4,8 @@ FUNCTION locate.py
 This is the main function of OBSrange.
 
 Uses two-way travel time information and ship coordinates from an OBS survey to
-invert for station location on the seafloor (Lat, Lon, Depth), turn-around time
-(TAT), static correction to the sound velocity through the water column (dvp),
-and the velocity of the ship in the radial direction of the survey circle (vr).
+invert for station location on the seafloor (Lat, Lon, Depth) as well as the
+average sound velocity through the water column (dvp).
 
 Josh R. & Zach E. & Stephen M. 4/23/18
 '''
@@ -15,8 +14,6 @@ import numpy as np
 import numpy.linalg as LA
 from funcs import pings, coord_txs, bootstrap, results, calc, ftest, plots, vel
 from funcs import ray_correct
-
-from IPython.core.debugger import Tracer
 
 def instruments(datafile, parameters, stn_ssp_dir, ssp_dir):
   ################### Independent Parameter Initializations ####################
@@ -76,21 +73,24 @@ def instruments(datafile, parameters, stn_ssp_dir, ssp_dir):
   ship_coords = [xs, ys, zs]
   coords = [drop_coords, ship_coords]
   
-  # Calculate velocity vector of ship at each survey point. Apply smoothing.
+  # Calculate velocity vector of ship at each survey point. Optional smoothing.
   vs = vel.vector(xs, ys, zs, ts)
   vs = vel.smooth(vs, npts)
 
   # Account for GPS-transponder offset
-  survcog = np.rad2deg(np.arctan2(vs[:,0], vs[:,1]))
-  dx, dy = calc.GPS_transp_correction(dforward, dstarboard, survcog)
+  surv_cog = np.rad2deg(np.arctan2(vs[:,0], vs[:,1]))
+  dx, dy = calc.GPS_transp_correction(dforward, dstarboard, surv_cog)
   xs = xs + dx
   ys = ys + dy
 
   ########################### Ray Bending Correction ###########################
+  
+  # Note "rvl" refers to "ray-versus-line"
   if raycorr:
-    dt_rvl = ray_correct.makegrid(lat0, lon0, z0, sta, ts[0], stn_ssp_dir, ssp_dir)
+    dt_rvl = ray_correct.makegrid(lat0,lon0,z0,sta,ts[0],stn_ssp_dir,ssp_dir)
   else:
     dt_rvl = []
+  
   ############################ Bootstrap Resampling ############################
   
   print('\n Performing bootstrap resampling ...')

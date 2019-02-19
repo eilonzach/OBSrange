@@ -2,6 +2,7 @@
 Function fetch.py
 
 Return a python list of absolute file paths to files within a given directory.
+Can also specify unix style wildcards via a matchkey.
 
 Stephen M.
 '''

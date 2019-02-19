@@ -12,7 +12,10 @@ resampling, where each data point occurs N times in the bootstraping scheme.
 The third function inverts the results of the previous two functions (i.e. it 
 re-orders an array by its proper index order).
 
-The fourth function performs the inversion.
+The fifth function is a simple helper function to get the correct ray bending
+corrections for the current station. 
+
+The fifth function performs the inversion.
 
 Josh R. & Zach E. & Stephen M. 4/23/18
 '''
@@ -68,16 +71,20 @@ def unscramble(data, idxs):
   return unscrambled_data
 
 def ray_correct_get_time(dt_rvl, r):
+  # Loads in ray correction grids.
   x_grid = dt_rvl['Dx_grid_m']
   z_grid = dt_rvl['dz_grid_km']
   t_grid = dt_rvl['dT_grid_ms']
 
+  # Reshape for later operations.
   x_grid = x_grid.reshape(len(x_grid), 1)
   z_grid = z_grid.reshape(len(z_grid), 1)
 
+  # Break apart ship position into xy and z.
   dxy_ship = np.sqrt(np.sum(r[0:2,:]**2, axis=0)) 
   dz_ship = r[2,:]
 
+  # Find closest indices to get appropriate ray correction times.
   indx = np.argmin(abs(x_grid - dxy_ship), axis=0)
   indz = np.argmin(abs(z_grid - dz_ship/1000), axis=0)
 
@@ -142,7 +149,7 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords, M, dt_rvl):
       else:
         twts = twtbs
 
-      # Apply ray bending correction
+      # Apply ray bending correction.
       if raycorr and dt_rvl:
         r = np.array([xs - x0, ys - y0, zs - z0])
         dT_ray_v_line = ray_correct_get_time(dt_rvl, r)

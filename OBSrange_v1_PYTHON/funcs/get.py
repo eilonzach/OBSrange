@@ -1,9 +1,9 @@
 '''
 FUNCTION SET get.py
 
-A set of routines to extract SSPs, temperature, salinity, or buoyancy profiles 
-along a given point or points along a path (lat, lon). Uses interp_global_SSP, a
-function to load the variables and interpolate onto the desired location.
+A pair of routines to extract SSPs, temperature, salinity, or buoyancy profiles 
+along a given point or points along a path (lat, lon). Uses interp_global_SSP(),
+a function to load the variables and interpolate onto the desired location.
 
 Gets the World Ocean Atlas files from directory 'lev_db_dir'.
 
@@ -16,16 +16,13 @@ the original data filled in by nearest neighbor data. All profiles extend to
 
 Data at points where the original WOA has data should be unchanged from the 
 WOA. The annual mean World Ocean Atlas is used.
-  
-  lat, lon are a single point
  
   type_SSP = 0 indicates annual Levitus,
   type_SSP = 1:12 indicates Levitus for month 1:12
-  type_SSP = 13:16 indicates Levitus for Winter, Spring, Summer, or Fall
 
-UNITS:  sound speed in [m/s], depth in positive [meters].  
+UNITS: sound speed in [m/s], depth in positive [meters].  
 
-Returns P, a matrix of profiles: 33X(No. of points) and z, the standard 33
+Returns P, a matrix of profiles: 33 * (No. of points) and z, the standard 33
 World Ocean Atlas depths.
 
 Interpolation from World Ocean Atlas grid points to desired points by cubic
@@ -33,14 +30,11 @@ spline interpolation horizontally.
 
 Writes out file "stn_ssp_fname".
 
-
-Modified from original for simpler application (only sound speed) by 
-
+Modified from original for simpler application (only sound speed) by: 
 Zach Eilon and Stephen Mosher 01/25/19
 '''
 # Import modules and functions
 import numpy as np
-
 from scipy.io import loadmat
 from scipy.interpolate import interp2d
 

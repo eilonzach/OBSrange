@@ -10,7 +10,7 @@ import numpy as np
 
 '''
 A function to calculate two-way travel-times between a series of points
-(xs, ys, zs) and a single reference point (x0, y0, z0) given a static sound 
+(xs, ys, zs) and a single reference point (x0, y0, z0) given an average sound 
 speed for water (vpw), a sound speed perturbation (dvp), and a constant turn-
 around-time for the sensor.
 '''
@@ -19,7 +19,8 @@ def twt(x0, y0, z0, xs, ys, zs, vpw, dvp, tat):
   return twt
 
 '''
-A function to correct measured travel-times for ship's radial velocity.
+A function to correct measured travel-times by accounting for the ship's radial
+velocity.
 '''
 def tt_corr(x0, y0, z0, xs, ys, zs, vs, vp, dvp, tts):
   # Calculate ship's position unit vector.
@@ -30,9 +31,9 @@ def tt_corr(x0, y0, z0, xs, ys, zs, vs, vp, dvp, tts):
   vr = np.sum(vs.T * r_hat, axis=0)
   dr = vr * tts
   corrections = dr / (vp + dvp)
-  corrected = tts + corrections 
-  
-  # Return. (+/-) if logging ship location at (receive/transmit) time.
+  corrected = tts + corrections # (+/-) if logging ship location at
+                                # (receive/transmit) time.
+  # Return. 
   return corrected, corrections, vr
 
 '''
@@ -63,16 +64,16 @@ page) with transponder (T) and GPS (G):
   |__________| 
 '''
 def GPS_transp_correction(dforward, dstarboard, COG):
-  # Calculate azimuth from GPS to transponder in ship ref frame
+  # Calculate azimuth from GPS to transponder in ship reference frame.
   theta = np.rad2deg(np.arctan2(dstarboard, dforward))
   
-  # Calculate azimuth from GPS to transponder in geographic ref frame
+  # Calculate azimuth from GPS to transponder in geographic reference frame.
   phi = theta + COG
   
-  # Calculate absolute horizontal distance from GPS to transponder
+  # Calculate absolute horizontal distance from GPS to transponder.
   dr = np.sqrt(dforward**2 + dstarboard**2)
   
-  # Calculate East and North offset of transponder from GPS
+  # Calculate East and North offset of transponder from GPS.
   dE = dr * np.rad2deg(np.sin(phi))
   dN = dr * np.rad2deg(np.cos(phi))
 

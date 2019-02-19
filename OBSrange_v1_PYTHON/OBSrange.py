@@ -35,16 +35,11 @@ dstarboard = 0          # GPS-transp offset [m] (+ means trans. further stboard)
 twtcorr = False   # Option to apply a travel-time correction for ship velocity
 raycorr = True    # Option to apply a travel-time correction due to ray bending:
                   #   If you choose to correct for ray beding you can either
-                  #   input your own depth-soundspeed profile (make sure
-                  #   "SSP_stationname.txt" files are sitting in the directory
-                  #   defined below, where "stationname" is the same as "sta" in
-                  #   the code below) OR our code will calculate one for you
-                  #   based on the location and the date of the survey (using
-                  #   monthly means and a decadal SSP projection)
+                  #   input your own depth-soundspeed profile OR our code will 
+                  #   calculate one for you see the README for further details.
 
-parameters = [vpw, dvp, tat, N_bs, E_thresh, npts, dampx, dampy, dampz, \
-              dampdvp, eps, QC, res_thresh, dforward, dstarboard,\
-              twtcorr, raycorr]
+parameters = [vpw, dvp, tat, N_bs, E_thresh, npts, dampx, dampy, dampz, dampdvp,
+              eps, QC, res_thresh, dforward, dstarboard, twtcorr, raycorr]
 
 ################################ Directory Setup ###############################
 
