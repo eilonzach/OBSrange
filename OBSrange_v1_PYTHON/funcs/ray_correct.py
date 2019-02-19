@@ -4,7 +4,10 @@ Description
 # Import modules and functions
 import os
 import time
+import pickle
 import numpy as np
+from scipy.stats import hmean
+from scipy.interpolate import interp1d
 from funcs import get, shootrays
 
 def makegrid(lat, lon, z_sta, stn, t, stn_ssp_dir, ssp_dir):
@@ -55,11 +58,65 @@ def makegrid(lat, lon, z_sta, stn, t, stn_ssp_dir, ssp_dir):
   Dr_ray = np.zeros(shape=(Np, Nz))
   Dx = np.zeros(shape=(Np, Nz))
   t_ray = np.zeros(shape=(Np, Nz))
+  Dr_lin = np.zeros(shape=(Np, Nz))
   t_lin = np.zeros(shape=(Np, Nz))
+  Dr_ray[:] = np.nan
+  Dx[:] = np.nan
+  t_ray[:] = np.nan
+  Dr_lin[:] = np.nan
+  t_lin[:] = np.nan
 
   for i, ray in enumerate(ps):
     try:
-      shootrays.shootrays(ray, v_profile, zmax)
-    except Exception as e:
-      Tracer()()
-      
+      rx, rz, Dr, rt, rv = shootrays.shootrays(ray, v_profile, zmax)
+      # Get intersection of this ray at each depth
+      for j, depth in enumerate(zs):
+        f_Dr = interp1d(rz, Dr)
+        Dr_ray[i,j] = f_Dr(depth)
+        f_Dx = interp1d(rz, rx)
+        Dx[i,j] = f_Dx(depth)
+        f_t = interp1d(rz, rt)
+        t_ray[i,j] = f_t(depth)
+        Dr_lin[i,j] = np.sqrt(Dx[i,j]**2 + depth**2)
+        t_lin[i,j] = Dr_lin[i,j] / hmean(rv[rz <= depth]) 
+    except Exception:
+      continue
+
+  # difference in ray length( metres)
+  dDr_m = 1000 * (Dr_ray - Dr_lin)
+  
+  # difference in ray travel time (ms) (TWO-way)
+  dt_ray_ms = 2 * 1000 * (t_ray - t_lin) 
+  # to be clear: this number is POSITIVE if ray is slower than straight line
+  # approx. We should therefore SUBTRACT this from the observed travel times
+  # to correct them from bent rays to straight lines. Having turned data from
+  # rays to lines the code, which assumes lines, can then invert for position
+  
+  # Add vertical ray
+  Dx = np.vstack([np.zeros(Nz), Dx])
+  dDr_m = np.vstack([np.zeros(Nz), dDr_m])
+  dt_ray_ms = np.vstack([np.zeros(Nz), dt_ray_ms])
+
+  # Interpolate travel-time error onto regular mesh
+  minimum = np.min(np.hstack([4, np.nanmax(Dx, axis=0)]))
+  Dx_grid = np.arange(0, minimum + 0.005, 0.005) * 1000
+  dT_grid = np.zeros(shape=(len(Dx_grid), Nz))
+  dT_grid[:] = np.nan
+
+  for i, depth in enumerate(zs):
+    indx = ~np.isnan(dt_ray_ms[:,i])
+    f_dT = interp1d(Dx[indx == True, i]*1000, dt_ray_ms[indx == True, i])
+    dT_grid[:,i] = f_dT(Dx_grid)
+
+  Tracer()()
+  # Put results in a dictionary and write to disk
+  dT_ray_v_line_grid = {'Dx_grid_m': Dx_grid,
+                        'dz_grid_km': zs,
+                        'dT_grid_ms': dT_grid}
+
+  correction_file = stn_ssp_dir + 'cor_rayline_' + stn +'.pkl'
+  f = open(correction_file, 'wb')
+  pickle.dump(dT_ray_v_line_grid, f)
+  f.close()
+
+  return dT_ray_v_line_grid

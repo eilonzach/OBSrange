@@ -64,11 +64,12 @@ def shootrays(p, v_profile, zmax, dr=0.001, vdz=0.001):
   dz = zz2 - zz1
   b = dv / dz
   const_indx = (b == 0)
-  
+
   X = np.zeros(len(v1))
   X[const_indx == True] = constv_dist( u1[const_indx == True], dz[const_indx == True], p )
   X[const_indx != True] = gradv_dist(b[const_indx != True], u1[const_indx != True], u2[const_indx != True], p)
-  X[np.imag(X) > 0] = np.nan
+  
+  X = np.real(X)
   X = X[X != np.isnan(X)]
   X = np.hstack([0, X])
   Xd = np.cumsum(X)
@@ -78,7 +79,6 @@ def shootrays(p, v_profile, zmax, dr=0.001, vdz=0.001):
  
   # Calculate Dr
   Dr1 = np.sqrt(X[1:]**2 + dz**2)
-  assert(np.imag(Dr1).any() == False)
   Dr1 = np.hstack([0, Dr1])
   Dr2 = np.cumsum(Dr1)
   Dr = np.unique( np.hstack([np.arange(0, max(Dr2), dr), max(Dr2)]))
