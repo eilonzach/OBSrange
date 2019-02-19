@@ -91,7 +91,6 @@ def instruments(datafile, parameters, stn_ssp_dir, ssp_dir):
     dt_rvl = ray_correct.makegrid(lat0, lon0, z0, sta, ts[0], stn_ssp_dir, ssp_dir)
   else:
     dt_rvl = []
-
   ############################ Bootstrap Resampling ############################
   
   print('\n Performing bootstrap resampling ...')
@@ -110,7 +109,7 @@ def instruments(datafile, parameters, stn_ssp_dir, ssp_dir):
   R = results.results(N_bs, Nobs, M)
 
   # Perform bootstrap inversion.
-  R = bootstrap.inv(X, Y, Z, V, TWT, R, parameters, m0_strt, coords, M)
+  R = bootstrap.inv(X, Y, Z, V, TWT, R, parameters, m0_strt, coords, M, dt_rvl)
   
   # Unscramble randomly sampled data for plotting and evaluation.
   R.dtwts = np.mean(bootstrap.unscramble(R.dtwts, indxs), axis=1)

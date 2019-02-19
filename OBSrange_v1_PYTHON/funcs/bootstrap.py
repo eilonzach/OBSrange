@@ -67,7 +67,23 @@ def unscramble(data, idxs):
   
   return unscrambled_data
 
-def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords, M):
+def ray_correct_get_time(dt_rvl, r):
+  x_grid = dt_rvl['Dx_grid_m']
+  z_grid = dt_rvl['dz_grid_km']
+  t_grid = dt_rvl['dT_grid_ms']
+
+  x_grid = x_grid.reshape(len(x_grid), 1)
+  z_grid = z_grid.reshape(len(z_grid), 1)
+
+  dxy_ship = np.sqrt(np.sum(r[0:2,:]**2, axis=0)) 
+  dz_ship = r[2,:]
+
+  indx = np.argmin(abs(x_grid - dxy_ship), axis=0)
+  indz = np.argmin(abs(z_grid - dz_ship/1000), axis=0)
+
+  return t_grid[[indx, indz]]/1000
+
+def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords, M, dt_rvl):
   # Grab required parameters.
   vpw0     = parameters[0]    
   dvp0     = parameters[1]
@@ -79,7 +95,8 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords, M):
   dampz    = parameters[8]   
   dampdvp  = parameters[9]
   eps      = parameters[10] 
-  twtcorr  = parameters[15]   
+  twtcorr  = parameters[15]
+  raycorr  = parameters[16]   
   Nobs     = X.shape[0]
   x0       = coords[0][0]
   y0       = coords[0][1]
@@ -123,8 +140,14 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords, M):
       if twtcorr:
         twts = ctd # ctd = corrected, cns = corrections
       else:
-        twts = twtbs 
-      
+        twts = twtbs
+
+      # Apply ray bending correction
+      if raycorr and dt_rvl:
+        r = np.array([xs - x0, ys - y0, zs - z0])
+        dT_ray_v_line = ray_correct_get_time(dt_rvl, r)
+        twts = twts - dT_ray_v_line
+
       # Build the G matrix.
       G = calc.G(x, y, z, dvp, xbs, ybs, zbs, vpw0, Nobs, M)
       
@@ -156,12 +179,6 @@ def inv(X, Y, Z, V, T, R, parameters, m0_strt, coords, M):
       
       # Exclude 0=0 constraint equations from v_eff
       v = v - np.sum(np.sum(H,axis=1) == 0) - np.sum(np.sum(J, axis=1) == 0)
-
-      # Apply turn-around time bounds if necessary.
-      #if m1[3] < bounds[0]:
-      #  m1[3] = bounds[0]
-      #elif m1[3] > bounds[1]:
-      #  m1[3] = bounds[1]
       
       # Record output of current iteration in m0, E, and dtwt.
       R.models[str(i)][str(j)] = {'m': m0, 'E': E, 'dtwt': dtwt}
