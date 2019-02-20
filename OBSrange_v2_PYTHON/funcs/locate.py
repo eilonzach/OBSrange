@@ -15,7 +15,7 @@ import numpy.linalg as LA
 from funcs import pings, coord_txs, bootstrap, results, calc, ftest, plots, vel
 from funcs import ray_correct
 
-def instruments(datafile, parameters, stn_ssp_dir, ssp_dir):
+def instruments(datafile, parameters, ssp_dir):
   ################### Independent Parameter Initializations ####################
   print('\n Initializing independent parameters ...')
   vpw0       = parameters[0]    
@@ -87,7 +87,7 @@ def instruments(datafile, parameters, stn_ssp_dir, ssp_dir):
   
   # Note "rvl" stands for "ray-versus-line".
   if raycorr:
-    dt_rvl = ray_correct.makegrid(lat0,lon0,z0,sta,ts[0],stn_ssp_dir,ssp_dir)
+    dt_rvl = ray_correct.makegrid(lat0,lon0,z0,sta,ts[0], ssp_dir)
   else:
     dt_rvl = []
   

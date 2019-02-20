@@ -34,6 +34,7 @@ Modified from original for simpler application (only sound speed) by:
 Zach Eilon and Stephen Mosher 01/25/19
 '''
 # Import modules and functions
+import os
 import numpy as np
 from scipy.io import loadmat
 from scipy.interpolate import interp2d
@@ -89,9 +90,14 @@ def lev_based_ssp(lat, lon, type_SSP, lev_db_dir, stn_ssp_fname):
   # Interpolate global SSP file from Levitus database to get local SSP.
   ssp = interp_global_SSP(type_str, lon, lat, lev_db_dir)
 
+  # Check if output folder for generated SSPs exists.
+  path = './output/station_sound_speed_profiles/'
+  if not os.path.exists(path):
+    os.mkdir(path)
+
   # Save local SSP to disk.
-  print('\n Sound speed profile saved to ' + stn_ssp_fname)
-  txt_fle = open(stn_ssp_fname, 'w')
+  print('\n Sound speed profile saved to ' + path + stn_ssp_fname)
+  txt_fle = open(path + stn_ssp_fname, 'w')
   txt_fle.write('depth(m) ssp(m/s)\n')
   for depth, velocity in zip(z, ssp):
     txt_fle.write('{:>5}    {:>4.2f}\n'.format(depth, velocity))

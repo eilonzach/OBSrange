@@ -44,7 +44,7 @@ parameters = [vpw, dvp, tat, N_bs, E_thresh, npts, dampx, dampy, dampz, dampdvp,
 
 ################################ Directory Setup ###############################
 
-ssp_dir = './example/ocean_profiles/ssp_09/'
+ssp_dir = ''
 survey_dir = './example/'
 output_dir = './example/output/' 
 
@@ -57,20 +57,18 @@ survey_fles = fetch.data_paths(survey_dir, matchkey='*.txt')
 out_pkls = output_dir + 'data_pkls/'
 out_plts = output_dir + 'plots/'
 out_txts = output_dir + 'data_txts/'
-out_ssps = output_dir + 'station_sound_speed_profiles/'
 if not os.path.exists(output_dir):
   os.mkdir(output_dir)
   os.mkdir(out_pkls)
   os.mkdir(out_plts)
   os.mkdir(out_txts)
-  os.mkdir(out_ssps)
 
 # Fix random sampling. For example only.
 np.random.seed(0)
 
 # Perform locations for each survey site then write results to output.
 for survey_fle in survey_fles:
-  results, figs = locate.instruments(survey_fle, parameters, out_ssps, ssp_dir)
+  results, figs = locate.instruments(survey_fle, parameters, ssp_dir)
   output.out(results, figs, out_pkls, out_plts, out_txts)
   
 ##################################### FIN ######################################
