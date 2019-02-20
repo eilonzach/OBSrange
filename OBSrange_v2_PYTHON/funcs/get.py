@@ -90,7 +90,7 @@ def lev_based_ssp(lat, lon, type_SSP, lev_db_dir, stn_ssp_fname):
   ssp = interp_global_SSP(type_str, lon, lat, lev_db_dir)
 
   # Save local SSP to disk.
-  print('Sound speed profile saved to ' + stn_ssp_fname)
+  print('\n Sound speed profile saved to ' + stn_ssp_fname)
   txt_fle = open(stn_ssp_fname, 'w')
   txt_fle.write('depth(m) ssp(m/s)\n')
   for depth, velocity in zip(z, ssp):
