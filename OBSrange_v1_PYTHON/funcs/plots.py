@@ -14,6 +14,9 @@ import matplotlib.pyplot as plt
 # Histograms of model parameters
 def model_histos(res, bins):
   # Set up pyplot fig and axes objects.
+  plt.rcParams['font.weight'] = 'bold'
+  plt.rcParams['axes.labelweight'] = 'bold'
+  plt.rcParams['axes.linewidth'] = 1.5
   fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(9,6))
   ax1 = axes[0,0]
   ax2 = axes[0,1]
@@ -39,19 +42,19 @@ def model_histos(res, bins):
   ax1.axvline(np.mean(p1) - np.std(p1), 0, 1, color=c, ls='--', lw=2.5)
   ax1.axvline(np.mean(p1) + np.std(p1), 0, 1, color=c, ls='--', lw=2.5)
   ax1.axvline(np.mean(p1), 0, 1, color=c, lw=2.5)
-  ax1.set_title('(m) from ' + fin_lat + '$^\circ$N')
+  ax1.set_title('(m) from ' + fin_lat + '$^\circ$N', weight='bold')
  
   ax2.hist(p2, bins, edgecolor='k', lw=1.0)
   ax2.axvline(np.mean(p2) - np.std(p2), 0, 1, color=c, ls='--', lw=2.5)
   ax2.axvline(np.mean(p2) + np.std(p2), 0, 1, color=c, ls='--', lw=2.5)
   ax2.axvline(np.mean(p2), 0, 1, color=c, lw=2.5)
-  ax2.set_title('(m) from ' + fin_lon + '$^\circ$E')
+  ax2.set_title('(m) from ' + fin_lon + '$^\circ$E', weight='bold')
   
   ax3.hist(p3, bins, edgecolor='k', lw=1.0)
   ax3.axvline(np.mean(p3) - np.std(p3), 0, 1, color=c, ls='--', lw=2.5)
   ax3.axvline(np.mean(p3) + np.std(p3), 0, 1, color=c, ls='--', lw=2.5)
   ax3.axvline(np.mean(p3), 0, 1, color=c, lw=2.5)
-  ax3.set_title('Depth (m)')
+  ax3.set_title('Depth (m)', weight='bold')
   ax3.locator_params(axis='x', nbins=4)
 
   ax4.axis('off') # ax4 is a placeholder
@@ -60,14 +63,14 @@ def model_histos(res, bins):
   ax5.axvline(np.mean(p5) - np.std(p5), 0, 1, color=c, ls='--', lw=2.5)
   ax5.axvline(np.mean(p5) + np.std(p5), 0, 1, color=c, ls='--', lw=2.5)
   ax5.axvline(np.mean(p5), 0, 1, color=c, lw=2.5)
-  ax5.set_title('Water Velocity (m/s)')
+  ax5.set_title('Water Velocity (m/s)', weight='bold')
   ax5.locator_params(axis='x', nbins=4)
 
   ax6.hist(p6, bins, edgecolor='k', lw=1.0)
   ax6.axvline(np.mean(p6) - np.std(p6), 0, 1, color=c, ls='--', lw=2.5)
   ax6.axvline(np.mean(p6) + np.std(p6), 0, 1, color=c, ls='--', lw=2.5)
   ax6.axvline(np.mean(p6), 0, 1, color=c, lw=2.5)
-  ax6.set_title('Drift (m)')
+  ax6.set_title('Drift (m)', weight='bold')
 
   # Display fig.
   plt.tight_layout()
@@ -78,6 +81,9 @@ def model_histos(res, bins):
 
 def survey_map(lat0, lon0, z0, lats1, lons1, zs1, res, bad):
   # Set up pyplot fig and axes objects.
+  plt.rcParams['font.weight'] = 'bold'
+  plt.rcParams['axes.labelweight'] = 'bold'
+  plt.rcParams['axes.linewidth'] = 1.5
   fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(9.6572, 6.75))
   ax1 = axes[0]
   ax2 = axes[1]
@@ -133,7 +139,8 @@ def survey_map(lat0, lon0, z0, lats1, lons1, zs1, res, bad):
   ax1.locator_params(axis='x', nbins=3)
   ax1.set_xlabel('Longitude ($^\circ$)')
   ax1.set_ylabel('Latitude ($^\circ$)')
-  ax1.set_title('Drift: ' + tot_drift +' m     Azi: ' + fin_azi +'$^\circ$')
+  ax1.set_title('Drift: ' + tot_drift +' m  Azi: ' + fin_azi +'$^\circ$',
+                                                           weight='bold')
   ax1.legend(ncol=2, shadow=True, fancybox=True, loc=0)
   ax1.axis('square')
   
@@ -184,7 +191,7 @@ def survey_map(lat0, lon0, z0, lats1, lons1, zs1, res, bad):
   ax2.yaxis.set_label_position('right')
   ax2.set_xlabel('Longitude ($^\circ$)')
   ax2.set_ylabel('Depth (m)')
-  ax2.set_title('$Z_{final}$ - $Z_{drop}$ = ' + drop_diff + ' m')
+  ax2.set_title('$Z_{final}$ - $Z_{drop}$ = ' + drop_diff + ' m', weight='bold')
   
   asp = np.diff(ax2.get_xlim())[0] / np.diff(ax2.get_ylim())[0]
   asp /= np.abs(np.diff(ax1.get_xlim())[0] / np.diff(ax1.get_ylim())[0])
@@ -200,6 +207,9 @@ def survey_map(lat0, lon0, z0, lats1, lons1, zs1, res, bad):
 # Plot model misfit histogram
 def misfit(data, bins):
   # Set up pyplot fig and axes objects.
+  plt.rcParams['font.weight'] = 'bold'
+  plt.rcParams['axes.labelweight'] = 'bold'
+  plt.rcParams['axes.linewidth'] = 1.5
   fig, ax = plt.subplots(nrows=1, ncols=1)
   c = 'orangered'
 
@@ -212,7 +222,7 @@ def misfit(data, bins):
   ax.axvline(np.mean(data) + np.std(data), 0, 1, color=c, ls='--', lw=2.5)
   ax.axvline(np.mean(data), 0, 1, color=c, lw=2.5)
 
-  ax.set_title('Misfit')
+  ax.set_title('Misfit', weight='bold')
   ax.set_xlabel('RMS (ms)')
   
   # Display.
@@ -225,6 +235,9 @@ def misfit(data, bins):
 # Plot various data/residuals at each site
 def residuals(lats, lons, xs, ys, vs, res, N):
   # Set up pyplot fig and axes objects.
+  plt.rcParams['font.weight'] = 'bold'
+  plt.rcParams['axes.labelweight'] = 'bold'
+  plt.rcParams['axes.linewidth'] = 1.5
   fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(8,6))
   ax1 = axes[0,0]
   ax2 = axes[0,1]
@@ -241,7 +254,7 @@ def residuals(lats, lons, xs, ys, vs, res, N):
   # Ship velocities at each site.
   s1 = ax1.scatter(lons, lats, s=60, c=sq_sum_vs, edgecolors='k')
   ax1.scatter(fin_lon, fin_lat, s=250, marker='*', c='yellow', edgecolors='k')
-  ax1.set_title('Ship velocity (m/s)')
+  ax1.set_title('Ship velocity (m/s)', weight='bold')
   ax1.set_xlabel('Longitude ($^\circ$)')
   ax1.set_ylabel('Latitude ($^\circ$)')
   plt.colorbar(s1, ax=ax1)
@@ -266,7 +279,7 @@ def residuals(lats, lons, xs, ys, vs, res, N):
                    vmax = abs_bound)
 
   ax2.scatter(fin_lon, fin_lat, s=250, marker='*', c='yellow', edgecolors='k')
-  ax2.set_title('Travel-time corrections (ms)')
+  ax2.set_title('Doppler corrections (ms)', weight='bold')
   ax2.set_xlabel('Longitude ($^\circ$)')
   ax2.set_ylabel('Latitude ($^\circ$)')
   plt.colorbar(s2, ax=ax2)
@@ -291,7 +304,7 @@ def residuals(lats, lons, xs, ys, vs, res, N):
                    vmax=abs_bound)
 
   ax3.scatter(fin_lon, fin_lat, s=250, marker='*', c='yellow', edgecolors='k')
-  ax3.set_title('Travel-time residuals (ms)')
+  ax3.set_title('Travel-time residuals (ms)', weight='bold')
   ax3.set_xlabel('Longitude ($^\circ$)')
   ax3.set_ylabel('Latidute ($^\circ$)')
   plt.colorbar(s3, ax=ax3)
@@ -315,6 +328,7 @@ def residuals(lats, lons, xs, ys, vs, res, N):
                    vmin=-abs_bound,
                    vmax=abs_bound)
   
+  ax4.set_title('Travel-time residuals (ms)', weight='bold')
   ax4.set_xlabel('Ship Azimuth ($^\circ$)')
   ax4.set_ylabel('Travel-time residuals (ms)')
   plt.colorbar(s4, ax=ax4, label='Travel-time corrections (ms)')
@@ -331,6 +345,9 @@ def residuals(lats, lons, xs, ys, vs, res, N):
 # Error plots for F-test.
 def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
   # Set up pyplot fig and axes objects.
+  plt.rcParams['font.weight'] = 'bold'
+  plt.rcParams['axes.labelweight'] = 'bold'
+  plt.rcParams['axes.linewidth'] = 1.5
   fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(10,3))
   ax1 = axes[0]
   ax2 = axes[1]
@@ -356,7 +373,9 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
               levels=[0.05, 0.32],
               linewidths=2,
               colors='white')
-
+  
+  ax1.scatter(res.xs - x, res.ys - y, color='k', s=1)
+  
   ax1.scatter(Xg[xmax,ymax,zmax] - x,
               Yg[xmax,ymax,zmax] - y,
               s=100,
@@ -366,14 +385,14 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
   
   ax1.set_xlabel('$\delta$X (m)')
   ax1.set_ylabel('$\delta$Y (m)')
-  ax1.set_title('X-Y')
+  ax1.set_title('X-Y', weight='bold')
 
   # Text.
   default_xlim = ax1.get_xlim()
   default_ylim = ax1.get_ylim()
   xpos = default_xlim[0] * 0.95
-  ypos1 = default_ylim[0] * 0.95
-  ypos2 = default_ylim[1] * 0.875
+  ypos1 = default_ylim[1] * 0.85
+  ypos2 = default_ylim[1] * 0.7
   ax1.text(x=xpos, y=ypos1, s='$\overline{x}$ = ' + xmed + ' m', color='white')
   ax1.text(x=xpos, y=ypos2, s='$\overline{y}$ = ' + ymed + ' m', color='white')
 
@@ -390,6 +409,8 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
               linewidths=2,
               colors='white')
   
+  ax2.scatter(res.xs - x, res.zs - z, color='k', s=1)
+
   ax2.scatter(Xg[xmax,ymax,zmax] - x,
               Zg[xmax,ymax,zmax] - z,
               s=100,
@@ -399,14 +420,14 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
 
   ax2.set_xlabel('$\delta$X (m)')
   ax2.set_ylabel('$\delta$Z (m)')
-  ax2.set_title('X-Z')
+  ax2.set_title('X-Z', weight='bold')
   
   # Text.
   default_xlim = ax2.get_xlim()
   default_ylim = ax2.get_ylim()
   xpos = default_xlim[0] * 0.95
-  ypos1 = default_ylim[0] * 0.95
-  ypos2 = default_ylim[1] * 0.875
+  ypos1 = default_ylim[1] * 0.85
+  ypos2 = default_ylim[1] * 0.7
   ax2.text(x=xpos, y=ypos1, s='$\overline{x}$ = ' + xmed + ' m', color='white')
   ax2.text(x=xpos, y=ypos2, s='$\overline{z}$ = ' + zmed + ' m', color='white')
   
@@ -423,6 +444,8 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
               linewidths=2,
               colors='white')
   
+  ax3.scatter(res.ys - y, res.zs - z, color='k', s=1)
+
   ax3.scatter(Yg[xmax,ymax,zmax] - y,
               Zg[xmax,ymax,zmax] - z,
               s=100,
@@ -432,15 +455,15 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
   
   ax3.set_xlabel('$\delta$Y (m)')
   ax3.set_ylabel('$\delta$Z (m)')
-  ax3.set_title('Y-Z')
+  ax3.set_title('Y-Z', weight='bold')
   plt.colorbar(c3, ax=ax3)
   
   # Text.
   default_xlim = ax3.get_xlim()
   default_ylim = ax3.get_ylim()
   xpos = default_xlim[0] * 0.95
-  ypos1 = default_ylim[0] * 0.95
-  ypos2 = default_ylim[1] * 0.875
+  ypos1 = default_ylim[1] * 0.85
+  ypos2 = default_ylim[1] * 0.7
   ax3.text(x=xpos, y=ypos1, s='$\overline{y}$ = ' + ymed + ' m', color='white')
   ax3.text(x=xpos, y=ypos2, s='$\overline{z}$ = ' + zmed + ' m', color='white')
 
@@ -454,6 +477,9 @@ def ftest(xg, yg, zg, Xg, Yg, Zg, P, xmax, ymax, zmax, res):
 # Plot model resolution and covariance
 def resolution_covariance(R, M):
   # Set up pyplot fig and axes objects.
+  plt.rcParams['font.weight'] = 'bold'
+  plt.rcParams['axes.labelweight'] = 'bold'
+  plt.rcParams['axes.linewidth'] = 1.5
   fig, axes = plt.subplots(nrows=1, ncols=2)
   ax1 = axes[0]
   ax2 = axes[1]
@@ -469,11 +495,7 @@ def resolution_covariance(R, M):
   # Model Resolution
   m1 = ax1.imshow(resol, cmap='Greys', vmin=0, vmax=1, aspect='equal')
   
-  ax1.set_title('Model Resolution')
-  #xlabels = ax1.get_xticks()
-  #xlabels = [str(int(label) + 1) for label in xlabels]
-  #ylabels = ax1.get_yticks()
-  #ylabels = [str(int(label) + 1) for label in ylabels]
+  ax1.set_title('Model Resolution', weight='bold')
   xlabels = ['', '$X$', '$Y$', '$Z$', '$V_{P}$']
   ylabels = ['', '$X$', '$Y$', '$Z$', '$V_{P}$']
   ax1.set_xticklabels(xlabels)
@@ -488,11 +510,7 @@ def resolution_covariance(R, M):
   # Model Covariance
   m2 = ax2.imshow(model_cov, cmap='RdBu_r', vmin=-1, vmax=1, aspect='equal')
   
-  ax2.set_title('Model Covariance')
-  #xlabels = ax2.get_xticks()
-  #xlabels = [str(int(label) + 1) for label in xlabels]
-  #ylabels = ax2.get_yticks()
-  #ylabels = [str(int(label) + 1) for label in ylabels]
+  ax2.set_title('Model Covariance', weight='bold')
   xlabels = ['', '$X$', '$Y$', '$Z$','$V_{P}$']
   ax2.set_xticklabels(xlabels)
   ax2.set_yticklabels([])
