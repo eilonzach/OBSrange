@@ -31,7 +31,7 @@ def out(results, figs, pkls, plts, txts):
   # Save figures in the output directory.
   for i, fig in enumerate(figs):
     fig_path = plts + results['sta'] + '_fig' + str(i+1) +'.pdf'
-    fig.savefig(fig_path, format='pdf')
+    fig.savefig(fig_path, bbox_inches='tight', format='pdf')
 
 def exists(fle, txt_out):
   # Use the .txt file output as a proxy for whether file has been processed.
