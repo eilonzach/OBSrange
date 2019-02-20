@@ -1,7 +1,8 @@
 '''
 FUNCTION ray_correct.py
 
-
+A function and subfunctions to compute travel-time differences between straight
+rays and refracting rays by ray-tracing through a 1D velocity profile.
 
 Zach Eilon and Stephen Mosher 2/19/19
 '''
