@@ -15,6 +15,8 @@ from scipy.stats import hmean
 from scipy.interpolate import interp1d
 from funcs import get, shootrays
 
+from IPython.core.debugger import Tracer
+
 def load_ssp(ssp_fname):
   # Declare lists for velocities and depths. 
   ssp, z = [], []
@@ -82,26 +84,29 @@ def makegrid(lat, lon, z_sta, stn, t, stn_ssp_dir, ssp_dir):
   t_lin[:] = np.nan
 
   # Loop through ray parameters.
+  print('\n Ray Tracing... ')
   for i, ray in enumerate(ps):
-    try:
-      # Compute distances and times. (unless rays turn complex)
-      rx, rz, Dr, rt, rv = shootrays.shootrays(ray, v_profile, zmax)
-      
-      # Get intersection of this ray at each depth.
-      for j, depth in enumerate(zs):
-        f_Dr = interp1d(rz, Dr)
-        Dr_ray[i,j] = f_Dr(depth)
+    # Compute distances and times. (unless rays turn complex)
+    rx, rz, Dr, rt, rv = shootrays.shootrays(ray, v_profile, zmax)
 
-        f_Dx = interp1d(rz, rx)
-        Dx[i,j] = f_Dx(depth)
-        
-        f_t = interp1d(rz, rt)
-        t_ray[i,j] = f_t(depth)
-        
-        Dr_lin[i,j] = np.sqrt(Dx[i,j]**2 + depth**2)
-        t_lin[i,j] = Dr_lin[i,j] / hmean(rv[rz <= depth]) 
-    except Exception:
+    # Situation for when rays go complex.
+    if (np.array([rx, rz, Dr, rt, rv]) == 0).all():
       continue
+    
+    # Get intersection of this ray at each depth.
+    for j, depth in enumerate(zs):
+      f_Dr = interp1d(rz, Dr)
+      Dr_ray[i,j] = f_Dr(depth)
+    
+      f_Dx = interp1d(rz, rx)
+      Dx[i,j] = f_Dx(depth)
+      
+      f_t = interp1d(rz, rt)
+      t_ray[i,j] = f_t(depth)
+      
+      Dr_lin[i,j] = np.sqrt(Dx[i,j]**2 + depth**2)
+      t_lin[i,j] = Dr_lin[i,j] / hmean(rv[rz <= depth]) 
+  
 
   # Difference in ray length [m].
   dDr_m = 1000 * (Dr_ray - Dr_lin)
