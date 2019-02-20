@@ -95,7 +95,7 @@
     \textit{par.if\_raycorrect} & \textit{raycorr}           & Option to apply a travel time correction for ray-bending. If you choose to do this you can either provide your own sound speed profile for each station or our code will calculate one for you. See \textit{sspfile\_dir/ssp\_dir} below. \\ \hline
     \textit{par.if\_twtcorr}    & \textit{twtcorr}           & Option to apply a correction to two-way travel times due to the ship's radial velocity.\\ \hline
     \textit{par.N\_bs}          & \textit{N\_bs}             & Number of bootstrap iterations.\\ \hline
-    \textit{par.npts\_movingav} & \textit{npts}              & Number of points in an N-point moving average smoothing filter applied to the ship's velocity. Note that if this parameter is set to “1” that no smoothing is applied. stuff\\ \hline
+    \textit{par.npts\_movingav} & \textit{npts}              & Number of points in an N-point moving average smoothing filter applied to the ship's velocity. Note that if this parameter is set to “1” that no smoothing is applied.\\ \hline
     \textit{par.sspfiledir}     & \textit{ssp\_dir}          & Path to directory of station sound speed profiles. If providing your own profiles, they \textbf{must} be named according to \textit{SSP\_stationname.txt}. \\ \hline
     \textit{par.TAT}            & \textit{tat}               & Turn-around time (\textit{msec}).\\ \hline
     \textit{par.vp\_w}          & \textit{vpw}               & Water velocity (\textit{m/s}).\\ \hline
@@ -105,6 +105,25 @@
   \end{table}
 
   \newpage
+  
+  \subsection{Travel-Time Corrections}
+   \label{subsection:TTCs}
+
+   A nice feature of \textbf{\textit{OBSrange}} is that it provides the user with the option to perform corrections in order to account for various phenomena affecting acoustic travel-time data. Here we briefly mention these corrections and specifically focus on \textit{how they are implemented by the user when running \textbf{OBSrange}}. For a detailed discussion on these corrections and their merits, please refer to \textcolor{red}{our paper and supplement.}\\
+
+   The simplest correction for the user to implement is a travel-time correction accounting for the ship's radial velocity between sending and receiving pings. This correction is implemented by setting the \textit{par.if\_twtcorr (twtcorr)} in MATLAB (PYTHON) to true. Note that these corrections are computed whether they are applied or not.\\ 
+   
+   The user may also implement a correction which accounts for situations in which the ship's GPS and transponder unit are not collocated. To the implement this correction, the user must supply two values, namely, offsets in both the bow-stern and port-starboard directions as \textit{par.dforward} and \textit{par.dstarboard} in MATLAB (\textit{dforward} and \textit{dstarboard} in PYTHON). These offsets are in meters and are chosen to be positive in the case where the transponder is further forward (toward the bow of the ship) or further starboard than the GPS. To run \textbf{\textit{OBSrange}} without this correction, the user simply sets both of these values to zero.\\
+
+   The final correction accounts for travel-time differences between straight rays and refracting rays given a sound-speed-depth profile. The implementation of this correction is twofold. First, travel-time corrections are only implemented if the \textit{par.ray\_correct (raycorrect)} parameter in MATLAB (PYTHON) is set to true. Second, if this parameter is set to true, then the user has an additional choice, either to supply their own sound-speed-depth profile or let \textbf{\textit{OBSrange}} calculate one automatically based on the supplied station information. If users supply their own sound-speed-depth profiles, then currently, they \textbf{must} be formatted like the example sound-speed-depth profile shown in Figure \ref{fig:ssp}. Specifically, this means that the names of files containing the sound-speed-depth profiles to be used for each station \textbf{must} be "SSP\_STATIONNAME.txt", and that these \textit{.txt} files \textbf{must} consist of two columns, depth (in m), and velocity (in m/s). Finally, the first line of the \textit{.txt} file \textbf{must} contain the headers for depth and velocity as in Figure \ref{fig:ssp}. User's sound-speed-depth profiles may include any number of depth-velocity pairs, since these profiles are later interpolated, however, the greater the number of points the slower the performance. If users opt to let \textbf{\textit{OBSrange}} compute spound-speed-depth profiles for them, then these files are written in the output directory. \textbf{\textit{OBSrange}} computes these profiles by consulting files derived from the World Ocean Atlas (WOA) database. WOA sound-speed-depth profiles are interpolated using station locations and deployment times to generate reasonable station-specific profiles at the 33 WOA standard depths. 
+
+   \begin{figure}[!htb]
+    \includegraphics[width=\linewidth]{ssp.png}
+    \caption{Sample sound-speed profile for station WC03}
+    \label{fig:ssp}
+   \end{figure}
+
+
   \subsection{Structure}
    
    \begin{figure}[!htb]
@@ -120,7 +139,7 @@
  \label{section:ex}
 
   \subsection{General Output}
-  The example provided with \textbf{\textit{OBSrange}} locates the OBS package deployed at site WC03 of the PacificORCA array (\textcolor{red}{reference}). Simply run the example script for your corresponding version of the code, either \textit{OBSrange\_example.py} or \textit{OBSrange\_example.m}. These scripts will read the example survey \textit{.txt} file contained within \textbf{\textit{OBSrange}}'s  example directory (see Figure \ref{fig:struct}) and will also write the output into that directory.  In the case of the PYTHON version, the output will consist of a \textit{.pkl} file named \textit{WC03\_location.pkl}, a \textit{.txt} file similarly named \textit{WC03\_location.txt}, and 6 figures. In the case of the MATLAB version the output will consist of a \textit{.txt} file also named \textit{WC03\_location.txt}, a \textit{.mat} file called \textit{WC03\_data.mat}, and the same figures.
+  The example provided with \textbf{\textit{OBSrange}} locates the OBS package deployed at site WC03 of the PacificORCA array (\textcolor{red}{reference}). Simply run the example script for your corresponding version of the code, either \textit{OBSrange\_example.py} or \textit{OBSrange\_example.m}. These scripts will read the example survey \textit{.txt} file contained within \textbf{\textit{OBSrange}}'s  example directory (see Figure \ref{fig:struct}) and will also write the output into that directory.  In the case of the PYTHON version, the output will consist of a \textit{.pkl} file named \textit{WC03\_location.pkl}, a \textit{.txt} file similarly named \textit{WC03\_location.txt}, and 6 figures. In the case of the MATLAB version the output will consist of a \textit{.txt} file also named \textit{WC03\_location.txt}, a \textit{.mat} file called \textit{WC03\_data.mat}, and the same figures. Additionally, if the example is run with the refracting ray-correction applied and automatic velocity-profile generation (see Section \ref{subsection:TTCs}) then an additional \textit{.txt} file containing the generated velocity profile will also be written in the ouput directory in both cases (see Figure \ref{fig:ssp}).
 
   \subsection{The \textit{.txt} Files}
   The \textit{.txt} files created by the MATLAB and PYTHON versions are formatted slightly differently, but the results are the same. In Figure \ref{fig:ex} we show the first 40 lines of \textit{WC03\_location.txt} created by the PYTHON example and describe the general features of this file.\\
