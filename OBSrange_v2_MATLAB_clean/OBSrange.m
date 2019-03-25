@@ -71,7 +71,7 @@ ifQC_ping = 1; % Do quality control on pings? (We strongly recommend this!)
 res_thresh = 500; % (ms) Will filter out pings with residuals > specified magnitude
 
 % TAT - Define turnaround which remains fixed (transponder-specific value)
-par.TAT = 0.014; % (s)
+par.TAT = 0.013; % (s) [13 ms for Edgetech instruments]
 
 % Norm damping for each model parameter (damping towards starting model)
 % Larger values imply more damping towards the starting model.
