@@ -90,6 +90,8 @@ par.epsilon = 1e-10;
 % prepend functions directory to MATLAB path
 functionspath = [pwd,'/functions'];
 addpath(functionspath);
+functionsSSPpath = [pwd,'/functions/ocean_profiles_obsrange'];
+addpath(functionsSSPpath);
 
 %% Load 2-way Travel Time Data
 wd = pwd;
