@@ -19,6 +19,9 @@ function [ m_final,models,v_eff,N,R,Covm ] = inv_newtons( par,m_start,twt,x_ship
 %   models:   output structure with all models from the iterative inversion
 %             (and their associated data errors)
 %   v_eff:    effective number of degrees of freedom for the inverted data
+%   N:        data resolution matrix
+%   R:        model resolution matrix
+%   Covm:     model covariance matrix
 % 
 % J. Russell & Z. Eilon, 2018
 
@@ -108,6 +111,7 @@ N = G*Ginv;
 % Model Resolution
 R = Ginv*G;
 % Model Covariance
-Covm = Ginv*Ginv';
+sigma2_d = dtwt'*dtwt / v_eff;
+Covm = sigma2_d * (Ginv*Ginv');
 end
 
