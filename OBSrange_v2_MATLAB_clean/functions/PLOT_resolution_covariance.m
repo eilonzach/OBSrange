@@ -39,7 +39,7 @@
     set(ax2,'fontsize',16,'linewidth',2, ...
         'XTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','$\mathbf{V_{P}}$'},'TickLabelInterpreter','latex', ...
         'YTickLabel',{'$\mathbf{X}$','$\mathbf{Y}$','$\mathbf{Z}$','$\mathbf{V_{P}}$'});
-    title(ax2,'\textbf{Model Covariance}','fontsize',18,'Interpreter','latex');
+    title(ax2,'\textbf{Model Correlation}','fontsize',18,'Interpreter','latex');
     cb2 = colorbar(ax2,'linewidth',2);
     colormap(ax2,cmap)
     caxis([-1 1])
