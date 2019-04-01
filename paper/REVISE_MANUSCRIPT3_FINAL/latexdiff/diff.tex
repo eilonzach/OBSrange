@@ -1,0 +1,580 @@
+\documentclass[10pt,titlepage]{article}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL OBSrange.tex      Wed Feb 13 20:08:13 2019
+%DIF ADD ../OBSrange.tex   Wed Mar 27 18:23:44 2019
+\usepackage[margin=1in]{geometry}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage[round,sort,comma]{natbib}
+\usepackage{multirow}
+\usepackage{lineno}
+\linenumbers
+\usepackage{setspace}
+\doublespacing
+%\usepackage{amsaddr}
+\usepackage[colorlinks=true,allcolors=black,breaklinks]{hyperref}
+\usepackage{amsmath}
+\usepackage{authblk}
+%\usepackage[none]{hyphenat}
+%\usepackage[nomarkers,figuresonly,nofiglist]{endfloat}
+
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+\graphicspath{{../figs/}}
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFaddtex}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdeltex}[1]{{\protect\color{red}\sout{#1}}}                      %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF HYPERREF PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{\texorpdfstring{\DIFaddtex{#1}}{#1}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{\texorpdfstring{\DIFdeltex{#1}}{}} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+\begin{document}
+\title{\Large\bfseries OBSrange: A new tool for the precise remote location of Ocean Bottom Seismometers}
+
+\author[ ]{Joshua B. Russell \thanks{jrussell@ldeo.columbia.edu}}
+\author[2]{Zachary Eilon}
+\author[3]{Stephen G. Mosher}
+
+\affil[1]{Department of Earth and Environmental Sciences, Lamont-Doherty Earth Observatory of Columbia University, Palisades, NY, USA.}
+\affil[2]{Department of Earth Science, University of California Santa Barbara, Santa Barbara, CA, USA.}
+\affil[3]{Department of Earth and Environmental Sciences, University of Ottawa, Ottawa, Ontario, Canada.}
+\date{}
+
+\maketitle
+
+%\section{}
+%\subsection{}
+
+\begin{abstract}
+As the marine geophysics community continues to instrument the seafloor, data quality and instrument recoverability rely on accurate estimates of instrument locations. However, freely available software for this estimation does not currently exist. We present \textit{OBSrange}, an open-source tool for robustly locating ocean bottom seismometers (OBS) on the seafloor using acoustic transponder ranging data. Available in both MATLAB and Python, the algorithm inverts two-way acoustic ranging travel-time data for instrument location, depth, and average water sound speed with the ability to accurately account for ship velocity, ray refraction through the water column specific to the region, and a known lateral offset between the ship's GPS and transponder. The tool provides comprehensive estimates of model parameter uncertainty including bootstrap uncertainties for all four parameters as well as an F-test grid search providing a 3D confidence ellipsoid around each station. We validate the tool using a synthetic travel-time dataset and find average horizontal location errors on the order of $\sim$4~m for an instrument at 5000~m depth. An exploration of survey geometries shows significant variation in location precision depending on the pattern chosen. We explore the trade-off between survey length and location uncertainty to quantitatively inform cruise planning strategies. The optimal survey radius for resolving instrument location depends on water depth and desired precision and nominally ranges from 0.75--1~Nm at 5000~m water depth to $\sim$0.25~Nm at 500~m depth. Radial legs toward and away from the instrument are crucial for resolving the depth-water velocity trade off, and thus \textit{Circle} surveys should be avoided. \textit{Line} surveys, common for active source experiments, are unable to resolve the instrument location orthogonal to the survey line. We apply our tool to the 2018 Young Pacific ORCA deployment in the south Pacific yielding an average RMS data misfit of 1.96~ms with an average instrument drift of $\sim$170~m. Observed drifts reveal a clockwise-rotation pattern of $\sim$500~km diameter that resembles a cyclonic mesoscale gyre observed in the geostrophic flow field, suggesting a potential application of accurate instrument drifts as a novel proxy for depth-integrated flow through the water column.
+\end{abstract}
+%% ---------------- INTRODUCTION ---------------- %%
+\section{Introduction}
+The last two decades have seen a sea change in the longevity, distribution, and sophistication of temporary ocean bottom seismic installations. The proliferation of ocean bottom seismometer (OBS) deployments has opened up new possibilities for understanding the ocean basins \citep[e.g.][]{Lin2016,Takeo2016}, continental margins \citep[e.g.][]{Janiszewski2015,Hawley2016,Lynner2017,Eilon2017}, and even inland submerged environments \citep[e.g.][]{Accardo2017}. 
+
+However, even straightforward OBS installations present several unique challenges. Foremost among these is the inability to directly measure the location of the sensor at the seafloor. Precise knowledge of station location is essential for almost all seismological analysis. While the location of the ship is known at the time of deployment, as OBS instruments sink they may drift up to hundreds of meters from this point due to ocean currents and a non-streamlined basal profile. 
+
+For broadband OBS deployments, it has long been accepted practice to conduct an acoustic survey in order to triangulate the position of the instrument \citep[e.g.,][]{Creager1982}. To accomplish this, ships send non-directional acoustic pulses (``pings'') into the water column. These are received by the OBS transponder which sends its own acoustic pulse in response. The time elapsed between the ship sending and receiving acoustic pulses is proportional to distance, which (for known ship location) may be used to locate the instrument. It is common for this analysis to be conducted by technicians at OBS instrument centers and provided latterly to PIs and data centers as station metadata. Some codes are proprietary intellectual property of the instrument centers, and others are available for a license fee. 
+
+However, standard station location algorithms to date are lacking in certain respects. Water sound speed and even water depth are often assumed \textit{a priori}. Commonly, no corrections are made to account for the movement of the ship between sending and receiving acoustic signals, the horizontal offset between GPS and transponder location, or ray bending due to refraction through the water column. Robust uncertainty analysis, which would allow practitioners to gauge potential location errors, is either not conducted or communicated.
+
+We present \DIFaddbegin \DIFadd{an }\DIFaddend OBS locator software for use by the marine geophysics community that can account for ship velocity, GPS-transponder offset, and ray bending. Our efficient inversion algorithm provides station location in three dimensions and solves for depth-averaged water sound speed. We use statistical tools to provide robust uncertainties on the instrument location as well as water velocity. The code is available in both MATLAB and Python to promote accessibility (see Data and Resources). In this article, we present the theory behind our algorithm, validate the inversion using synthetic testing, compare its accuracy with a previous tool, and carefully test a variety of survey patterns identifying optimal geometries for accurately recovering all model parameters, including the trade-off between depth and water velocity. Finally, we demonstrate its utility with real data from the 2018 Young Pacific ORCA (OBS Research into Convecting Asthenosphere) Experiment \citep{Gaherty2018}, revealing a network-wide clockwise-rotation that resembles a cyclonic mesoscale gyre. This study represents a first open-source tool for accurately locating instruments on the seafloor as well as a thorough investigation of survey geometries that will serve to inform future OBS deployments.
+
+%% ---------------- ALGORITHM ---------------- %%
+\section{Algorithm }
+
+
+\subsection{The forward problem}
+
+Here we outline the forward and inverse problems for inverting acoustic ranging data for instrument location on the seafloor following \citet{Creager1982}. We wish to locate an instrument which rests at unknown position and depth on the ocean floor (Figure~\ref{fig:cartoon}). Taking the drop coordinates as the center of a Cartesian coordinate system in which $x$ is positive towards East, $y$ is positive towards North, and $z$ is positive upwards from the sea surface, the instrument lies at location $(x,y,z)$. We account for Earth's ellipticity when converting between geodetic and local ENU coordinates using the WGS84 reference ellipsoid \citep{WGS84_2000} and standard coordinate transformations \citep[i.e.,][]{Hoffmann_Wellenhof_2001}. The time taken for an acoustic pulse to travel from the ship's transponder to the instrument and back is a function of the sound speed in water ($V_P$), and the location of the ship, as well as the ``turn-around time'' ($\tau$) that corresponds to the (fixed) processing time between the OBS transducer receiving a ping and sending its response. If the shipboard transponder and GPS are not co-located and their relative positions are known, a heading-dependent correction is applied to the GPS position to precisely locate the transponder. In detail, we can account for the possibility that if the ship is under way, its position changes between sending and receiving pings. Thus, the total travel time, $T$, is: 
+
+\begin{equation}
+T = \frac{r_s + r_r}{V_P} + \tau \,, \label{eq:forward_send_receive}
+\end{equation}
+where for a straight-ray approximation,
+
+\begin{align}
+	r_s &= \sqrt{(x_s - x)^2 + (y_s - y)^2 + z^2}\\
+	r_r &= \sqrt{(x_r - x)^2 + (y_r - y)^2 + z^2} \,.
+\end{align}
+
+Subscript ``$s$'' indicates the ship's transponder sending a ping and ``$r$'' indicates the ship's transponder receiving the OBS's response. These positions are related by the velocity ($\mathbf{u} = (u_x,u_y,0)$) of the ship, which is estimated from the survey data by differencing neighboring survey points:
+
+\begin{equation}
+\begin{pmatrix} x_s\\y_s\\0 \end{pmatrix} = \begin{pmatrix} x_r\\y_r\\0 \end{pmatrix} - T\begin{pmatrix} u_x\\u_y\\0 \end{pmatrix} \,.
+\end{equation}
+
+It follows that, to a close approximation,
+
+\begin{align}
+\begin{split}
+r_s &\approx r_r - \left(\mathbf{u} \cdot \mathbf{\hat{r}}_r \right) T\\
+	&= r_r - \delta r \,,
+\end{split}	
+\end{align}
+
+where $\mathbf{\hat{r}}_r$ is the unit-vector pointing from the instrument to the ship at the time of receiving. By calculating the distance $\delta r = \left(\mathbf{u} \cdot \mathbf{\hat{r}}_r \right) T$, we can account for the send-receive timing offset related to a change in the ship's position by computing a correction time, $\delta T_{\text{dopp}} = \delta r/V_P$, which will be \DIFdelbegin \DIFdel{positive }\DIFdelend \DIFaddbegin \DIFadd{added to the total travel time }\DIFaddend if GPS coordinates correspond to the receive location and \DIFdelbegin \DIFdel{negative }\DIFdelend \DIFaddbegin \DIFadd{subtracted }\DIFaddend if they correspond to the send location. 
+
+We can also account for ray-bending due to refraction through the water column by calculating an additional correction time, $\delta T_{\text{bend}}$, that is the difference in two-way travel time between the straight-ray approximation calculated through the depth-averaged water column and the value calculated by ray tracing through a 1D sound-speed profile. A \DIFdelbegin \DIFdel{velocity profile automatically is }\DIFdelend \DIFaddbegin \DIFadd{decadal average velocity profile is automatically }\DIFaddend selected from the 2009 World Ocean Atlas database \DIFdelbegin \DIFdel{decadal averages }\DIFdelend (see Data and Resources) for the appropriate survey location and month \DIFdelbegin \DIFdel{(}\DIFdelend \DIFaddbegin \DIFadd{as }\DIFaddend determined by GPS \DIFdelbegin \DIFdel{location }\DIFdelend \DIFaddbegin \DIFadd{coordinates }\DIFaddend and time stamps in the \DIFdelbegin \DIFdel{data file)}\DIFdelend \DIFaddbegin \DIFadd{survey data file}\DIFaddend . Alternatively, \DIFdelbegin \DIFdel{a }\DIFdelend \DIFaddbegin \DIFadd{the }\DIFaddend user can specify their own velocity profile. Rays are traced from the surface down to $\pm$200~m about the nominal drop depth (\textit{e.g.}, from multibeam data) and at a range of distances out to 4~km offset, producing an evenly spaced lookup-table of $\delta T_{\text{bend}}$ corrections as a function of depth and offset. The corrections are then added to the raw travel times for the appropriate depth and offset to convert from bent to straight rays. This correction is most significant for stations in shallow water (less than $\sim$1000~m) at long offsets, in particular if there is a sharp velocity change at the thermocline, but is negligible ($<$1~ms) for deeper instruments and at shorter offsets (see Figures~S1--S2, available in the electronic supplement to this article). With the addition of these corrections to equation (\ref{eq:forward_send_receive}), the two-way travel time is given by:
+
+\begin{equation}
+T + \delta T = \frac{2 r_r}{V_P} + \tau \,, \label{eq:forward}
+\end{equation}
+
+where $\delta T = \delta T_{\text{dopp}} + \delta T_{\text{bend}}$.
+
+\subsection{The inverse problem}
+
+If the ship location and travel times between the OBS and ship are known, but the position of the OBS is not, equation (\ref{eq:forward}) can be thought of as a non-linear inverse problem, of the form $ \mathbf{d} = g(\mathbf{m})$, where $g(\mathbf{m})$ represents the forward-model. In practice, a limited survey radius makes it difficult to uniquely solve for $z$, $V_P$, and $\tau$. Since turn-around time is a parameter provided by the transponder manufacturer, we choose to fix $\tau$ in order to reduce unnecessary trade-offs in the inversion and more precisely resolve depth and water velocity. Thus, the model contains four parameters: $\mathbf{m} = \{x,y,z,V_P\}$. The data, $\mathbf{d}$, are a vector of corrected travel times, $T+\delta T$ (note that $\delta T$ is itself a function of $\mathbf{m}$ \DIFdelbegin \DIFdel{; this }\DIFdelend \DIFaddbegin \DIFadd{and }\DIFaddend will be adjusted iteratively during the inversion). Uncorrected travel-time residuals predicted from the starting model with magnitude $>$500~ms are considered anomalous and are removed before beginning the inversion. This type of problem can be solved iteratively using Newton's method \citep{Menke2018}:
+
+\begin{equation}
+	\mathbf{m}_{k+1} = \mathbf{m}_k + \left[\mathbf{G}^{\text{T}} \mathbf{G}\right]^{-1} \mathbf{G}^{\text{T}} \left(\mathbf{d} - g(\mathbf{m}_k)\right) \,,
+\end{equation}
+
+where $\mathbf{G}$ is a matrix of partial derivatives: $G_{ij} = \partial d_i/\partial m_j$, as follows:
+
+%\begin{align*}
+%\frac{\partial d_i}{\partial x_O} &= 
+%	-\frac{2 x_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\
+%\frac{\partial d_i}{\partial y_O} &= 
+%	-\frac{2 y_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\
+%\frac{\partial d_i}{\partial z_O} &= 
+%	\frac{2 z_O}{V_P} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{-\frac{1}{2}}\\	
+%\frac{\partial d_i}{\partial V_P} &= 
+%	-\frac{2}{V_P^2} \left( (x_i - x_O)^2 + (y_i - y_O)^2 + z_O^2 \right)^{\frac{1}{2}}\\	
+%\frac{\partial d_i}{\partial \tau} &= 1\\	
+%\end{align*}
+\begin{align}
+\frac{\partial d_i}{\partial x} &= 
+	-\frac{2 (x_i - x)}{V_P \, r_i}\\
+\frac{\partial d_i}{\partial y} &= 
+	-\frac{2 (y_i - y)}{V_P \, r_i} \\
+\frac{\partial d_i}{\partial z} &= 
+	\frac{2 z}{V_P \, r_i} \\	
+\frac{\partial d_i}{\partial V_P} &= 
+	-\frac{2 \, r_i}{V_P^2} \,.
+\end{align}
+
+We use the drop coordinates and water depth (if available from multibeam) as a starting model, along with $V_P = 1500$ m/s. We fix $\tau =$13 ms, which is the default value for all ITC and ORE Offshore and EdgeTech transponders and underwater communications transducers (Ernest Aaron, \textit{pers. comm.}). There is some degree of trade-off between the water depth and the water velocity. Simplistically, if all survey measurements are made at a constant distance from the station (\textit{e.g.}, if the survey is a circle centered on the station) then these parameters co-vary perfectly. As a result, the inverse problem is ill-posed and, like all mixed-determined problems, requires regularization. We damp perturbations in $V_P$, which is not likely to vary substantially from 1500 m/s, and implement global norm damping to stabilize the inversion:
+
+\begin{equation}
+	\mathbf{F} = 
+	\left[\begin{matrix}
+	\mathbf{G}\\\mathbf{H}\\\epsilon^{1/2}\mathbf{I}
+	\end{matrix}\right] \,,
+	\hspace{15mm}
+	\mathbf{f} = 
+	\left[\begin{matrix}
+	\mathbf{d} - g(\mathbf{m})\\\mathbf{0}\\\mathbf{0}
+	\end{matrix}\right] \,,
+\end{equation}
+where $\mathbf{I}$ is the $4\times 4$ identity matrix, $\epsilon = 10^{-10}$, $\mathbf{H}=\text{diag}\left( \gamma_{x}, \gamma_{y}, \gamma_{z}, \gamma_{V_P} \right)$, $\gamma_{x}=\gamma_{y}=\gamma_{z}=0$, and $\gamma_{V_P} = 5\times10^{-8}$. These values for the damping parameters were determined by trial and error and are the defaults in the code. They have been tested on many different survey geometries, and thus, should require very little tuning for most applications but can easily be altered by the user. The damped solution using Newton's method becomes:
+
+\begin{equation}
+	\mathbf{m}_{k+1} = \mathbf{m}_k + \left[ \mathbf{F}^{\text{T}} \mathbf{F} \right]^{-1} \mathbf{F}^{\text{T}} \mathbf{f} \,. \label{eq:inverse}
+\end{equation}
+
+This equation is solved iteratively, until the root-mean-squared (RMS) of the misfit, $e$, (where $e = T+\delta T-g(\mathbf{m})$) decreases by less than 0.1 ms compared to the previous iteration. This criterion is typically reached after $\sim$4 iterations. 
+
+\subsection{Errors and uncertainty}
+In order to estimate the uncertainty in our model, we perform 1,000 bootstrap iterations on survey travel-time data with a balanced resampling approach \citep{Davison1986}. In each iteration the algorithm inverts a random sub-sample of the true data set, with the constraint that all data points are eventually sampled an equal number of times. This approach reduces variance in bias and achieves robust uncertainty estimates in fewer iterations compared to traditional uniform sampling approaches \citep{Hung2011}. Although balanced resampling provides empirical probability distributions of possible model parameters, it does not offer straightforward quantitative estimates of model uncertainty because the goodness of data fit for each run in the bootstrap iteration is ignored\DIFdelbegin \DIFdel{(}\DIFdelend \DIFaddbegin \DIFadd{; }\DIFaddend that is, within each iteration, a model is found that best fits the randomly sub-sampled dataset, but in the context of the full dataset, the fit and uncertainty of that particular model may be relatively poor\DIFdelbegin \DIFdel{). }\DIFdelend \DIFaddbegin \DIFadd{. Model uncertainty may also be estimated directly from the model covariance matrix, but simplifying assumptions must be made about the data errors if they are not known a priori (see Figures~S11, available in the electronic supplement to this article, for a comparison of model uncertainties estimated by bootstrap and covariance). 
+}
+
+\DIFaddend For more statistically robust uncertainty estimates, we perform a grid search over ($x,y,z$) within a region centered on the bootstrapped mean location, 
+$(x_{{\text{best}}},y_{{\text{best}}},z_{{\text{best}}})$. For each perturbed location, ($x^{\prime},y^{\prime},z^{\prime}$), we use an F-test to compare the norm of the data prediction error to the minimum error, assuming they each have a $\chi^2$ distribution. The effective number of degrees of freedom, $\nu$ can be approximated as 
+
+\begin{equation}
+\nu \approx N_f - \text{tr}(\mathbf{F}\mathbf{F}_{\text{inv}}) \,,
+\end{equation}
+where $\mathbf{F}_{\text{inv}}= \left[ \mathbf{F}^{\text{T}} \mathbf{F} \right]^{-1} \mathbf{F}^{\text{T}}$, $N_f$ is the length of vector $\mathbf{f}$, and $\text{tr}()$ denotes the trace. Using the F-test, we can evaluate the statistical probability of the true OBS location departing from our best-fitting location by a given value. 
+
+Some care is required in implementing this grid search. Since $z$ covaries with $V_P$, varying $z$ alone leads to large errors in data prediction as $|z^{\prime}-z_{{\text{best}}}|$ increases if one holds $V_P$ fixed. As a result, it appears as if the gradient in the error surface is very sharp in the $z$ direction, implying this parameter is very well resolved; in fact, the opposite is true. We find the empirical covariance of $z$ and $V_P$ by performing principal component analysis on the bootstrap model solutions. We then use the largest eigenvector to project perturbations in $z$ within the grid search onto $V_P$, adjusting velocity appropriately as we progress through the grid search. 
+
+\subsection{Model resolution and trade-offs}
+In order to quantitatively compare various survey configurations and assess their ability to recover the true model parameters, we calculate the model resolution, $\mathbf{R}$, and correlation, $\mathbf{C}$, matrices. The $M \times M$ model resolution matrix is given by \citep{Menke2018}:
+
+\begin{equation}
+\mathbf{R} = \mathbf{G}_{\text{inv}} \mathbf{G} \,,
+\end{equation}
+where $\mathbf{G}_{\text{inv}}= \left[ \mathbf{G}^{\text{T}} \mathbf{G} + \mathbf{H}^{\text{T}} \mathbf{H} + \epsilon\mathbf{I} \right]^{-1} \mathbf{G}^{\text{T}}$. Since the resolution matrix depends only on the data kernel and applied damping and is thus independent of the data themselves, it reflects strongly the chosen survey geometry. Each model parameter is independently resolved when $\mathbf{R}=\mathbf{I}$. Since perfect resolution occurs when $\mathbf{R}$ is equal to the identity matrix, off-diagonal elements (or ``spread'') indicate poor model resolution and trade-offs between the respective parameters. The spread of the model resolution matrix is defined as the squared $L_2$ norm of the difference between $\mathbf{R}$ and the identity matrix \citep{Menke2018}:
+
+\begin{equation}
+\text{spread}(\mathbf{R}) = \sum_{i=1}^M\sum_{j=1}^M \left[ R_{ij}-\delta_{ij}\right]^2 \,,
+\end{equation}
+where $\delta_{ij}$ is the Dirac delta function. Therefore, model resolution is perfect when $\text{spread}(\mathbf{R})=0$.
+
+The model correlation matrix (or unit covariance matrix), $\mathbf{C}$, describes the mapping of error between model parameters. Given the covariance matrix \DIFdelbegin \DIFdel{$\mathbf{\Sigma}_{\text{m}} = \mathbf{G}_{\text{inv}} \mathbf{G}_{\text{inv}}^{\text{T}}$}\DIFdelend \DIFaddbegin \DIFadd{$\mathbf{\Sigma}_{\text{m}} = \mathbf{G}_{\text{inv}} \mathbf{\Sigma}_{\text{d}} \mathbf{G}_{\text{inv}}^{\text{T}}$}\DIFaddend , the correlation matrix is defined as:
+
+\begin{equation}
+\mathbf{C} = \mathbf{D}^{-1}\mathbf{\Sigma}_{\text{m}}\mathbf{D}^{-1} \,,
+\end{equation}
+where $\mathbf{D} = \text{diag}(\mathbf{\Sigma}_{\text{m}})^{1/2}$ is the diagonal matrix of model parameter standard deviations. The off diagonal elements of this unitless matrix indicate how model parameters trade off with one another in the inversion, with negative numbers indicating negatively correlated parameters and vice versa.
+
+
+
+
+
+
+
+
+
+%% ---------------- RESULTS ---------------- %%
+\section{Results }
+We summarize the results of synthetic testing and application to a real data set in order to demonstrate the robust features of \textit{OBSrange}. All synthetic tests shown in this section were carried out at 5000~m \DIFaddbegin \DIFadd{water }\DIFaddend depth unless noted otherwise (see electronic supplement for results of tests at different water depths). This \DIFdelbegin \DIFdel{depth }\DIFdelend is similar to the average \DIFaddbegin \DIFadd{water }\DIFaddend depth of the Young Pacific ORCA Experiment, where the tool is applied in section~\ref{sec:PacificArray_deployment}, allowing for easier comparison. Furthermore, the magnitude of uncertainties generally decrease for shallow water (see Figures~S7--S8, available in the electronic supplement to this article), and therefore, uncertainties reported here represent upper bounds for the algorithm.
+
+\subsection{Demonstration on synthetic data} \label{Demonstration on synthetic data}
+We validated our algorithm by checking that it correctly recovers the (known) location of synthetic test stations. Synthetic two-way travel times were computed by interpolating the ship's position (traveling at an average velocity of 8~kn) within a fixed survey pattern at one-minute intervals, sending straight-line rays to the instrument and back, and adding the turn-around time. This travel time includes the change in ship's position between sending and receiving; since the position of the ship at the time it receives the acoustic pulse is itself dependent on the travel time, in constructing the synthetic dataset we iterated on this value until the time and position converged to give an error of \mbox{$<10^{-6}$ s}. Only the two-way travel time, ship location, and absolute time at the moment the ship receives the acoustic pulse were recorded for the inversion, mimicking data obtained during real surveys using equipment such as an EdgeTech deck box. We then added Gaussian random noise to the resultant travel times using a standard deviation of 4 ms, to account for measurement noise, errors in ship GPS location, and local changes in water velocity. Lastly, we randomly dropped out $\sim$20\% of the travel time data points, simulating the occasional null return from the acoustic survey. This testing procedure was designed to mimic the idiosyncrasies of real acoustic surveys as closely as possible. 
+
+Figure~\ref{fig:one_sta_synth} shows the result of an inversion at a single station at 5000~m depth using a 1~Nm radius ``\textit{PACMAN}'' survey geometry. For this inversion, we included the correction for a Doppler shift introduced by the ship's motion, estimating ship velocity, as one would for real data, from the timing and location of survey points. The inversion was successful in locating the OBS station: the estimated location is 3.0 m from the the true location (Figure~\ref{fig:one_sta_synth}). This misfit is extremely small in the context of $\sim$320~m of drift, a survey radius of $\sim$1800~m (1~Nm), and a water depth of $\sim$5300~m. The true location falls well within the uncertainty bounds estimated from the F-test and the bootstrap analysis. 
+
+In order to obtain statistics on the general quality of the synthetic recovery, we performed this test for 10,000 synthetic OBS stations, as follows: For each iteration, a synthetic station location was determined relative to a fixed drop point by drawing x- and y-drifts from zero-centered Gaussian distributions with standard deviations of 100 m (only in rare cases are stations thought to drift further than $\sim$200 m). The depth and average water velocity were similarly randomly selected, with mean values of 5000 m and 1500 m/s and standard deviations of 50 m and 10 m/s, respectively. The known turn-around time is perfectly accounted for. For tests of the basic location algorithm, we held the survey geometry constant, using the \textit{PACMAN} configuration with a radius of 1~Nm (see Section~\ref{sec:surv_geom_tests}). 
+
+The results of these tests show that on average our inversion is highly successful in correctly locating the OBS stations. The mean location errors in the x-, y-, and z-directions were 0.038 m, 0.152 m, and -0.599 m respectively, demonstrating there was no systematic bias in the locations. The mean error in water velocity was indistinguishable from zero, showing that its estimation was also not biased. The mean absolute horizontal location error was 2.3 m, with a standard deviation of 1.2 m. 95\% of the absolute horizontal station location errors were less than 4.6 m. There was no relationship observed between station drift (i.e., the distance between the synthetic OBS station and the drop point) and the location error, indicating that as long as stations settle within the survey bounds they will be well located. A corollary to this observation is that location estimates should not be biased by incorrectly recorded drop locations. 
+
+We observed a strong trade-off between water velocity and depth, which was responsible for the larger standard error in station depth estimates, which was \mbox{9.6~m}. This uncertainty is likely of negligible concern for most OBS practitioners, but if precise depths are important then a survey geometry that includes more tracks towards and away from the station would be preferable (in addition to verification using acoustic echo-sounders that implement precise water-velocity profiles from XBT (expendable bathythermograph) data as well as an accurate GPS-transponder offset correction).
+
+\subsection{Comparison to previous tools} \label{sec:Comparison_to_previous_tools}
+
+We compared our location algorithm with a tool developed by engineers at Scripps Institution of Oceanography (SIO) that is commonly used to locate OBS on the seafloor. This unpublished tool, hereafter referred to as \textit{SIOgs}, performs a grid search in $x$--$y$ holding $z$ fixed at the reported drop-point depth and assuming a water velocity of 1500 m/s. The grid search begins with grid cells of 100$\times$100~m and iteratively reduces their size to 0.1$\times$0.1~m. In contrast to our algorithm, \textit{SIOgs} does not account for: 1) the Doppler correction ($\delta T_{\text{dopp}}$) due to the changing ship position between sending and receiving, 2) the ellipsoidal shape of the Earth when converting between latitude-longitude and $x$--$y$, 3) a known GPS-transponder offset, 4) variations in $z$ and $V_p$, and 5) automated identification and removal of low-quality travel-time data. Furthermore, \textit{SIOgs} provides no information about uncertainty or resolution of model parameters.  
+
+To quantitatively compare our algorithm with \textit{SIOgs}, as well as the importance of the 5 additional features that our algorithm includes, we performed 9 separate inversions of a synthetic dataset for a \textit{PACMAN} survey geometry with 1 Nm radius and 4~ms of Gaussian noise added to the travel-time data (Figure~\ref{fig:compare_tool}). For the synthetic experiment, the instrument drifted 447~m from the drop point, settling to 5050~m depth with a water velocity of 1520~m/s. Relative to the GPS, the transponder was located 10~m closer to the ship's bow and 10~m further starboard (a horizontal distance of $\sim$14~m). We inverted the synthetic data using the complete \textit{OBSrange} algorithm (inversion 1 in Figure~\ref{fig:compare_tool}) as well as several variants where parameters were damped or removed to assess their importance; details of the inversions including the starting models are given in Table~\ref{table:compare_tool}. Our algorithm estimated the horizontal position of the instrument to within $\sim$1.5~m of the true location with a mean data RMS misfit of 3.7~ms, while \textit{SIOgs} (inversion 8) located it $\sim$42~m from the true position with an RMS of 19.7~ms, far beyond the 95\% F-test contour (Figure~\ref{fig:compare_tool}a). Our algorithm recovered the true depth and water velocity to within 3~m and 1~m/s on average, respectively.
+
+The \textit{SIOgs} tool was very susceptible to anomalous travel-time data, which are a common occurrence in real survey data and are thought to result from out-of-plane acoustic reflections or multiples of earlier pulses. Inversion \textit{SIOgs no QC} (\DIFaddbegin \DIFadd{inversion }\DIFaddend 9) included a single anomalous travel-time measurement 4000~ms from its true value, causing the station to be mislocated by $\sim$320~m with a travel-time residual RMS of $\sim$383~ms. We found that if several such erroneous travel-time data are included in the SIO inversion, a horizontal location misfit on the order of $\sim$1000~m can result. Although such outliers can be manually discarded, they could potentially be overlooked. As mentioned, our method includes a quality control step based on travel-time residuals of the starting location that removes such anomalous residuals with magnitudes $>$500 ms (default value in the code).
+
+\textit{OBSrange} inversions that did not solve for $z$ and/or $V_p$ resulted in the largest instrument location errors. With depth held constant at 5000~m (inversion 6), the instrument was mislocated by $\sim$7.5~m and water velocity underestimated by $\sim$14~m/s. Similarly, with $V_p$ held constant (inversion 5), the instrument was located $\sim$11~m from its true position, and the estimated depth was $\sim$72~m too shallow. In the case where both depth and water velocity were held constant (inversion 7), we observed a location misfit of $\sim$40~m, similar to that of the \textit{SIOgs} tool (\DIFaddbegin \DIFadd{inversion }\DIFaddend 8). The strong trade-off between depth and water velocity means that one cannot be confidently recovered without also solving for the other, and failing to solve for one (or both) results in larger location errors.
+
+In addition to showing the full potential of \textit{OBSrange}, we demonstrate the importance of accounting for Earth's ellipsoidal shape when converting latitude and longitude to $x$--$y$ (inversion 3). The travel-time residuals of \textit{SIOgs} (Figure~\ref{fig:compare_tool}b) display both a static shift from 0~ms as well as an azimuthal dependence. The shift of approximately -20~ms is a combination of the incorrectly assumed station depth and water velocity and accounts for most of the data misfit. The azimuthal variation observed in the travel-time residuals of \textit{SIOgs} is due to both the incorrect horizontal location of the instrument as well as the failure to account for Earth's ellipsoidal shape when converting from geographic coordinates to $x$--$y$. Failing to account for the ellipsoid produces a 2-theta azimuthal pattern in the residuals that becomes increasingly strong as survey radius increases and \DIFdelbegin \DIFdel{at latitudes far from around }\DIFdelend \DIFaddbegin \DIFadd{as latitudes deviate from approximately }\DIFaddend $\pm$50$^{\circ}$, where the ellipsoid and spherical approximation converge. For this synthetic test with a survey radius of 1 Nm ($\sim$1852 m) at $\sim$6$^{\circ}$S, the ellipsoid produced a maximum apparent horizontal shift to the northern and southern ship positions of $\sim$10~m (see Figures~S3, available in the electronic supplement to this article). The resulting 2-theta ellipsoid travel-time anomaly had an RMS of $\sim$2.2~ms with a mean of -1.3~ms, indicating that failing to account for the ellipsoid leads to small biases that map directly into $z$ and $Vp$. Correcting for this anomaly slightly improved the ability to accurately recover station depth and water velocity; however, it did not significantly affect the horizontal location estimate, owing to the roughly symmetric survey pattern (i.e., the perturbation to travel times are nearly symmetric with respect to ship azimuth in Figures~S3--S4). For non-symmetric surveys, including those with a strong back-azimuthal variation in good acoustic returns, horizontal location biases resulting from improper ellipticity corrections may be more significant.
+
+Failing to account for the relative offset in shipboard GPS and transponder (with transponder located $\sim$14~m from the GPS toward the front-right of the ship) leads to biased $z$ and $V_p$ estimates (inversion 4). Instrument depth and water velocity are underestimated by $\sim$28~m and $\sim$8~m/s, respectively. The difference in transponder-to-instrument and GPS-to-instrument two-way travel times is nearly constant with ship azimuth for the \textit{PACMAN} configuration (see Figure~S5, available in the electronic supplement to this article) with a mean of $\sim$3.4~ms. This constant travel time offset is primarily mapped into $z$. Because the transponder is almost always further away than the GPS from the instrument in this example, this results in a $z$ estimate that is too shallow. Similarly, if the transponder had been located at the back-left of the ship, then it would have been closer than the GPS to the instrument and $z$ would be over estimated. This suggests that in principle, the GPS-transponder offset could be solved for; however, in practice there is significant trade off between GPS-transponder offset, depth, and water velocity, such that it would be difficult to resolve unless $z$ and $V_p$ are known. The horizontal uncertainties are still small ($\sim$3~m), even without this correction.
+
+The ``Doppler'' corrections ($\delta T_{\text{dopp}}$ in equation~(\ref{eq:forward})) applied to the two-way travel times provided only a very small improvement to the estimated horizontal instrument locations ($\sim$2.7~m improvement in mean horizontal location and $\sim$2.0~m reduction in $r_{xy}$ RMS misfit; see inversion 2). Because this correction term is calculated from the ship's radial velocity with respect to the instrument, it is small (magnitudes $<$1.6~ms) for the circular portions of the survey and relatively large ($\sim$6~ms) for the radial segments. Only a small portion of the \textit{PACMAN} survey occurs along the radial direction (Figure~\ref{fig:one_sta_synth}a) and therefore, these corrections tend to have a small effect on model recovery. In practice, the effectiveness of these corrections depend strongly on the precision of the shipboard GPS as well as an accurate reconstruction of ship velocity, which can be difficult to achieve if large swaths of the survey fail to return soundings.
+
+
+\subsection{Exploration of survey pattern geometries} \label{sec:surv_geom_tests}
+
+In order to evaluate which survey patterns are optimal for accurately locating instruments on the seafloor, we conducted 19 synthetic surveys of varying geometry and size. For these tests, we attempted to mimic real-world experimental uncertainty as closely as possible. Each parameter ($x$, $y$, $z$, $V_p$) was treated as a Gaussian random variable with a predetermined mean and standard deviation
+(see Section~\ref{Demonstration on synthetic data}). For each survey configuration, we applied the full \textit{OBSrange} algorithm (including corrections for Doppler and GPS-transponder offset) to 10,000 realizations drawn from these distributions in order to fully explore the limits of each survey type. The GPS-transponder offset is the same as in the previous section ($\sim$14~m). Synthetic data were calculated in the same way as in previous sections with $\sim$20\% of the data points randomly removed. To further simulate realistic data loss due to ``shadowing'' effects associated with topography obstructing the acoustic propagation path, we removed three sectors of data with random central azimuth and half-width standard deviation of 20$^{\circ}$ for each realization (excluding \textit{Line} surveys). All survey points $<$100~m from the drop point were retained. The precise uncertainties and optimal survey sizes as determined in this section are specific to an average water depth of 5000~m and scale down at shallower depths. Additional tests at 500~m and 2000~m average water depth are shown in Figures~S7--S8 in the electronic supplement and demonstrate that uncertainties generally decrease with decreasing water depth, and thus uncertainties stated in this section represent upper bounds for the algorithm.
+
+The resulting RMS misfits for each model parameter and survey type are shown in Figure~\ref{fig:survey_geom_explore}a--c. The most well-resolved parameter for all survey types is the horizontal location of the instrument on the seafloor, $r_{xy}$. With the exception of \textit{Line} and 1.5~Nm \textit{Circle} surveys, all survey types resolve horizontal location to within 50~m. The \textit{Line} surveys fail to resolve the instrument location along the direction orthogonal to the ship track (RMS $\sim$700~m) but succeed in resolving its location parallel to the line (RMS $\sim$4~m). This is also shown in plots of model resolution (Figure~\ref{fig:resolution_correlation}), where model parameter $y$ is unresolved for a ship track parallel to the x-direction. The \textit{PACMAN} survey with radius 0.75--1~Nm ($\sim$9--12~km) and the 1~Nm \textit{Diamond} survey perform best with horizontal RMS misfits of $<$4~m. Although the \textit{PACMAN} and \textit{Diamond} surveys perform nearly equally well in our synthetic test, we prefer the former since its quasi-circular pattern results in a smaller Doppler correction (i.e., the ship remains at a nearly constant radius from the instrument for most of the survey). The \textit{PACMAN} survey recovers the horizontal location to within 10~m even for a survey with radius of 0.5~Nm.
+
+Horizontal instrument location is important for most applications, and its precision increases with survey radius. However, larger surveys require more time at each site and thus are undesirable. The improvement in misfit with increasing survey size saturates at large radius, and this diminishing return can be quantified by a trade-off parameter, $\lambda$, defined as the product between total survey length and horizontal misfit, $\delta r_{xy}$ (Figure~\ref{fig:survey_geom_explore}d). Assuming constant ship speed, minimizing this parameter is equivalent to mutually minimizing survey duration and horizontal location error. According to this metric, the ideal survey size is $\sim$0.75~Nm radius for the \textit{PACMAN} survey geometry at 5000~m depth. The saturation of horizontal misfit improvement with increasing radius for \textit{PACMAN} surveys is shown by $\nabla r_{xy}$ in Figure~\ref{fig:survey_geom_explore}e (see also Figure~S6, available in the electronic supplement to this article). The rate of horizontal misfit improvement with increasing radius quickly approaches zero beyond a radius of 0.75--1~Nm.
+
+Depth and water velocity are essentially equally well resolved by most survey geometries with uncertainties of 10--15~m and 2--3~m/s, respectively, depending on survey size. This excludes \textit{Line}, \textit{Circle}, and $<$0.75~Nm \textit{PACMAN} surveys, which exhibit strong $z$-$V_p$ trade-offs. This trade-off can be seen in the resolution and correlation matrices for the \textit{Circle} (Figure~\ref{fig:resolution_correlation}). The \textit{Line} survey poorly estimates depth (RMS $\sim$200~m) but resolves water velocity to within $\sim$5~m/s. The radial portions of the survey patterns are key for successfully resolving the $z$-$V_P$ trade-off, as evidenced by the poor performance by \textit{Circle} surveys. For a given survey distance, the \textit{PACMAN} survey performs best; the 1~Nm radius \textit{PACMAN} survey recovers horizontal position, depth, and water velocity to within 3~m, 10~m, and 3~m/s, respectively.
+
+
+\subsection{Application to PacificArray deployment} \label{sec:PacificArray_deployment}
+We applied the location algorithm to acoustic surveys carried out during the Young Pacific ORCA deployment in the central Pacific ocean during April and May of 2018 \citep{Gaherty2018}. The OBS array comprised 30 SIO broadband instruments each equipped with a Model ITC-3013 transponder and deployed from the R/V Kilo Moana in water depths of $\sim$4400-4800 m. Acoustic  surveys were carried out using an EdgeTech 8011M Acoustic Transceiver command and ranging unit, attached to a hull-mounted 12 kHz transducer. A GPS-transponder offset is not known, and therefore no correction is applied. The relatively calm seas allowed for ideal survey geometry at almost all sites, with a ship speed of \mbox{$\le$8~knots} at a maximum radius of \mbox{$\sim$1.3~Nm}. 
+
+An example station inversion, as well as the graphical outputs of the location software, is shown in Figures \ref{fig:one_sta_real_survey}-\ref{fig:one_sta_real_ftests}. Ship velocity is estimated from the survey data by differencing neighboring survey points. In theory, this could be used to correct Doppler shifts (Figure \ref{fig:one_sta_real_survey}c) in travel time (as in the synthetic tests), but we found that this correction did not substantially improve data fit for real stations and so did not apply it to this data set, although it is included as an option in the location codes. Furthermore, the ray-bending corrections, $\delta T_{\text{bend}}$, are negligible ($<$0.01~ms) at these water depths (see Figures~S1--S2, available in the electronic supplement to this article) and change the estimated horizontal location, depth, and water velocity by less than 0.2~m, 0.5~m, and 0.3~m/s, respectively; thus, we choose not to apply the ray-bending correction here. The small RMS data misfit of $\sim$1.6~ms attests to the quality of the survey measurements and the appropriateness of our relatively simple location algorithm (Figure~\ref{fig:one_sta_real_survey}d). The southwestwards drift of \mbox{$\sim340$~m} (Figure~\ref{fig:one_sta_real_histograms}) demonstrates that ocean currents can substantially displace the final OBS location from the surface drop point. The F-test 95\% confidence bounds are 5--6~m in the horizontal directions and 10--12~m in depth (Figure~\ref{fig:one_sta_real_ftests}).
+
+The 30 stations in this array drifted an average distance of 170\DIFaddbegin \DIFadd{~}\DIFaddend m. The mean data RMS misfit was 1.96\DIFaddbegin \DIFadd{~}\DIFaddend ms and the estimated 95th percentile horizontal location error based on the bootstrap analysis was 1.13\DIFaddbegin \DIFadd{~}\DIFaddend m. The water depth estimated by the inversion was systematically shallower than that measured using the shipboard multibeam instrument, differing by an average value of 18.6 m. Assuming the multibeam depths, which are computed using a water sound speed profile that is validated daily by XBT measurements, are correct, this discrepancy indicates that the inversion systematically overestimates sound speed slightly (see Section~4). 
+
+Without accurate seafloor corroboration from an ROV, it is not possible to directly verify the locations of stations within the Pacific ORCA array. However, we  obtain indirect support for the success of the location algorithm by considering the drift of all stations within this array (Figure~\ref{fig:meso_eddy}). Taken together, the direction and magnitude of drift depicts a pattern of clockwise rotation with a minimum diameter of $\sim$500 km. This pattern is consistent with a meso-scale cyclonic gyre, with a direction, location, and approximate size that is consonant with large-scale patterns of geostrophic flow observed in this location roughly within the time frame of the deployment (see Figure~S10, available in the electronic supplement to this article). The fact that we are able to discern this pattern from our estimated locations is a testament to the accuracy of the \textit{OBSrange} algorithm. This observation also raises the intriguing possibility of using OBS instruments as ad hoc depth-integrated flow meters for the oceans. 
+
+%% ---------------- DISCUSSION ---------------- %%
+\section{Discussion }
+A reliable tool for accurately locating instruments on the seafloor is paramount, given the growing number of ocean bottom deployments. We present the first such open-source OBS locator code that is freely available to the scientific community. One of the primary features of the tool is its ability to provide robust confidence bounds on the 3D instrument position on the seafloor, which will inform recovery cruise efforts as well as provide accurate station metadata, upon which essentially all seismic analyses rely. Furthermore, we have performed the first systematic exploration of survey geometries that we are aware of, which will help streamline future OBS deployments.
+
+At $\sim$5000~m water depth, most survey geometries recover depth and average sound speed velocity equally well. However, the \textit{PACMAN} survey with a radius of $\sim$1~Nm sufficiently recovers all model parameters in the synthetic tests (Figure~\ref{fig:survey_geom_explore}), including $z$ and $V_p$ to within 10~m and 3~m/s, respectively, and horizontal location to within $\sim$3~m. A radius of 0.75~Nm is sufficient for accurate horizontal locations (to within $\sim$4~m) but with increased uncertainty in instrument depth and water velocity. However, the smaller 0.75~Nm radius survey reduces the total survey duration by $\sim$25\% compared to the 1~Nm survey ($\sim$38~min compared to $\sim$50~min for an average ship velocity of 8~kn). If depth and water velocity estimates are of lesser importance and/or time is limited, the smaller 0.75~Nm radius may be desirable. A survey radius larger than 1~Nm is likely not warranted, requiring more ship time at each site for little improvement in misfit. Additionally, failed acoustic returns are more likely to occur at greater distances from the instrument, resulting in data gaps\DIFdelbegin \DIFdel{which will }\DIFdelend \DIFaddbegin \DIFadd{, which could }\DIFaddend negatively impact the inversion. \DIFaddbegin \DIFadd{We find that on average, the 1~Nm }\textit{\DIFadd{PACMAN}} \DIFadd{geometry is robust to azimuthal gaps in the data as large as $\sim$60$^{\circ}$ (see Figure~S12, available in the electronic supplement to this article). }\DIFaddend Some ship captains prefer only to steam along straight lines; in such cases, the \textit{Diamond} survey with 1~Nm radius is a viable alternative, given its comparable performance to the \textit{PACMAN} geometry (Figure~\ref{fig:survey_geom_explore}a--c). The radial legs of the survey where the ship travels toward and away from the instrument are crucial for resolving the depth-velocity trade-off. For this reason, the \textit{Circle} configuration cannot independently resolve depth and water velocity and should be avoided.
+
+The \textit{Line} geometry warrants additional discussion as it is commonly used for locating OBS during active-source experiments because it is often the simplest pattern. Parallel to the line, the instrument location is resolved quite well (to within $\sim$4~m). However, the instrument location perpendicular to the line cannot be resolved. This is evident from the resolution matrix as well as the synthetic bootstrap tests. The instrument depth is also poorly resolved with RMS of $\sim$200~m. In order to resolve both horizontal dimensions and depth, an alternative survey geometry with a range of ship-track azimuths (or even two perpendicular lines crossing the instrument, such as the \textit{Cross} or \textit{Hourglass} geometry) may be used.
+
+Optimal survey size scales down with decreasing water depth. Figures~S7--S8 in the electronic supplement show the synthetic tests from Section~\ref{sec:surv_geom_tests} \DIFaddbegin \DIFadd{carried out }\DIFaddend at 2000~m and 500~m. The optimal survey radius shrinks to 0.5~Nm at 2000~m water depth and 0.25~Nm at 500~m depth. Uncertainties decrease with decreasing water depth at the preferred survey radius as well as overall. This decrease in optimal survey size has implications for ray bending corrections in shallow water. Deviations from the straight ray approximation occur most strongly in shallow water at large offsets, especially if there is an abrupt drop in velocity at the thermocline (see \DIFdelbegin \DIFdel{Figures}\DIFdelend \DIFaddbegin \DIFadd{Figure}\DIFaddend ~S1, available in the electronic supplement to this article). However, the small optimal survey size at shallow water depth means large offsets are never reached, reducing the importance of ray bending even at shallow depths. For instance, at 0.25~Nm offset for 500~m water depth the perturbation to the travel time is only $\sim$0.06~ms, significantly lower than experimental noise, even with the presence of an abrupt thermocline.
+
+Observations of instrument drift from seasurface to seafloor are byproducts of the location algorithm if instrument drop points are precisely recorded. Figure~\ref{fig:meso_eddy} highlights both the precision of the \textit{OBSrange} algorithm as well as the potential for using instrument drift as an oceanographic observation. \DIFdelbegin \DIFdel{A }\DIFdelend \DIFaddbegin \DIFadd{Instrument drifts display a }\DIFaddend clockwise rotation pattern \DIFdelbegin \DIFdel{in instrument drift is observed }\DIFdelend across the Young Pacific ORCA network that is consistent with a large cyclonic mesoscale feature\DIFdelbegin \DIFdel{, providing novel point measurements of }\DIFdelend \DIFaddbegin \DIFadd{. Such measurements provide novel proxies for }\DIFaddend depth-integrated flow through the water column that could be used to calibrate models of the vertical shear (Ryan Abernathey, \textit{pers. comm.}). Although there \DIFdelbegin \DIFdel{are certainly }\DIFdelend \DIFaddbegin \DIFadd{certainly exist }\DIFaddend higher resolution methods \DIFdelbegin \DIFdel{of }\DIFdelend \DIFaddbegin \DIFadd{for }\DIFaddend measuring shallow-most characteristics of the water column, such as \DIFdelbegin \DIFdel{using an }\DIFdelend acoustic Doppler current \DIFdelbegin \DIFdel{profiler (ADCP}\DIFdelend \DIFaddbegin \DIFadd{profilers (ADCPs}\DIFaddend ), observations \DIFdelbegin \DIFdel{tracking }\DIFdelend \DIFaddbegin \DIFadd{spanning the full water column }\DIFaddend from the surface to seafloor may still prove useful. With the further proliferation of seafloor data providing broader spatial and temporal sampling, \DIFdelbegin \DIFdel{data such as these }\DIFdelend \DIFaddbegin \DIFadd{high resolution drift measurements }\DIFaddend could be used to verify models of vertical structure of the full water column. The network-wide depth-averaged water velocity is $\sim$1505~m/s with standard deviation $\sim$4.5~m/s, consistent with the regional decadal average for the month of April ($\sim$1509~m/s) from the 2009 World Ocean Atlas database (see Data and Resources).
+
+Accounting for a relative offset between the shipboard GPS and transponder may be important for correctly resolving depth and average sound speed for some combinations of survey geometry and GPS-transponder offset. The synthetic test in Section~\ref{sec:Comparison_to_previous_tools} shows that if the transponder and GPS are offset by $\sim$14~m and the survey pattern is such that the transponder is systematically positioned further than the GPS from the instrument by $\sim$2.5~m (in 3-dimensions), $z$ may be underestimated by as much as $\sim$28~m. This bias may explain the $\sim$18.6~m shallowing of stations at Young Pacific ORCA compared to depths reported by the shipboard multibeam, where a GPS-transponder offset was not known and no correction was applied. Figure~S9 in the electronic supplement shows results for the same synthetic tests from Section~\ref{sec:surv_geom_tests} without the GPS-transponder correction applied. While the \textit{PACMAN} survey still performs best at recovering horizontal location, it poorly recovers depth and water velocity. However, anti-symmetric patterns (i.e. having both clockwise and counter-clockwise segments and ship tracks toward and away from the instrument) such as \textit{Hourglass} and \textit{Cross2} accurately recover $z$ and $V_p$ by effectively canceling the offset anomaly along the anti-symmetric legs. The specific configuration of the GPS-transponder offset relative to the chosen survey pattern dictates the impact of not correcting the travel times for such an offset. For example, if the GPS and transponder were located at the front and back of the ship, respectively, the circular legs of the survey would be unbiased, with large biases along the radial legs. If the GPS-transponder offset cannot be determined before an experiment and accurate depth and sound speed are desired, an anti-symmetric survey pattern with \DIFdelbegin \DIFdel{clockwise/counter-clockwise and }\DIFdelend \DIFaddbegin \DIFadd{both clockwise and counter-clockwise legs as well as }\DIFaddend radial legs toward/away from the instrument may be used with a slight reduction in horizontal precision.
+
+We find that the Doppler travel-time corrections improve RMS travel-time misfit by only $\sim$0.3~ms ($\sim$7\% reduction) for the synthetic test \DIFdelbegin \DIFdel{(}\DIFdelend \DIFaddbegin \DIFadd{in }\DIFaddend Figure~\ref{fig:compare_tool} \DIFdelbegin \DIFdel{) }\DIFdelend and do not improve RMS misfit for the real data. However, the test shows a reduction in horizontal errors of $\sim$2~m ($\sim$40\%) when using the correction, and therefore, we include the Doppler correction as an option in the code. One possible reason why the corrections fail to improve the travel-time misfit for real data may simply be the inability to accurately estimate ship velocity resulting from poor GPS spatial precision and/or poor spatiotemporal sampling along the ship tracks, especially when large data gaps are present. \DIFdelbegin \DIFdel{The }\DIFdelend \DIFaddbegin \DIFadd{Furthermore, the }\DIFaddend \textit{PACMAN} survey pattern is quasi-circular and therefore the Doppler correction is quite small ($<$2~ms) along the majority of the survey (Figure~\ref{fig:one_sta_real_survey}c).
+
+
+
+%% ---------------- CONCLUSION ---------------- %%
+\section{Conclusion }
+We present \textit{OBSrange}, a new open-source tool for robustly locating OBS on the seafloor. Acoustic ranging two-way travel-time data between the ship and OBS are inverted for horizontal instrument position, instrument depth, and depth-averaged water sound speed. Our algorithm can account for travel time perturbations due to ship motion between sending and receiving, ray bending through the water column, and a static offset between the GPS and transponder. Uncertainties are calculated for all four parameters using bootstrap resampling, and an F-test grid search provides a 3D confidence ellipsoid around the station. 
+\DIFaddbegin 
+
+\DIFaddend The tool is validated using a synthetic travel-time dataset yielding typical horizontal location errors on the order of $\sim$4~m for 5000~m water depth. Various survey geometries are explored through synthetic tests, and we find that the \textit{PACMAN} survey configuration is most successful at recovering horizontal location, even with an unaccounted for GPS-transponder offset. Optimal survey radius depends on water depth and desired precision ranging from 0.75--1~Nm at 5000~m water depth to $\sim$0.25~Nm at 500~m depth. The \textit{Circle} configuration is unable to resolve depth and water velocity and should be avoided. The \textit{Line} survey pattern, commonly used in short-period OBS deployments, recovers instrument location parallel to the line but has no resolution in the orthogonal direction. If instrument depth and/or water velocity are of particular importance, a survey pattern such as \textit{PACMAN} is desirable, which contains long ship tracks toward and away from the instrument. If GPS-transponder offset is uncertain and cannot be measured, the \textit{Cross2} or \textit{Hourglass} patterns provide the best resolution of depth and water velocity. We apply the tool to the 2018 Young Pacific ORCA deployment yielding an average RMS data misfit of 1.96~ms and revealing a clockwise-rotation pattern in the instrument drifts with a diameter of $\sim$500~km that correlates with a cyclonic mesoscale feature. This observation further demonstrates the precision of \textit{OBSrange} and suggests the possibility of utilizing instrument drift data as an oceanographic tool for estimating depth-integrated flow through the water column.
+
+%% ---------------- DATA AND RESOURCES ---------------- %%
+\section{Data and Resources }
+The complete OBSrange code \DIFdelbegin \DIFdel{is available }\DIFdelend in both MATLAB and Python \DIFdelbegin \DIFdel{at (see IRIS SeisCode link). All }\DIFdelend \DIFaddbegin \DIFadd{as well as all }\DIFaddend 2018 Young Pacific ORCA survey data are available \DIFdelbegin \DIFdel{upon request by contacting the author J. B. Russell. }\DIFdelend \DIFaddbegin \DIFadd{for download at }\href{https://seiscode.iris.washington.edu/projects/obsrange}{https://seiscode.iris.washington.edu/projects/obsrange}\DIFadd{. }\DIFaddend Geostrophic flow and dynamic sea level measurements are provided by Copernicus
+Marine Environment Monitoring Service (CMEMS) at \href{http://marine.copernicus.eu/services-portfolio/access-to-products/?option=com_csw\&view=details\&product_id=SEALEVEL_GLO_PHY_L4_NRT_OBSERVATIONS_008_046}{http://marine.copernicus.eu/services-portfolio/access-to-products/?option=com\_csw\&view=details\&product\_id=SEALEVEL\_GLO\_PHY\_L4\_NRT\_OBSERVATIONS\_008\_046} (last accessed October 2018). Ocean sound speed profiles compiled from the 2009 World Ocean Atlas database by Brian Dushaw are available at \href{http://staff.washington.edu/dushaw/WOA/}{http://staff.washington.edu/dushaw/WOA/} (last accessed \DIFdelbegin \DIFdel{February }\DIFdelend \DIFaddbegin \DIFadd{March }\DIFaddend 2019).
+
+%% ---------------- ACKNOWLEDGMENTS ---------------- %%
+\section{Acknowledgments }
+The authors thank the captain, crew, and engineers of the R/V Kilo Moana who made the deployment possible as well as the Scripps Institution of Oceanography engineers aboard the vessel who provided the OBS instrumentation and whose expertise contributed greatly to the success of the Young Pacific ORCA deployment. This work was supported by NSF grant OCE-1658214 (Z. Eilon) as well as an NSF Graduate Research Fellowship DGE-16-44869 (J.B. Russell). The authors thank two anonymous reviewers whose suggestions greatly improved the manuscript and OBSrange tool. We additionally thank Ernest Aaron for key conversations on the acoustic equipment as well as sharing the SIO location code written by Paul Georgief; Ryan P. Abernathey for guidance interpreting instrument drift in relation to ocean dynamics; and William Menke for insightful conversations on model resolution in the presence of prior constraints. Finally, we thank Leah Mosher for her assistance with Figure 1 of the article.
+
+%% ---------------- ADDRESSES ---------------- %%
+\newpage
+{\bfseries\sffamily 
+\noindent Joshua B. Russell \\
+Department of Earth and Environmental Sciences \\
+Lamont-Doherty Earth Observatory of Columbia University \\
+61 Route 9W - PO Box 1000 \\
+Palisades, New York 10964 U.S.A. \\
+
+\noindent Zachary Eilon \\
+Department of Earth Science \\
+2116 Webb Hall \\
+University of California Santa Barbara \\
+Santa Barbara, California 93106 U.S.A. \\
+
+\noindent Stephen G. Mosher \\
+Department of Earth and Environmental Sciences \\
+University of Ottawa \\
+Office Number 15034, 120 University Private \\
+Ottawa, Ontario \\
+Canada K1N 6N5
+}
+%% ---------------- REFERENCES ---------------- %%
+\newpage
+%\bibliographystyle{srl.bst}
+%\bibliographystyle{plainnat}
+\bibliographystyle{agufull08.bst}
+\begin{thebibliography}{14}
+\providecommand{\natexlab}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem[{\textit{Accardo et~al.}(2017)\textit{Accardo, Gaherty, Shillington,
+  Ebinger, Nyblade, Mbogoni, Chindandali, Ferdinand, Mulibo, Kamihanda, Keir,
+  Scholz, Selway, Donnell, Tepp, Gallacher, Mtelela, Salima, and
+  Mruma}}]{Accardo2017}
+Accardo, N.~J., J.~B. Gaherty, D.~J. Shillington, C.~J. Ebinger, A.~A. Nyblade,
+  G.~J. Mbogoni, P.~R.~N. Chindandali, R.~W. Ferdinand, G.~D. Mulibo,
+  G.~Kamihanda, D.~Keir, C.~Scholz, K.~Selway, J.~P.~O. Donnell, G.~Tepp,
+  R.~Gallacher, K.~Mtelela, J.~Salima, and A.~Mruma (2017), {Surface wave
+  imaging of the weakly extended Malawi Rift from ambient-noise and teleseismic
+  Rayleigh waves from}, \textit{Geophysical Journal International},
+  \textit{209}, 1892--1905, \doi{10.1093/gji/ggx133}.
+
+\bibitem[{\textit{Agency and Mapping}(2000)}]{WGS84_2000}
+Agency, N.~I., and Mapping (2000), {Department of Defense World Geodetic System
+  1984: its definition and relationships with local geodetic systems}.
+
+\bibitem[{\textit{Creager and Dorman}(1982)}]{Creager1982}
+Creager, K.~C., and L.~M. Dorman (1982), {Location of Instruments on the
+  Seafloor by Joint Adjustment of Instrument and Ship Positions},
+  \textit{Journal of Geophysical Research}, \textit{87}, 8379--8388.
+
+\bibitem[{\textit{Davison et~al.}(1986)\textit{Davison, Hinkley, and
+  Schechtman}}]{Davison1986}
+Davison, A., D.~Hinkley, and E.~Schechtman (1986), {Efficient bootstrap
+  simulation}, \textit{Biometrika}, \textit{73}(3), 555--566.
+
+\bibitem[{\textit{Eilon and Abers}(2017)}]{Eilon2017}
+Eilon, Z.~C., and G.~A. Abers (2017), {High seismic attenuation at a mid-ocean
+  ridge reveals the distribution of deep melt}, \textit{Science Advances},
+  \textit{3}, 1--8.
+
+\bibitem[{\textit{Gaherty et~al.}(2018)\textit{Gaherty, Eilon, Forsyth, and
+  Ekstr{\"o}m}}]{Gaherty2018}
+Gaherty, J., Z.~Eilon, D.~Forsyth, and G.~Ekstr{\"o}m (2018), Imaging
+  small-scale convection and structure of the mantle in the south pacific: A
+  {U}.{S}. contribution to an international {P}acific{A}rray, in \textit{IRIS
+  Workshop 2018}, HC7, Albuquerque, NM U.S.A.
+
+\bibitem[{\textit{Hawley et~al.}(2016)\textit{Hawley, Allen, and
+  Richards}}]{Hawley2016}
+Hawley, W.~B., R.~M. Allen, and M.~A. Richards (2016), {Tomography reveals
+  buoyant asthenosphere accumulating beneath the Juan de Fuca plate},
+  \textit{Science}, \textit{353}(6306), 1--4.
+
+\bibitem[{\textit{Hoffmann-Wellenhof et~al.}(2001)\textit{Hoffmann-Wellenhof,
+  Lichtenegger, and Collins}}]{Hoffmann_Wellenhof_2001}
+Hoffmann-Wellenhof, B., H.~Lichtenegger, and J.~Collins (2001), \textit{{Global
+  Positioning System: theory and practice}}, fifth edit ed., 279--284 pp.,
+  Springer, Vienna, Springer-Verlag, New York,.
+
+\bibitem[{\textit{Hung et~al.}(2011)\textit{Hung, Lee, and Chuang}}]{Hung2011}
+Hung, W.-l., E.~S. Lee, and S.-c. Chuang (2011), {Balanced bootstrap resampling
+  method for neural model selection}, \textit{Computers and Mathematics with
+  Applications}, \textit{62}(12), 4576--4581,
+  \doi{10.1016/j.camwa.2011.10.039}.
+
+\bibitem[{\textit{Janiszewski and Abers}(2015)}]{Janiszewski2015}
+Janiszewski, H.~A., and G.~A. Abers (2015), {Imaging the Plate Interface in the
+  Cascadia Seismogenic Zone : New Constraints from Offshore Receiver
+  Functions}, \textit{Seismological Research Letters}, \textit{86}(5),
+  1261--1269, \doi{10.1785/0220150104}.
+
+\bibitem[{\textit{Lin et~al.}(2016)\textit{Lin, Gaherty, Jin, Collins,
+  Lizarralde, Evans, and Hirth}}]{Lin2016}
+Lin, P.-Y.~P., J.~B. Gaherty, G.~Jin, J.~A. Collins, D.~Lizarralde, R.~L.
+  Evans, and G.~Hirth (2016), {High-resolution seismic constraints on flow
+  dynamics in the oceanic asthenosphere}, \textit{Nature}, \textit{535}(7613),
+  1--9, \doi{10.1038/nature18012}.
+
+\bibitem[{\textit{Lynner and Bodmer}(2017)}]{Lynner2017}
+Lynner, C., and M.~Bodmer (2017), {Mantle flow along the eastern North American
+  margin inferred from shear wave splitting}, \textit{Geology},
+  \textit{45}(10), 1--4, \doi{10.1130/G38980.1}.
+
+\bibitem[{\textit{Menke}(2018)}]{Menke2018}
+Menke, W. (2018), \textit{{Geophysical Data Analysis: Discrete Inverse
+  Theory}}, fourth edition ed., Elsevier.
+
+\bibitem[{\textit{Takeo et~al.}(2016)\textit{Takeo, Kawakatsu, Isse, Nishida,
+  Sugioka, Ito, Shiobara, and Suetsugu}}]{Takeo2016}
+Takeo, A., H.~Kawakatsu, T.~Isse, K.~Nishida, H.~Sugioka, A.~Ito, H.~Shiobara,
+  and D.~Suetsugu (2016), {Seismic azimuthal anisotropy in the oceanic
+  lithosphere and asthenosphere from broadband surface wave analysis of OBS
+  array records at 60 Ma seafloor}, \textit{Journal of Geophysical Research :
+  Solid Earth}, \textit{121}, 1927--1947, \doi{10.1002/2015JB012429.Received}.
+
+\end{thebibliography}
+
+
+%% ---------------- FIGURES ---------------- %%
+\newpage
+%\section{Figures and Tables }
+%% Cartoon
+\begin{figure}[h]
+\begin{center}
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=4in]{cartoon_v2.pdf}
+\caption{Schematic of the acoustic ranging procedure for a \textit{PACMAN} survey pattern. The instrument drop point (OBS drop) is treated as the origin and initial model for the inversion. The OBS is then free to drift as it descends to the seafloor (OBS drift). A 12~kHz acoustic pulse is sent from ship to OBS, and after a processing time $\tau$, the OBS returns a pulse to the ship. Meanwhile, the ship has moved from its initial position (send) to its receiving position (exaggerated for illustrative purposes). The difference in these send- and receive-times is referred to as the ``Doppler'' correction, $\delta T_{\text{dopp}}$, in the text. From this schematic, it is clear that ship tracks traveling toward or away from the instrument will result in the largest Doppler times.}
+\label{fig:cartoon}
+\end{center}
+\end{figure}
+
+\newpage
+
+%% Synthetic test (1-station) 
+\begin{figure}[h]
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure01.pdf}
+\caption{Test of \DIFaddbeginFL \DIFaddFL{the }\DIFaddendFL location algorithm using synthetic data \DIFdelbeginFL \DIFdelFL{calculated }\DIFdelendFL for a station at 5000~m depth using the \textit{PACMAN} geometry. a) The \textit{PACMAN} survey pattern colored by travel-time residuals. The gray and red squares represent the drop location and final inversion, respectively. The green star denotes the true location. b-c) \DIFdelbeginFL \DIFdelFL{Bootstrap histograms }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Histograms }\DIFaddendFL from a bootstrap analysis with \DIFaddbeginFL \DIFaddFL{the median shown by the solid red line, }\DIFaddendFL 95th percentile values indicated by dashed red lines\DIFaddbeginFL \DIFaddFL{, }\DIFaddendFL and the true value in green. Inset shows the direction of true (green dashed) and estimated (red) drift with respect to the starting location. d-f) Slices through the F-test surface with white lines showing 68\% and 95\% confidence. Symbols are the same as (a). Comparison of the true input values with the inverted model parameters demonstrates that the location, depth, and water velocity are extremely well recovered, and the estimated uncertainties on these parameters are consonant with the actual misfit.}
+\label{fig:one_sta_synth}
+\end{figure}
+
+\newpage
+
+%% Comparison to previous tools
+\begin{figure}[h]
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure05.pdf}
+\caption{ Synthetic test of OBSrange performance (gray symbols) compared with the SIO tool (red symbols) for a \textit{PACMAN} survey of radius 1 Nm at 5050~m depth. a) Map view comparing the OBSrange and SIOgs inverted instrument locations with the true location in green. Black contours show the 68\% and 95\% confidence from the OBSrange F-test. b) Two-way travel time (TWT) residuals for both methods as a function of ship azimuth from the true station location. c) TWT and (d)--(f) model parameter RMS misfits for the 9 inversions, where closed symbols represent parameters that are solved for in the inversion and open symbols are parameters that remain fixed throughout the inversion. The horizontal instrument location misfit is given by $\delta r_{xy} = \sqrt{\delta x^2 + \delta y^2} $. Stars in (c)--(f) mark the inversion results shown in (a) and (b). See Table~\ref{table:compare_tool} for details of each inversion.}
+\label{fig:compare_tool}
+\end{figure}
+
+\newpage
+
+%% Exploring survey geometries
+\begin{figure}[h]
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure06_z5000m.pdf}
+\caption{ Test of 10,000 synthetic survey realizations of various survey geometries and sizes for an instrument at a nominal depth of 5000~m. Blue filled circles represent \textit{PACMAN} surveys ranging from 0.1--1.5~Nm. \textit{Circle} surveys (blue open circles) are of radius 0.5~Nm, 1~Nm, and 1.5~Nm. All other surveys (black and gray symbols) are \DIFdelbeginFL \DIFdelFL{for }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{at }\DIFaddendFL 1~Nm radius. The ``optimal'' \textit{PACMAN} survey is circled in red (see d). a--c) RMS model parameter misfits for each survey \DIFaddbeginFL \DIFaddFL{type }\DIFaddendFL with respect to total survey length: \textit{PACMAN}, \textit{Circle}, \textit{Cross}, \textit{Line}, \textit{Triangle}, \textit{Diamond}, \textit{Hourglass}, and \textit{Cardinal} where \textit{Cardinal} comprises multiples pings overhead and at 4 cardinal points. Each survey geometry is shown to the right of its respective legend entry. Horizontal instrument location misfit is again given by $\delta r_{xy} = \sqrt{\delta x^2 + \delta y^2} $. Dashed lines for \textit{Line} surveys denote misfit in the direction running parallel to the line ($x$-direction for these tests). Arrows denote symbols which extend beyond the axis bounds. d) Quantification of diminishing improvement as radius of \textit{PACMAN} survey is increased, where $\lambda$ is the product between survey radius and $\delta r_{xy}$. The lowest ``optimal'' value of $\lambda$ occurs at a radius of 0.75~Nm (circled in red). e) Change in the rate of improvement of horizontal location misfit with increasing \textit{PACMAN} survey radius ($\nabla r_{xy}$), where the red dashed line indicates minimum $\lambda$ (see Figure~S6, available in the electronic supplement to this article). Improvements in horizontal misfit become small as radius increases beyond 0.75--1~Nm.}
+\label{fig:survey_geom_explore}
+\end{figure}
+
+\newpage
+
+%% Resolution and correlation matrices
+\begin{figure}[h]
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure07.pdf}
+\caption{ Model resolution and correlation matrices for 3 survey configurations of radius 1 Nm: (left) \textit{PACMAN}, (center) \textit{Circle}, and (right) \textit{Line}. The \textit{Line} survey \DIFdelbeginFL \DIFdelFL{is }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{was conducted }\DIFaddendFL parallel to the x-direction. $\text{spread}(\mathbf{R})$ is listed at the top right of each resolution matrix. A spread of zero signifies good model resolution for all parameters.}
+\label{fig:resolution_correlation}
+\end{figure}
+
+\newpage
+
+%% Example real station - survey pattern + residuals
+\begin{figure}[h]
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure02.pdf}
+\caption{Example inversion at station EC03 in the 2018 Young Pacific ORCA deployment. a) Map view of acoustic survey; colored circles are successful acoustic range measurements, black crosses are bad measurements rejected by automatic quality control (greater than 500~ms from predicted travel time), gray square is drop location, red star is final location. b) Map view of data residuals based on travel times computed using bootstrap mean station location. c) Data residuals plotted as a function of azimuth, colored by the computed Doppler correction (not used in this inversion). d) Histogram of data RMS from the bootstrap; the RMS of the final model is shown as a red star.}
+\label{fig:one_sta_real_survey}
+\end{figure}
+
+\newpage
+
+%% Example real station - bootstrap histogram
+\begin{figure}[h]
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure03.pdf}
+\caption{Histograms of model parameters from the bootstrap inversion of station EC03 in the 2018 Young Pacific ORCA deployment. Red solid line shows \DIFdelbeginFL \DIFdelFL{mean }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{median }\DIFaddendFL value, while dashed lines indicate 95th percentiles. Latitude and longitude are plotted in meters from the mean point, for ease of interpretation. The inset plot shows the mean drift azimuth from the drop location (gray square).}
+\label{fig:one_sta_real_histograms}
+\end{figure}
+
+\newpage
+
+%% Example real station - F-tests
+\begin{figure}[h]
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure04.pdf}
+\caption{ Three orthogonal slices through the F-test probability volume for station EC03 in the 2018 Young Pacific ORCA deployment, contoured by probability of true station location relative to the best fitting inverted location ($\bar{x},\bar{y},\bar{z}$), indicated by the red star. White contours show 68\% and 95\% contours. Black dots show individual locations from the bootstrap analysis (Figure~\ref{fig:one_sta_real_histograms}).}
+\label{fig:one_sta_real_ftests}
+\end{figure}
+
+\newpage
+
+%% All stations meso eddy
+\begin{figure}[h]
+\includegraphics[trim=0cm 0cm 0cm 0cm,clip=true,width=\columnwidth]{Figure08.pdf}
+\caption{Pacific ORCA deployment, showing drift directions and magnitudes of each OBS instrument relative to their drop points, as well as the water velocity at each location. Note that drift arrows are not to geographic scale. The systematic clock-wise pattern of drift within the water column resembles a meso-scale cyclonic feature moving through this region approximately during the deployment (see Figure~S1, available in the electronic supplement to this article). Station symbol sizes are inversely scaled to acoustic travel time data misfit.}
+\label{fig:meso_eddy}
+\end{figure}
+\newpage
+%% Table 1 : Details of synthetic tests from figure 5
+\renewcommand{\arraystretch}{1.4}\begin{table}
+\caption{Details of the synthetic tests in Figure 3 for a \textit{PACMAN} survey of radius 1~Nm and 5050~m instrument depth. Final model parameters for OBSrange inversions are the average of 1000 bootstrap iterations. Parameters that are held fixed during the inversion are denoted in italics and their final values omitted. Parameters $x$ and $y$ are displayed as distance from the drop location.}
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l | c c c c c | l c c c c}
+                     &                  & \textbf{Doppler}     & \textbf{ellipsoid}  & \textbf{GPS}         & \textbf{remove}     & & $\mathbf{x}$ & $\mathbf{y}$ & $\mathbf{z}$ & $\mathbf{V_p}$ \\ 
+\textbf{Model Name} & \textbf{method} & \textbf{correction}  & \textbf{correction} & \textbf{correction}  & \textbf{bad data}   & & \textbf{(m)} & \textbf{(m)} & \textbf{(m)} & \textbf{(m/s)} \\ 
+\hline
+\hline
+\multirow{4}{*}{\textbf{(1) OBSrange}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \textbf{initial} & 0 & 0 & -5000 & 1500 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 199 & -399 & -5047 & 1519 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 1.9 & 2.2 & 9.9 & 2.7 \\ 
+\hline
+\multirow{4}{*}{\textbf{(2) No Doppler}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{No} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \textbf{initial} & 0 & 0 & -5000 & 1500 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 200 & -396 & -5041 & 1518 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 1.9 & 4.6 & 12.4 & 3.4 \\ 
+\hline
+\multirow{4}{*}{\textbf{(3) No Ellipsoid}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{No} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \textbf{initial} & 0 & 0 & -5000 & 1500 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 200 & -399 & -5055 & 1522 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 1.9 & 2.8 & 10.9 & 3.1 \\ 
+\hline
+\multirow{4}{*}{\textbf{(4) No GPS}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{No} & \multirow{4}{*}{Yes} & \textbf{initial} & 0 & 0 & -5000 & 1500 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 198 & -398 & -5022 & 1512 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 2.8 & 3.4 & 30.1 & 8.8 \\ 
+\hline
+\multirow{4}{*}{\textbf{(5) Fix-$V_p$}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \textbf{initial} & 0 & 0 & -5000 & $\mathit{1500}$ \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 192 & -393 & -4977 & - \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 8.2 & 7.6 & 73.3 & 20.0 \\ 
+\hline
+\multirow{4}{*}{\textbf{(6) Fix-Z}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & 1500 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 194 & -395 & - & 1506 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 5.8 & 5.4 & 50.0 & 13.6 \\ 
+\hline
+\multirow{4}{*}{\textbf{(7) XY-only}} & \multirow{4}{*}{OBSrange} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \multirow{4}{*}{Yes} & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & $\mathit{1500}$ \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 177 & -367 & - & - \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 26.0 & 34.6 & 50.0 & 20.0 \\ 
+\hline
+\multirow{4}{*}{\textbf{(8) SIOgs}} & \multirow{4}{*}{Grid Search} & \multirow{4}{*}{No} & \multirow{4}{*}{No} & \multirow{4}{*}{No} & \multirow{4}{*}{Yes} & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & $\mathit{1500}$ \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 177 & -365 & - & - \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 23.4 & 35.0 & 50.0 & 20.0 \\ 
+\hline
+\multirow{4}{*}{\textbf{(9) SIOgs no QC}} & \multirow{4}{*}{Grid Search} & \multirow{4}{*}{No} & \multirow{4}{*}{No} & \multirow{4}{*}{No} & \multirow{4}{*}{No} & \textbf{initial} & 0 & 0 & $\mathit{-5000}$ & $\mathit{1500}$ \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{final}& 508 & -498 & - & - \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{true}& 200 & -400 & -5050 & 1520 \\ 
+\multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \multirow{4}{*}{} & \textbf{RMS} & 307.7 & 97.7 & 50.0 & 20.0 \\ 
+\hline
+\end{tabular}
+}
+\label{table:compare_tool}
+\end{table}
+
+
+
+
+\end{document}  

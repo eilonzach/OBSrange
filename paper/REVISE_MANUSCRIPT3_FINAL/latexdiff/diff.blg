@@ -1,0 +1,62 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: diff.aux
+The style file: agufull08.bst.bst
+I found no \bibdata command---while reading file diff.aux
+Warning--I didn't find a database entry for "Lin2016"
+Warning--I didn't find a database entry for "Takeo2016"
+Warning--I didn't find a database entry for "Janiszewski2015"
+Warning--I didn't find a database entry for "Hawley2016"
+Warning--I didn't find a database entry for "Lynner2017"
+Warning--I didn't find a database entry for "Eilon2017"
+Warning--I didn't find a database entry for "Accardo2017"
+Warning--I didn't find a database entry for "Creager1982"
+Warning--I didn't find a database entry for "Gaherty2018"
+Warning--I didn't find a database entry for "WGS84_2000"
+Warning--I didn't find a database entry for "Hoffmann_Wellenhof_2001"
+Warning--I didn't find a database entry for "Menke2018"
+Warning--I didn't find a database entry for "Davison1986"
+Warning--I didn't find a database entry for "Hung2011"
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+You've used 0 entries,
+            3076 wiz_defined-function locations,
+            1094 strings with 9612 characters,
+and the built_in function-call counts, 33 in all, are:
+= -- 0
+> -- 0
+< -- 0
++ -- 0
+- -- 1
+* -- 2
+:= -- 10
+add.period$ -- 0
+call.type$ -- 0
+change.case$ -- 0
+chr.to.int$ -- 1
+cite$ -- 0
+duplicate$ -- 0
+empty$ -- 1
+format.name$ -- 0
+if$ -- 1
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 0
+newline$ -- 7
+num.names$ -- 0
+pop$ -- 0
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 1
+stack$ -- 0
+substring$ -- 0
+swap$ -- 0
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 0
+width$ -- 0
+write$ -- 6
+(There was 1 error message)
